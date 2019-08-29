@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 import userInformation from '../reducers/auth/loginReducer'
-import { ILoginResponse } from '../model/auth/auth'
+import { IAuthenticatedDetails } from '../model/auth/auth'
 
 interface IStore {
-    userInformation: ILoginResponse;
+    userInformation: IAuthenticatedDetails;
 }
 
 export const initialState: IStore = {

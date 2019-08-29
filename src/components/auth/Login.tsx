@@ -1,12 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
-import { ILoginResponse } from "../../model/auth/auth";
+import { IAuthenticatedDetails } from "../../model/auth/auth";
 import { callLoginApi } from "../../actions/auth/loginActions";
 import { AppState } from "../../store";
 import { RouteComponentProps } from "react-router";
 
 interface Props {
-  userInformation: ILoginResponse;
+  userInformation: IAuthenticatedDetails;
   callLoginApi: Function;
 }
 

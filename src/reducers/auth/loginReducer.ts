@@ -1,9 +1,9 @@
 import { initialState } from '../../store';
-import { ILoginResponse } from '../../model/auth/auth'
+import { IAuthenticatedDetails } from '../../model/auth/auth'
 import { LoginActionType, LoginAction } from '../../actions/auth/loginActions'
 
 export default function loginReducer(
-    state: ILoginResponse = initialState.userInformation,
+    state: IAuthenticatedDetails = initialState.userInformation,
     action: LoginAction
 ) {
     switch(action.type) {

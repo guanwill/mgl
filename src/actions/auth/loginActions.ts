@@ -49,15 +49,15 @@ export const callLoginApi = (username: string, password: string): Function => as
         console.log('LOGIN RESPONSE ', loginResponse);
 
         if (loginResponse.user) {
-            const userDetails: IAuthenticatedUserDetails = _.pick(loginResponse.user, 'verified', '_id', 'username');
+            const userDetails: IAuthenticatedUserDetails = _.pick(loginResponse.user, 'verified', '_id', 'username', 'name');
             const payload: IAuthenticatedDetails = { user: userDetails, accesstoken: loginResponse.accesstoken, message: loginResponse.message };
             localStorage.setItem('accessToken', payload.accesstoken);
             axios.defaults.headers.common['Authorization'] = payload.accesstoken;
             return dispatch(setLoginSuccess(payload));
         }
         
-        const pendingUser = { user: {verified: false, _id:'', username: ''}, accesstoken: '', message: loginResponse.message };
-        return dispatch(setLoginSuccess(pendingUser));
+        const pendingVerificationUser = { user: {verified: false, _id:'', username: '', name: ''}, accesstoken: '', message: loginResponse.message };
+        return dispatch(setLoginSuccess(pendingVerificationUser));
 
     } catch (e) {
         delete axios.defaults.headers.common['Authorization'];
