@@ -4,6 +4,7 @@ import { IAuthenticatedDetails } from "../../model/auth/auth";
 import { callLoginApi } from "../../actions/auth/loginActions";
 import { AppState } from "../../store";
 import { RouteComponentProps } from "react-router";
+import isTokenExpired from "../../helpers/isTokenExpired";
 
 interface Props {
   userInformation: IAuthenticatedDetails;
@@ -20,7 +21,7 @@ export class Login extends React.Component<Props & RouteComponentProps, State> {
     super(props);
     this.state = {
       username: "",
-      password: "",
+      password: ""
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -46,6 +47,13 @@ export class Login extends React.Component<Props & RouteComponentProps, State> {
       this.props.history.push("/");
     } else if (this.props.userInformation.user.verified === prevProps) {
       this.props.history.push("/login");
+    }
+  };
+
+  componentDidMount = () => {
+    if (!isTokenExpired()) {
+      // user will never get jwt and verified status if they are in pending verification status
+      this.props.history.push("/");
     }
   };
 
