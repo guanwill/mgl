@@ -52,6 +52,7 @@ export class Login extends React.Component<Props & RouteComponentProps, State> {
 
   componentDidMount = () => {
     if (!isTokenExpired()) {
+      console.log('IS EXPIRED? LOGIN.TX ', isTokenExpired());
       // user will never get jwt and verified status if they are in pending verification status
       this.props.history.push("/");
     }
