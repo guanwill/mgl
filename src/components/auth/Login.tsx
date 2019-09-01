@@ -41,12 +41,9 @@ export class Login extends React.Component<Props & RouteComponentProps, State> {
     this.props.callLoginApi(this.state.username, this.state.password);
   }
 
-  componentDidUpdate = prevProps => {
-    if (this.props.userInformation.user.verified) {
-      console.log("verified", this.props.userInformation.user.verified);
+  componentDidUpdate = () => {
+    if (!isTokenExpired()) {
       this.props.history.push("/");
-    } else if (this.props.userInformation.user.verified === prevProps) {
-      this.props.history.push("/login");
     }
   };
 
