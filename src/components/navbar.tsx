@@ -1,34 +1,30 @@
 import React from "react";
 import { connect } from "react-redux";
-import { AppState } from "../store";
+import { AppState, initialState } from "../store";
 import { Link, withRouter } from "react-router-dom";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../helpers/isTokenExpired";
+import { IAuthenticatedDetails } from "../model/auth/auth";
+import { logoutUser } from "../actions/auth/authActions";
 
-interface Props {}
+interface Props {
+  userInformation: IAuthenticatedDetails;
+  logoutUser: Function;
+}
 interface State {}
 
 export class Navbar extends React.Component<
   Props & RouteComponentProps,
   State
 > {
-//   componentDidMount = () => {
-//     if (!isTokenExpired()) {
-//         console.log('navbar check token');
-//       this.props.history.push("/");
-//     }
-//   };
-
-
-  onLogout(e) {
+  onLogout = async e => {
     e.preventDefault();
-    console.log("IN HEREEEE");
     localStorage.removeItem("accessToken");
+    await this.props.logoutUser(initialState.userInformation);
     this.props.history.push("/login");
-  }
+  };
 
   public render() {
-      {console.log('IS TOKEN EXPIRED? ', isTokenExpired());}
     const authLinks = (
       <ul className="navbar-nav ml-auto">
         <a href="#" className="nav-link" onClick={this.onLogout.bind(this)}>
@@ -60,14 +56,13 @@ export class Navbar extends React.Component<
   }
 }
 
-const mapStateToProps = (state: AppState) => ({});
+const mapStateToProps = (state: AppState) => ({
+  userInformation: state.userInformation
+});
 
-const mapDispatchToProps = {};
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(Navbar);
+const mapDispatchToProps = {
+  logoutUser
+};
 
 export default connect(
   mapStateToProps,

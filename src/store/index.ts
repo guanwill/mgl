@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import userInformation from '../reducers/auth/loginReducer'
+import userInformation from '../reducers/auth/authReducer'
 import { IAuthenticatedDetails } from '../model/auth/auth'
 
 interface IStore {

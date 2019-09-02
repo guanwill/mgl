@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { IAuthenticatedDetails } from "../../model/auth/auth";
-import { callLoginApi } from "../../actions/auth/loginActions";
+import { callLoginApi } from "../../actions/auth/authActions";
 import { AppState } from "../../store";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
@@ -33,7 +33,6 @@ export class Login extends React.Component<Props & RouteComponentProps, State> {
       keyof State
     >;
     this.setState(newState);
-    console.log("On Change! ", this.state);
   }
 
   handleSubmit(e) {
@@ -41,15 +40,18 @@ export class Login extends React.Component<Props & RouteComponentProps, State> {
     this.props.callLoginApi(this.state.username, this.state.password);
   }
 
-  componentDidUpdate = () => {
-    if (!isTokenExpired()) {
+  componentDidUpdate = prevProps => {
+    if (this.props.userInformation.user.verified) {
+      console.log("verified", this.props.userInformation.user.verified);
       this.props.history.push("/");
+    } else if (this.props.userInformation.user.verified === prevProps) {
+      this.props.history.push("/login");
     }
   };
 
   componentDidMount = () => {
     if (!isTokenExpired()) {
-      console.log('IS EXPIRED? LOGIN.TX ', isTokenExpired());
+      console.log("IS EXPIRED? ", isTokenExpired());
       // user will never get jwt and verified status if they are in pending verification status
       this.props.history.push("/");
     }

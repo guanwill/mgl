@@ -5,48 +5,48 @@ import { IAuthenticatedDetails, IAuthenticatedUserDetails } from '../../model/au
 import axios from 'axios';
 import _ from 'lodash';
 
-export enum LoginActionType {
+export enum AuthActionType {
     LOGIN_SUCCESS = 'LOGIN_SUCCESS',
     LOGIN_ERROR = 'LOGIN_ERROR',
+    LOGOUT_SUCCESS = 'LOGOUT_SUCCESS',
 }
 
-export interface ILoginAction {
-    type: LoginActionType,
+export interface IAuthAction {
+    type: AuthActionType,
     payload?: any;
 }
 
-export class LoginAction implements ILoginAction {
-    public type: LoginActionType;
+export class LoginAction implements IAuthAction {
+    public type: AuthActionType;
     public payload?: any;
 
-    constructor(type: LoginActionType, payload: object) {
+    constructor(type: AuthActionType, payload: object) {
         this.type = type;
         this.payload = payload;
     }
 }
 
-export const setLoginError = (loginError: any): ILoginAction => {
+export const setLoginError = (loginError: any): IAuthAction => {
     return {
-        type: LoginActionType.LOGIN_ERROR,
+        type: AuthActionType.LOGIN_ERROR,
         payload: loginError,
     }
 }
 
-export const setLoginSuccess = (loginResponse: IAuthenticatedDetails): ILoginAction => {
+export const setLoginSuccess = (loginResponse: IAuthenticatedDetails): IAuthAction => {
     return {
-        type: LoginActionType.LOGIN_SUCCESS,
+        type: AuthActionType.LOGIN_SUCCESS,
         payload: loginResponse,
     }
 }
 
 export const callLoginApi = (username: string, password: string): Function => async (
-    dispatch: ThunkDispatch<AppState, void, ILoginAction>,
+    dispatch: ThunkDispatch<AppState, void, IAuthAction>,
     state: AppState,
     api: IApi
 ) => {
     try {
         const loginResponse = await api.authApi.login(username, password);
-        console.log('LOGIN RESPONSE ', loginResponse);
 
         if (loginResponse.user) {
             const userDetails: IAuthenticatedUserDetails = _.pick(loginResponse.user, 'verified', '_id', 'username', 'name');
@@ -63,4 +63,11 @@ export const callLoginApi = (username: string, password: string): Function => as
         delete axios.defaults.headers.common['Authorization'];
         return dispatch(setLoginError(e));
     }    
+}
+
+export const logoutUser = (logoutPayload: IAuthenticatedDetails) => {
+    return {
+        type: AuthActionType.LOGOUT_SUCCESS,
+        payload: logoutPayload,
+    }
 }

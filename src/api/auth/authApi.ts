@@ -16,10 +16,8 @@ export default class AuthApi {
                 password: password
             }
             const response = await this.httpClient.post(`${this.hostName}/api/v1/auth/login`, payload);
-            console.log('AUTHAPI RESPONSE ', response);
             return response.data
         } catch (err) {
-            console.log('ERRRR ', err)
             throw (err);
         }
     }
