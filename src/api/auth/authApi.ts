@@ -21,4 +21,17 @@ export default class AuthApi {
             throw (err);
         }
     }
+
+    public register = async (username: string, password: string): Promise<any> => {
+        try {
+            const payload = {
+                username: username,
+                password: password,
+            }
+            const response = await this.httpClient.post(`${this.hostName}/api/v1/auth/register`, payload);
+            return response.data
+        } catch (err) {
+            throw (err);
+        }
+    }
 }

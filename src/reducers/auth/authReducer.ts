@@ -17,6 +17,11 @@ export default function authReducer(
         ...state,
         ...action.payload
       };
+    case AuthActionType.REGISTER_SUCCESS:
+      return {
+        ...state,
+        ...action.payload
+      };    
     default:
       return state;
   }
