@@ -14,8 +14,12 @@ interface State {
 //   verificationToken: string 
 }
 
+interface RouteParams {
+    id: string
+}
+
 export class Verify extends React.Component<
-  Props & RouteComponentProps,
+  Props & RouteComponentProps<RouteParams>,
   State
 > {
   constructor(props) {
@@ -35,7 +39,9 @@ export class Verify extends React.Component<
     // const { userInformation } = this.props;
 
     return (
-        <h1>hi</h1>
+        <>
+            <h1>{this.props.match.params.id}</h1>
+        </>
     )
   }
 }
