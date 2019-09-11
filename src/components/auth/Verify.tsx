@@ -5,6 +5,7 @@ import { callVerifyApi } from "../../actions/auth/authActions";
 import { AppState } from "../../store";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
+import isTokenExpired from "../../helpers/isTokenExpired";
 
 interface Props {
   userInformation: IAuthenticatedDetails;
@@ -33,13 +34,13 @@ export class Verify extends React.Component<
   componentDidMount = async () => {
     await this.props.callVerifyApi(this.props.match.params.id);
 
-    if (
-      this.props.userInformation.user._id &&
-      this.props.userInformation.user._id.length
-    ) {
-      this.setState({
-        verified: true
-      });
+    if (!isTokenExpired()) {
+      console.log("IS EXPIRED? ", isTokenExpired());
+      this.props.history.push("/");
+    }
+
+    if (this.props.userInformation.message === 'Account verified.') {
+      this.setState({verified: true});
     }
   };
 

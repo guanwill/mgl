@@ -1,21 +1,21 @@
 import React from "react";
 import { connect } from "react-redux";
 import { IAuthenticatedDetails } from "../../model/auth/auth";
-import { callResendVerificationApi } from "../../actions/auth/authActions";
+import { callResetPasswordApi } from "../../actions/auth/authActions";
 import { AppState } from "../../store";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
 
 interface Props {
   userInformation: IAuthenticatedDetails;
-  callResendVerificationApi: Function
+  callResetPasswordApi: Function
 }
 
 interface State {
   email: string
 }
 
-export class Resend extends React.Component<
+export class Password extends React.Component<
   Props & RouteComponentProps,
   State
 > {
@@ -35,7 +35,7 @@ export class Resend extends React.Component<
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    await this.props.callResendVerificationApi(this.state.email);
+    await this.props.callResetPasswordApi(this.state.email);
   }
 
   public componentDidMount() {
@@ -54,7 +54,7 @@ export class Resend extends React.Component<
 
     return (
       <div className="container" style={{ marginTop: "50px", width: "700px" }}>
-        <h2 style={{ marginBottom: "40px" }}>Resend Verification Token</h2>
+        <h2 style={{ marginBottom: "40px" }}>Forgot Password</h2>
 
         <p>{userInformation.message}</p>
 
@@ -71,7 +71,7 @@ export class Resend extends React.Component<
           </div>
           <div className="form-group">
             <button type="submit" className="btn btn-primary">
-              Send verification token
+              Reset Password
             </button>
           </div>
         </form>
@@ -85,10 +85,10 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const mapDispatchToProps = {
-  callResendVerificationApi
+  callResetPasswordApi
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Resend);
+)(Password);

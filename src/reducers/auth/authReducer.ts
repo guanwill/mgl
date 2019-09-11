@@ -32,6 +32,11 @@ export default function authReducer(
         ...state,
         ...action.payload
       };
+    case AuthActionType.RESET_PASSWORD:
+        return {
+          ...state,
+          ...action.payload
+        };
     default:
       return state;
   }

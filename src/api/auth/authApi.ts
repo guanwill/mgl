@@ -55,4 +55,16 @@ export default class AuthApi {
             throw (err);
         }
     }
+
+    public resetPassword = async (email: string): Promise<any> => {
+        try {
+            const payload = {
+                username: email
+            }
+            const response = await this.httpClient.post(`${this.hostName}/api/v1/auth/forgot_password`, payload);
+            return response.data
+        } catch (err) {
+            throw (err);
+        }
+    }
 }
