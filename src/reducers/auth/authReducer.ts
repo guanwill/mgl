@@ -7,21 +7,26 @@ export default function authReducer(
   action: IAuthAction
 ) {
   switch (action.type) {
-    case AuthActionType.LOGIN_SUCCESS:
+    case AuthActionType.LOGIN_USER:
       return {
         ...state,
         ...action.payload
       };
-    case AuthActionType.LOGOUT_SUCCESS:
+    case AuthActionType.LOGOUT_USER:
       return {
         ...state,
         ...action.payload
       };
-    case AuthActionType.REGISTER_SUCCESS:
+    case AuthActionType.REGISTER_USER:
       return {
         ...state,
         ...action.payload
-      };    
+      };
+    case AuthActionType.VERIFY_USER:
+        return {
+          ...state,
+          ...action.payload
+        };    
     default:
       return state;
   }

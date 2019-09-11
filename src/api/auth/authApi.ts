@@ -34,4 +34,13 @@ export default class AuthApi {
             throw (err);
         }
     }
+
+    public verify = async (token: string): Promise<any> => {
+        try {
+            const response = await this.httpClient.get(`${this.hostName}/api/v1/auth/verify_account/${token}`);
+            return response.data
+        } catch (err) {
+            throw (err);
+        }
+    }
 }

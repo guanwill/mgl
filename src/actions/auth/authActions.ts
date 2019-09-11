@@ -6,11 +6,12 @@ import axios from 'axios';
 import _ from 'lodash';
 
 export enum AuthActionType {
-    LOGIN_SUCCESS = 'LOGIN_SUCCESS',
+    LOGIN_USER = 'LOGIN_USER',
     // LOGIN_ERROR = 'LOGIN_ERROR',
-    LOGOUT_SUCCESS = 'LOGOUT_SUCCESS',
-    REGISTER_SUCCESS = 'REGISTER_SUCCESS',
-    // REGISTER_ERROR = 'REGISTER_ERROR'
+    LOGOUT_USER = 'LOGOUT_USER',
+    REGISTER_USER = 'REGISTER_USER',
+    // REGISTER_ERROR = 'REGISTER_ERROR',
+    VERIFY_USER = 'VERIFY_USER'
 }
 
 export interface IAuthAction {
@@ -37,7 +38,7 @@ export class LoginAction implements IAuthAction {
 
 export const setLoginSuccess = (loginResponse: IAuthenticatedDetails): IAuthAction => {
     return {
-        type: AuthActionType.LOGIN_SUCCESS,
+        type: AuthActionType.LOGIN_USER,
         payload: loginResponse,
     }
 }
@@ -70,7 +71,7 @@ export const callLoginApi = (username: string, password: string): Function => as
 
 export const logoutUser = (logoutPayload: IAuthenticatedDetails) => {
     return {
-        type: AuthActionType.LOGOUT_SUCCESS,
+        type: AuthActionType.LOGOUT_USER,
         payload: logoutPayload,
     }
 }
@@ -84,7 +85,7 @@ export const logoutUser = (logoutPayload: IAuthenticatedDetails) => {
 
 export const setRegisterSuccess = (registerResponse: IAuthenticatedDetails): IAuthAction => {
     return {
-        type: AuthActionType.REGISTER_SUCCESS,
+        type: AuthActionType.REGISTER_USER,
         payload: registerResponse,
     }
 }
@@ -98,8 +99,32 @@ export const callRegisterApi = (username: string, password: string): Function =>
         const registerResponse = await api.authApi.register(username, password);
         console.log('registerresponse ', registerResponse);
         const userDetails: IAuthenticatedUserDetails = _.pick(registerResponse.user, 'verified', '_id', 'username', 'name');
-        const payload: IAuthenticatedDetails = { user: userDetails, accesstoken: registerResponse.accesstoken, message: registerResponse.message };
+        const payload: IAuthenticatedDetails = { user: userDetails, accesstoken: '', message: registerResponse.message };
         return dispatch(setRegisterSuccess(payload));
+    } catch (e) {
+        // return dispatch(setRegisterError(e));
+        return e
+    }    
+}
+
+export const setVerifySuccess = (verifyResponse: IAuthenticatedDetails): IAuthAction => {
+    return {
+        type: AuthActionType.VERIFY_USER,
+        payload: verifyResponse,
+    }
+}
+
+export const callVerifyApi = (token: string): Function => async (
+    dispatch: ThunkDispatch<AppState, void, IAuthAction>,
+    state: AppState,
+    api: IApi
+) => {
+    try {
+        const verificationResponse = await api.authApi.verify(token);
+        console.log('verificationResponse ', verificationResponse);
+        const userDetails: IAuthenticatedUserDetails = _.pick(verificationResponse.user, 'verified', '_id', 'username', 'name');
+        const payload: IAuthenticatedDetails = { user: userDetails, accesstoken: '', message: verificationResponse.message };
+        return dispatch(setVerifySuccess(payload));
     } catch (e) {
         // return dispatch(setRegisterError(e));
         return e

@@ -1,17 +1,17 @@
 import React from "react";
 import { connect } from "react-redux";
 import { IAuthenticatedDetails } from "../../model/auth/auth";
-// import { callRegisterApi } from "../../actions/auth/authActions";
+import { callVerifyApi } from "../../actions/auth/authActions";
 import { AppState } from "../../store";
 import { RouteComponentProps } from "react-router";
 
 interface Props {
   userInformation: IAuthenticatedDetails;
-//   callRegisterApi: Function
+  callVerifyApi: Function
 }
 
 interface State {
-//   verificationToken: string 
+    verified: boolean;
 }
 
 interface RouteParams {
@@ -25,33 +25,39 @@ export class Verify extends React.Component<
   constructor(props) {
     super(props);
     this.state = {
-    
+        verified: false
     };
-    // this.handleInputChange = this.handleInputChange.bind(this);
-    // this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    // this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  public componentDidMount() {
+  componentDidMount() {
+        this.props.callVerifyApi(this.props.match.params.id)
+
+        if (this.props.userInformation.user._id && this.props.userInformation.user._id.length) {
+            this.setState({
+                verified: true
+            })
+        }            
+        
   }
 
   public render() {
-    // const { userInformation } = this.props;
 
     return (
         <>
-            <h1>{this.props.match.params.id}</h1>
+            <p>{this.state.verified ? 'Account is now verified. Please login.' : this.props.userInformation.message}</p>
+
+            
         </>
     )
   }
 }
 
 const mapStateToProps = (state: AppState) => ({
-//   userInformation: state.userInformation
+  userInformation: state.userInformation
 });
 
 const mapDispatchToProps = {
-//   callRegisterApi
+  callVerifyApi
 };
 
 export default connect(
