@@ -99,7 +99,6 @@ export const callRegisterApi = (username: string, password: string): Function =>
 ) => {
     try {
         const registerResponse = await api.authApi.register(username, password);
-        console.log('registerresponse ', registerResponse);
         const payload: IAuthenticatedDetails = { user: {verified: false, _id:'', username: '', name: ''}, accesstoken: '', message: registerResponse.message };
         return dispatch(setRegisterSuccess(payload));
     } catch (e) {
@@ -122,9 +121,7 @@ export const callVerifyApi = (token: string): Function => async (
 ) => {
     try {
         const verificationResponse = await api.authApi.verify(token);
-        console.log('verificationResponse ', verificationResponse);
         const payload: IAuthenticatedDetails = { user: {verified: false, _id:'', username: '', name: ''}, accesstoken: '', message: verificationResponse.message };
-        console.log('verificationpayload ', payload);
         return dispatch(setVerifySuccess(payload));
     } catch (e) {
         // return dispatch(setRegisterError(e));
@@ -145,8 +142,6 @@ export const callResendVerificationApi = (email: string): Function => async (
     api: IApi
 ) => {
     try {
-        console.log('email: ', email);
-
         const verificationResponse = await api.authApi.resendVerificationToken(email);
         const payload: IAuthenticatedDetails = { user: {verified: false, _id:'', username: '', name: ''}, accesstoken: '', message: verificationResponse.message };
         return dispatch(setResendVerificationSuccess(payload));
@@ -169,10 +164,7 @@ export const callResetPasswordApi = (email: string): Function => async (
     api: IApi
 ) => {
     try {
-        console.log('email: ', email);
-
         const forgotPasswordResponse = await api.authApi.resetPassword(email);
-        console.log('forgotPasswordResponse ', forgotPasswordResponse);
         const payload: IAuthenticatedDetails = { user: {verified: false, _id:'', username: '', name: ''}, accesstoken: '', message: forgotPasswordResponse.message };
         return dispatch(setResetPasswordSuccess(payload));
     } catch (e) {
