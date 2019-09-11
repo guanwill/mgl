@@ -43,4 +43,16 @@ export default class AuthApi {
             throw (err);
         }
     }
+
+    public resendVerificationToken = async (email: string): Promise<any> => {
+        try {
+            const payload = {
+                username: email
+            }
+            const response = await this.httpClient.post(`${this.hostName}/api/v1/auth/resend_verification_email`, payload);
+            return response.data
+        } catch (err) {
+            throw (err);
+        }
+    }
 }

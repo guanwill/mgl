@@ -6,6 +6,7 @@ import configureStore from './store/configureStore';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Verify from './components/auth/Verify';
+import Resend from './components/auth/Resend';
 import Navbar from './components/navbar';
 
 const Main = () => {
@@ -20,6 +21,7 @@ const Main = () => {
           <Route path='/login' component={Login}/>
           <Route path='/register' component={Register}/>
           <Route path='/verify/:id' component={Verify}/>
+          <Route path='/resend' component={Resend}/>
         </Switch>
       </main>      
     </Provider>

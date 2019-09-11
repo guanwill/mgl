@@ -26,7 +26,12 @@ export default function authReducer(
         return {
           ...state,
           ...action.payload
-        };    
+        };
+    case AuthActionType.RESEND_VERIFICATION:
+      return {
+        ...state,
+        ...action.payload
+      };
     default:
       return state;
   }

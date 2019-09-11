@@ -4,18 +4,19 @@ import { IAuthenticatedDetails } from "../../model/auth/auth";
 import { callVerifyApi } from "../../actions/auth/authActions";
 import { AppState } from "../../store";
 import { RouteComponentProps } from "react-router";
+import { Link } from "react-router-dom";
 
 interface Props {
   userInformation: IAuthenticatedDetails;
-  callVerifyApi: Function
+  callVerifyApi: Function;
 }
 
 interface State {
-    verified: boolean;
+  verified: boolean;
 }
 
 interface RouteParams {
-    id: string
+  id: string;
 }
 
 export class Verify extends React.Component<
@@ -25,30 +26,42 @@ export class Verify extends React.Component<
   constructor(props) {
     super(props);
     this.state = {
-        verified: false
+      verified: false
     };
   }
 
-  componentDidMount() {
-        this.props.callVerifyApi(this.props.match.params.id)
+  componentDidMount = async () => {
+    await this.props.callVerifyApi(this.props.match.params.id);
 
-        if (this.props.userInformation.user._id && this.props.userInformation.user._id.length) {
-            this.setState({
-                verified: true
-            })
-        }            
-        
-  }
+    if (
+      this.props.userInformation.user._id &&
+      this.props.userInformation.user._id.length
+    ) {
+      this.setState({
+        verified: true
+      });
+    }
+  };
+
+  componentWillMount = () => {
+    this.props.userInformation.message = "";
+  };
 
   public render() {
-
     return (
-        <>
-            <p>{this.state.verified ? 'Account is now verified. Please login.' : this.props.userInformation.message}</p>
-
-            
-        </>
-    )
+      <>
+        {this.state.verified ? (
+          <p>{this.props.userInformation.message}</p>
+        ) : (
+          <div>
+            <p>{this.props.userInformation.message}</p>
+            <Link className="nav-link" to="/resend">
+              Resend Verification Link
+            </Link>
+          </div>
+        )}
+      </>
+    );
   }
 }
 

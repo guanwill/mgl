@@ -11,7 +11,8 @@ export enum AuthActionType {
     LOGOUT_USER = 'LOGOUT_USER',
     REGISTER_USER = 'REGISTER_USER',
     // REGISTER_ERROR = 'REGISTER_ERROR',
-    VERIFY_USER = 'VERIFY_USER'
+    VERIFY_USER = 'VERIFY_USER',
+    RESEND_VERIFICATION = "RESEND_VERIFICATION"
 }
 
 export interface IAuthAction {
@@ -124,7 +125,34 @@ export const callVerifyApi = (token: string): Function => async (
         console.log('verificationResponse ', verificationResponse);
         const userDetails: IAuthenticatedUserDetails = _.pick(verificationResponse.user, 'verified', '_id', 'username', 'name');
         const payload: IAuthenticatedDetails = { user: userDetails, accesstoken: '', message: verificationResponse.message };
+        console.log('verificationpayload ', payload);
         return dispatch(setVerifySuccess(payload));
+    } catch (e) {
+        // return dispatch(setRegisterError(e));
+        return e
+    }    
+}
+
+export const setResendVerificationSuccess = (verifyResponse: IAuthenticatedDetails): IAuthAction => {
+    return {
+        type: AuthActionType.RESEND_VERIFICATION,
+        payload: verifyResponse,
+    }
+}
+
+export const callResendVerificationApi = (email: string): Function => async (
+    dispatch: ThunkDispatch<AppState, void, IAuthAction>,
+    state: AppState,
+    api: IApi
+) => {
+    try {
+        console.log('email: ', email);
+
+        const verificationResponse = await api.authApi.resendVerificationToken(email);
+        console.log('verificationResponse ', verificationResponse);
+        const userDetails: IAuthenticatedUserDetails = _.pick(verificationResponse.user, 'verified', '_id', 'username', 'name');
+        const payload: IAuthenticatedDetails = { user: userDetails, accesstoken: '', message: verificationResponse.message };
+        return dispatch(setResendVerificationSuccess(payload));
     } catch (e) {
         // return dispatch(setRegisterError(e));
         return e

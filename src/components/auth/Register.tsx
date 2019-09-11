@@ -79,6 +79,10 @@ export class Register extends React.Component<
     }
   }
 
+  componentWillMount = () => {
+    this.props.userInformation.message = ''
+  };
+
   public render() {
     const { userInformation } = this.props;
 

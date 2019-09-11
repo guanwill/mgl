@@ -57,6 +57,10 @@ export class Login extends React.Component<Props & RouteComponentProps, State> {
     }
   };
 
+  componentWillMount = () => {
+    this.props.userInformation.message = ''
+  };
+
   public render() {
     const { userInformation } = this.props;
     return (
