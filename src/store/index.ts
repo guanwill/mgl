@@ -11,6 +11,7 @@ interface IStore {
 
 export interface IUserGames {
     games: IGame[];
+    message?: string;
 }
 
 export const initialState: IStore = {
@@ -25,7 +26,8 @@ export const initialState: IStore = {
         message: '',
     },
     userGames: {
-        games: []
+        games: [],
+        message: ''
     }
 }
 

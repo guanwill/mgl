@@ -57,7 +57,7 @@ export const callLoginApi = (username: string, password: string): Function => as
             const userDetails: IAuthenticatedUserDetails = _.pick(loginResponse.user, 'verified', '_id', 'username', 'name');
             const payload: IAuthenticatedDetails = { user: userDetails, accesstoken: loginResponse.accesstoken, message: loginResponse.message };
             localStorage.setItem('accessToken', payload.accesstoken);
-            axios.defaults.headers.common['Authorization'] = payload.accesstoken;
+            // axios.defaults.headers.common['Authorization'] = payload.accesstoken;
 
             console.log('AUTHACTION SET HEADER ', axios.defaults.headers.common['Authorization']);
             return dispatch(setLoginSuccess(payload));
@@ -67,7 +67,7 @@ export const callLoginApi = (username: string, password: string): Function => as
         return dispatch(setLoginSuccess(pendingVerificationUser));
 
     } catch (e) {
-        delete axios.defaults.headers.common['Authorization'];
+        // delete axios.defaults.headers.common['Authorization'];
         // return dispatch(setLoginError(e));
         return e
     }    

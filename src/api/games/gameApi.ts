@@ -20,4 +20,17 @@ export default class GameApi {
             throw (err);
         }
     }
+
+    public addGame = async (title: string, user_id: string, config: IConfig): Promise<IGamesResponse> => {
+        try {
+            const payload = {
+                title
+            }
+            const response = await this.httpClient.post(`${this.hostName}/api/v1/games/user/${user_id}`, payload, config);
+            return response.data
+        } catch (err) {
+            console.log('ERR ', err);
+            throw (err);
+        }
+    }
 }

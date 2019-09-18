@@ -1,16 +1,18 @@
 import React from "react";
 import { connect } from "react-redux";
-// import { callFetchGamesApi } from "../../actions/game/gameActions";
+import { callAddGameApi } from "../../actions/game/gameActions";
 import { AppState, IUserGames } from "../../store";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
-// import { Link } from "react-router-dom";
 
 interface Props {
-//   callFetchGamesApi(user_id: string): void;
+  callAddGameApi(title: string, user_id: string): void;
+  userGames: IUserGames;
 }
 
-interface State {}
+interface State {
+  title: string;
+}
 
 interface RouteParams {
   user_id: string;
@@ -22,49 +24,84 @@ export class AddGame extends React.Component<
 > {
   constructor(props) {
     super(props);
-    this.state = {};
-    // this.handleInputChange = this.handleInputChange.bind(this);
+    this.state = {
+      title: ""
+    };
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  //   handleInputChange(event: { target: { name: any; value: any } }) {
-  //     const newState = { [event.target.name]: event.target.value } as Pick<
-  //       State,
-  //       keyof State
-  //     >;
-  //     this.setState(newState);
-  //   }
+  handleInputChange = async event => {
+    const newState = { [event.target.name]: event.target.value } as Pick<
+      State,
+      keyof State
+    >;
+    await this.setState(newState);
+  };
+
+  handleSubmit = async e => {
+    e.preventDefault();
+    await this.props.callAddGameApi(
+      this.state.title,
+      this.props.match.params.user_id
+    );
+  };
 
   componentDidMount = async () => {
     if (isTokenExpired()) {
       console.log("IS EXPIRED? ", isTokenExpired());
       this.props.history.push("/login");
     }
-    // console.log('asdfasdfsaf', JSON.stringify(this.props.match.params.user_id))
-    // await this.props.callFetchGamesApi(this.props.match.params.user_id);
   };
 
-  //   componentWillMount = () => {
-  //     this.props.userInformation.message = ''
-  //   };
+  componentDidUpdate = prevProps => {
+    if (this.props.userGames.message === "Game added") {
+      this.props.history.push(`/user/${this.props.match.params.user_id}/games`);
+    }
+  };
+
+  componentWillMount = () => {
+    this.props.userGames.message = "";
+  };
 
   public render() {
-
     return (
       <>
         <h1>Add Game</h1>
 
-        <div>
+        <p>{this.props.userGames.message}</p>
 
+        <div>
+          <form onSubmit={this.handleSubmit}>
+            <div className="form-group"></div>
+            <div className="form-group">
+              <input
+                type="input"
+                placeholder="Title"
+                className="form-control"
+                name="title"
+                onChange={this.handleInputChange}
+              />
+            </div>
+
+            <div className="form-group">
+              <button type="submit" className="btn btn-primary">
+                Add Game
+              </button>
+            </div>
+          </form>
         </div>
       </>
     );
   }
 }
 
-const mapStateToProps = (state: AppState) => ({});
+const mapStateToProps = (state: AppState) => ({
+  userGames: state.userGames
+});
 
 const mapDispatchToProps = {
-//   callFetchGamesApi
+  callAddGameApi
 };
 
 export default connect(
