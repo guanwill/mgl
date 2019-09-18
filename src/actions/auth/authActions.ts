@@ -21,7 +21,7 @@ export interface IAuthAction {
     payload?: any;
 }
 
-export class LoginAction implements IAuthAction {
+export class AuthAction implements IAuthAction {
     public type: AuthActionType;
     public payload?: any;
 
@@ -58,6 +58,8 @@ export const callLoginApi = (username: string, password: string): Function => as
             const payload: IAuthenticatedDetails = { user: userDetails, accesstoken: loginResponse.accesstoken, message: loginResponse.message };
             localStorage.setItem('accessToken', payload.accesstoken);
             axios.defaults.headers.common['Authorization'] = payload.accesstoken;
+
+            console.log('AUTHACTION SET HEADER ', axios.defaults.headers.common['Authorization']);
             return dispatch(setLoginSuccess(payload));
         }
         

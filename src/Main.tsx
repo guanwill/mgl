@@ -10,6 +10,9 @@ import Resend from './components/auth/Resend';
 import Password from './components/auth/Password';
 import Navbar from './components/navbar';
 
+import Games from './components/games';
+import AddGame from './components/games/addGame';
+
 const Main = () => {
   const store = configureStore();
 
@@ -17,13 +20,16 @@ const Main = () => {
     <Provider store={store}>
       <Navbar />
       <main>
-        <Switch>          
+        <Switch>
           {/* <Route exact path='/' component={Home}/> */}
           <Route path='/login' component={Login}/>
           <Route path='/register' component={Register}/>
           <Route path='/verify/:id' component={Verify}/>
           <Route path='/resend' component={Resend}/>
           <Route path='/forgot_password' component={Password}/>
+
+          <Route exact path='/user/:user_id/games' component={Games}/>
+          <Route exact path='/user/:user_id/games/add' component={AddGame}/>
         </Switch>
       </main>      
     </Provider>

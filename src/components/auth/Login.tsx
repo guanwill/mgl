@@ -43,7 +43,7 @@ export class Login extends React.Component<Props & RouteComponentProps, State> {
   componentDidUpdate = prevProps => {
     if (this.props.userInformation.user.verified) {
       console.log("verified", this.props.userInformation.user.verified);
-      this.props.history.push("/");
+      this.props.history.push(`/user/${this.props.userInformation.user._id}/games`);
     } else if (this.props.userInformation.user.verified === prevProps) {
       this.props.history.push("/login");
     }

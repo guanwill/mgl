@@ -1,0 +1,15 @@
+export interface IGame {
+    _id: string,
+    title: string,
+    user: string,
+}
+
+export interface IGamesResponse {
+    address?: [],
+    games: IGame[],
+    verified: string,
+    _id: string,
+    username: string,
+    verification_token: string,
+    verification_token_created_at: string
+}

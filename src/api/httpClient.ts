@@ -6,9 +6,12 @@ export interface IHttpClient {
 }
 
 class AxiosHttpClient implements IHttpClient {
-    get = async (uri: string) => {
+    get = async (uri: string, config?: object) => {
+
+        console.log('httpclient ...', config);
+        
         try {
-            return await axios.get(uri);
+            return await axios.get(uri, config);
         } catch (exception) {
             throw exception
         }
