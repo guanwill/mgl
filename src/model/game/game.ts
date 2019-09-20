@@ -14,3 +14,8 @@ export interface IGamesApiResponse {
     verification_token_created_at: string,
     message?: string
 }
+
+export interface IGameApiResponse {
+    games: IGame,
+    message?: string
+}

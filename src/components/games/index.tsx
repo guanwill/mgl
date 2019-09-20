@@ -16,6 +16,7 @@ interface State {}
 
 interface RouteParams {
   user_id: string;
+  game_id: string;
 }
 
 export class Games extends React.Component<
@@ -34,6 +35,10 @@ export class Games extends React.Component<
     }
     await this.props.callFetchGamesApi(this.props.match.params.user_id);
   };
+
+  componentWillMount = async () => {
+    this.props.userGames.message = '';
+  }
 
   deleteGame = (user_id, game_id) => {
      if(window.confirm('Delete Game?') ) {
@@ -69,6 +74,10 @@ export class Games extends React.Component<
               >
                 Delete
               </button>
+
+              <Link to={`/user/${this.props.match.params.user_id}/games/${game._id}/edit`}>
+                Edit Game
+                </Link>
             </div>
           ))}
         </div>

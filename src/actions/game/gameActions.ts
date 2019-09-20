@@ -2,7 +2,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppState, IUserGamesStore } from '../../store';
 import { IApi } from '../../api';
 import _ from 'lodash';
-import { IGame, IGamesApiResponse } from '../../model/game/game';
+import { IGame, IGamesApiResponse, IGameApiResponse } from '../../model/game/game';
 
 export interface IConfig {
     headers: {
@@ -13,7 +13,8 @@ export interface IConfig {
 export enum GameActionType {
     LOAD_GAMES = 'LOAD_GAMES',
     ADD_GAME = "ADD_GAME",
-    DELETE_GAME = "DELETE_GAME"
+    DELETE_GAME = "DELETE_GAME",
+    UPDATE_GAME = "UPDATE_GAME"
 }
 
 export interface IGameAction {
@@ -107,6 +108,34 @@ export const callDeleteGameApi = (user_id: string, game_id: string): Function =>
 
         console.log('deleteGamesResponse ', gamesResponse);
         return dispatch(deleteGameSuccess(gamesResponse));
+
+    } catch (e) {
+        return e
+    }    
+}
+
+export const updateGameSuccess = (payload: IGameApiResponse): IGameAction => {
+    return {
+        type: GameActionType.UPDATE_GAME,
+        payload: payload,
+    }
+}
+
+export const callUpdateGameApi = (title: string, user_id: string, game_id: string): Function => async (
+    dispatch: ThunkDispatch<AppState, void, IGameAction>,
+    state: AppState,
+    api: IApi
+) => {
+    try {
+        let config: IConfig = {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+            }
+        }
+        const gamesResponse = await api.gameApi.updateGame(title, user_id, game_id, config);
+
+        console.log('updateGameSuccess ', gamesResponse);
+        return dispatch(updateGameSuccess(gamesResponse));
 
     } catch (e) {
         return e

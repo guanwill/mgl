@@ -12,6 +12,7 @@ import Navbar from './components/navbar';
 
 import Games from './components/games';
 import AddGame from './components/games/addGame';
+import EditGame from './components/games/editGame';
 
 const Main = () => {
   const store = configureStore();
@@ -30,6 +31,7 @@ const Main = () => {
 
           <Route exact path='/user/:user_id/games' component={Games}/>
           <Route exact path='/user/:user_id/games/add' component={AddGame}/>
+          <Route exact path='/user/:user_id/games/:game_id/edit' component={EditGame}/>
         </Switch>
       </main>      
     </Provider>

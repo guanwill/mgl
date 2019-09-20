@@ -22,6 +22,21 @@ export default function gameReducer(
           ...state,
           games: games
         }
+    case GameActionType.UPDATE_GAME:
+      return {
+        ...state,
+        message: action.payload.message,
+        games: state.games.map((game) => {
+          if(game._id === action.payload.game._id) {
+            // Return a new object
+            return {
+              ...game,  // copy the existing item
+              ...action.payload.game  // replace the email addr
+            }
+          }      
+          return game; // Leave every other item unchanged
+        })
+      }
     default:
       return state;
   }

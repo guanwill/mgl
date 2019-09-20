@@ -1,6 +1,6 @@
 import { IHttpClient } from '../httpClient';
 import { IConfig } from '../../actions/game/gameActions';
-import { IGamesApiResponse } from '../../model/game/game';
+import { IGamesApiResponse, IGameApiResponse } from '../../model/game/game';
 
 export default class GameApi {
     httpClient: IHttpClient;
@@ -37,6 +37,19 @@ export default class GameApi {
     public deleteGame = async (user_id: string, game_id: string, config: IConfig): Promise<IGamesApiResponse> => {
         try {
             const response = await this.httpClient.delete(`${this.hostName}/api/v1/games/${game_id}/user/${user_id}`, config);
+            return response.data
+        } catch (err) {
+            console.log('ERR ', err);
+            throw (err);
+        }
+    }
+
+    public updateGame = async (title: string, user_id: string, game_id: string, config: IConfig): Promise<IGameApiResponse> => {
+        try {
+            const payload = {
+                title
+            }
+            const response = await this.httpClient.post(`${this.hostName}/api/v1/games/${game_id}/user/${user_id}`, payload, config);
             return response.data
         } catch (err) {
             console.log('ERR ', err);
