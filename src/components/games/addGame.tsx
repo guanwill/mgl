@@ -1,13 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import { callAddGameApi } from "../../actions/game/gameActions";
-import { AppState, IUserGames } from "../../store";
+import { AppState, IUserGamesStore } from "../../store";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
 
 interface Props {
   callAddGameApi(title: string, user_id: string): void;
-  userGames: IUserGames;
+  userGames: IUserGamesStore;
 }
 
 interface State {

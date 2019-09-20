@@ -6,10 +6,10 @@ import { IGame } from '../model/game/game';
 
 interface IStore {
     userInformation: IAuthenticatedDetails;
-    userGames: IUserGames
+    userGames: IUserGamesStore
 }
 
-export interface IUserGames {
+export interface IUserGamesStore {
     games: IGame[];
     message?: string;
 }

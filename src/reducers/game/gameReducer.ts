@@ -1,8 +1,8 @@
-import { initialState, IUserGames } from "../../store";
+import { initialState, IUserGamesStore } from "../../store";
 import { IGameAction, GameActionType } from "../../actions/game/gameActions";
 
 export default function gameReducer(
-  state: IUserGames = initialState.userGames,
+  state: IUserGamesStore = initialState.userGames,
   action: IGameAction
 ) {
   switch (action.type) {
@@ -16,6 +16,12 @@ export default function gameReducer(
           ...state,
           ...action.payload
         };
+    case GameActionType.DELETE_GAME:
+        const games = state.games.filter((game) => game._id !== action.payload.game);
+        return {
+          ...state,
+          games: games
+        }
     default:
       return state;
   }

@@ -4,12 +4,13 @@ export interface IGame {
     user: string,
 }
 
-export interface IGamesResponse {
+export interface IGamesApiResponse {
     address?: [],
     games: IGame[],
     verified: string,
     _id: string,
     username: string,
     verification_token: string,
-    verification_token_created_at: string
+    verification_token_created_at: string,
+    message?: string
 }

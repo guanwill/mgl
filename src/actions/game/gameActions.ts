@@ -1,9 +1,8 @@
 import { ThunkDispatch } from 'redux-thunk';
-import { AppState } from '../../store';
+import { AppState, IUserGamesStore } from '../../store';
 import { IApi } from '../../api';
-import axios from 'axios';
 import _ from 'lodash';
-import { IGame, IGamesResponse } from '../../model/game/game';
+import { IGame, IGamesApiResponse } from '../../model/game/game';
 
 export interface IConfig {
     headers: {
@@ -13,7 +12,8 @@ export interface IConfig {
 
 export enum GameActionType {
     LOAD_GAMES = 'LOAD_GAMES',
-    ADD_GAME = "ADD_GAME"
+    ADD_GAME = "ADD_GAME",
+    DELETE_GAME = "DELETE_GAME"
 }
 
 export interface IGameAction {
@@ -49,15 +49,15 @@ export const callFetchGamesApi = (user_id: string): Function => async (
                 Authorization: `Bearer ${localStorage.getItem("accessToken")}`
             }
         }
-        const gamesResponse = await api.gameApi.fetchGames(user_id, config);
+        const gamesResponse: IGamesApiResponse = await api.gameApi.fetchGames(user_id, config);
         return dispatch(loadedGames(gamesResponse.games));
 
     } catch (e) {
         return e
-    }    
+    }
 }
 
-export const addGameSuccess = (payload: IGamesResponse): IGameAction => {
+export const addGameSuccess = (payload: IUserGamesStore): IGameAction => {
     return {
         type: GameActionType.ADD_GAME,
         payload: payload,
@@ -79,6 +79,34 @@ export const callAddGameApi = (title: string, user_id: string): Function => asyn
 
         console.log('gamesResponse ', gamesResponse);
         return dispatch(addGameSuccess(gamesResponse));
+
+    } catch (e) {
+        return e
+    }    
+}
+
+export const deleteGameSuccess = (payload: IUserGamesStore): IGameAction => {
+    return {
+        type: GameActionType.DELETE_GAME,
+        payload: payload,
+    }
+}
+
+export const callDeleteGameApi = (user_id: string, game_id: string): Function => async (
+    dispatch: ThunkDispatch<AppState, void, IGameAction>,
+    state: AppState,
+    api: IApi
+) => {
+    try {
+        let config: IConfig = {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+            }
+        }
+        const gamesResponse = await api.gameApi.deleteGame(user_id, game_id, config);
+
+        console.log('deleteGamesResponse ', gamesResponse);
+        return dispatch(deleteGameSuccess(gamesResponse));
 
     } catch (e) {
         return e
