@@ -5,7 +5,7 @@ import Main from './Main';
 const App: React.FC = () => {
   return (
     <div className="App">
-      <h1>WELCOME</h1>
+      <h1>A HERO'S BAG</h1>
       <Main />      
     </div>
   );
