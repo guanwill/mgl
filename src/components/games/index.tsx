@@ -122,7 +122,8 @@ export class Games extends React.Component<
       filter: false,
       print: false,
       download: false,
-      viewColumns: false
+      viewColumns: false,
+      selectableRows: 'none',
       //  filterType: 'checkbox',
       // onRowClick
       // onCellClick
