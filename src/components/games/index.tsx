@@ -55,6 +55,7 @@ export class Games extends React.Component<
 
         {console.log("user games: ", games)}
 
+        {/* only appear for logged in user, no one else */}
         <Link to={`/user/${this.props.match.params.user_id}/games/add`}>
           Add Game
         </Link>

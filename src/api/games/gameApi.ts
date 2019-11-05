@@ -21,10 +21,17 @@ export default class GameApi {
         }
     }
 
-    public addGame = async (title: string, user_id: string, config: IConfig): Promise<IGamesApiResponse> => {
+    public addGame = async (title: string, genre: string, platform: string, release_date: string, status: string, rating: number, review: string, comments: string, user_id: string, config: IConfig): Promise<IGamesApiResponse> => {
         try {
             const payload = {
-                title
+                title,
+                genre,
+                platform,
+                release_date,
+                status,
+                rating,
+                review,
+                comments
             }
             const response = await this.httpClient.post(`${this.hostName}/api/v1/games/user/${user_id}`, payload, config);
             return response.data
@@ -44,10 +51,17 @@ export default class GameApi {
         }
     }
 
-    public updateGame = async (title: string, user_id: string, game_id: string, config: IConfig): Promise<IGameApiResponse> => {
+    public updateGame = async (title: string, genre: string, platform: string, release_date: string, status: string, rating: number, review: string, comments: string, user_id: string, game_id: string, config: IConfig): Promise<IGameApiResponse> => {
         try {
             const payload = {
-                title
+                title,
+                genre,
+                platform,
+                release_date,
+                status,
+                rating,
+                review,
+                comments
             }
             const response = await this.httpClient.post(`${this.hostName}/api/v1/games/${game_id}/user/${user_id}`, payload, config);
             return response.data

@@ -65,7 +65,7 @@ export const addGameSuccess = (payload: IUserGamesStore): IGameAction => {
     }
 }
 
-export const callAddGameApi = (title: string, user_id: string): Function => async (
+export const callAddGameApi = (title: string, genre: string, platform: string, release_date: string, status: string, rating: number, review: string, comments: string, user_id: string): Function => async (
     dispatch: ThunkDispatch<AppState, void, IGameAction>,
     state: AppState,
     api: IApi
@@ -76,11 +76,8 @@ export const callAddGameApi = (title: string, user_id: string): Function => asyn
                 Authorization: `Bearer ${localStorage.getItem("accessToken")}`
             }
         }
-        const gamesResponse = await api.gameApi.addGame(title, user_id, config);
-
-        console.log('gamesResponse ', gamesResponse);
+        const gamesResponse = await api.gameApi.addGame(title, genre, platform, release_date, status, rating, review, comments, user_id, config);
         return dispatch(addGameSuccess(gamesResponse));
-
     } catch (e) {
         return e
     }    
@@ -105,10 +102,7 @@ export const callDeleteGameApi = (user_id: string, game_id: string): Function =>
             }
         }
         const gamesResponse = await api.gameApi.deleteGame(user_id, game_id, config);
-
-        console.log('deleteGamesResponse ', gamesResponse);
         return dispatch(deleteGameSuccess(gamesResponse));
-
     } catch (e) {
         return e
     }    
@@ -121,7 +115,7 @@ export const updateGameSuccess = (payload: IGameApiResponse): IGameAction => {
     }
 }
 
-export const callUpdateGameApi = (title: string, user_id: string, game_id: string): Function => async (
+export const callUpdateGameApi = (title: string, genre: string, platform: string, release_date: string, status: string, rating: number, review: string, comments: string, user_id: string, game_id: string): Function => async (
     dispatch: ThunkDispatch<AppState, void, IGameAction>,
     state: AppState,
     api: IApi
@@ -132,11 +126,8 @@ export const callUpdateGameApi = (title: string, user_id: string, game_id: strin
                 Authorization: `Bearer ${localStorage.getItem("accessToken")}`
             }
         }
-        const gamesResponse = await api.gameApi.updateGame(title, user_id, game_id, config);
-
-        console.log('updateGameSuccess ', gamesResponse);
+        const gamesResponse = await api.gameApi.updateGame(title, genre, platform, release_date, status, rating, review, comments, user_id, game_id, config);
         return dispatch(updateGameSuccess(gamesResponse));
-
     } catch (e) {
         return e
     }    

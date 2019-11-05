@@ -2,6 +2,13 @@ export interface IGame {
     _id: string,
     title: string,
     user: string,
+    status: string;
+    platform: string;
+    release_date?: string | null;
+    genre?: string | null;
+    rating?: number | null;
+    review?: string | null;
+    comments?: string | null;
 }
 
 export interface IGamesApiResponse {
