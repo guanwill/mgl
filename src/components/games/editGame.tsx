@@ -132,7 +132,7 @@ export class EditGame extends React.Component<
                 <select
                     name="genre"
                     id="genre"
-                    value={this.state.genre}
+                    value={this.state.genre ? this.state.genre : ""}
                     onChange={e => this.handleInputChange(e)}
                 >
                     <option value="">Please select</option>
