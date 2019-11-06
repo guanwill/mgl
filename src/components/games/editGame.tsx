@@ -4,7 +4,7 @@ import { callUpdateGameApi } from "../../actions/game/gameActions";
 import { AppState, IUserGamesStore } from "../../store";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
-import { IGame } from "../../model/game/game";
+import moment from 'moment';
 
 interface Props {
   callUpdateGameApi(title: string, genre: string, platform: string, release_date: string, status: string, rating: number, review: string, comments: string, user_id: string, game_id: string): void;
@@ -172,7 +172,7 @@ export class EditGame extends React.Component<
                 className="form-control"
                 name="release_date"
                 onFocus={(e) => e.target.type = 'date'}
-                value={this.state.release_date ? new Date(this.state.release_date).toISOString().substr(0,10) : ""}
+                value={this.state.release_date ? moment(new Date(this.state.release_date)).format("DD/MM/YYYY") : ""}
                 onChange={e => this.handleInputChange(e)}
               />
             </div>

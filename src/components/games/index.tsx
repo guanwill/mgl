@@ -8,10 +8,13 @@ import { AppState, IUserGamesStore } from "../../store";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
-// UI Libraries
+// MUI
 import Container from "@material-ui/core/Container";
 import MUIDataTable from "mui-datatables";
+import Button from "@material-ui/core/Button";
+import { ButtonWrapper } from "../../styles/styles";
 
 interface Props {
   userGames: IUserGamesStore;
@@ -53,16 +56,43 @@ export class Games extends React.Component<
     }
   };
 
+  
+
   public render() {
     const { games } = this.props.userGames;
 
     const columns = [
       {
+        name: "",
+        label: "",
+        options: {
+          filter: false,
+          sort: false
+        }
+      },
+      {
         name: "title",
         label: "Title",
         options: {
-          filter: true,
+          filter: false,
           sort: true
+        }
+      },
+      {
+        name: "release_date",
+        label: "Release Date",
+        options: {
+          filter: false,
+          sort: true,
+          customBodyRender: (value, tableMeta, updateValue) => {
+            const game = games.find(
+              game => game.title === tableMeta.rowData[1]
+            )!;
+            const release_date = game.release_date;
+            if (release_date) {
+              return moment(new Date(release_date)).format("DD/MM/YYYY");
+            }
+          }
         }
       },
       {
@@ -91,22 +121,24 @@ export class Games extends React.Component<
           customBodyRender: (value, tableMeta, updateValue) => {
             return (
               <>
-              <button
-                onClick={() => {
-                  this.deleteGame(
-                    this.props.match.params.user_id,
-                    games[tableMeta.rowIndex]._id
-                  );
-                }}
-              >
-                Delete
-              </button>
+                <button
+                  onClick={() => {
+                    const game = games.find(
+                      game => game.title === tableMeta.rowData[1]
+                    )!;
+                    this.deleteGame(this.props.match.params.user_id, game);
+                  }}
+                >
+                  Delete
+                </button>
 
-               <Link
-                to={`/user/${this.props.match.params.user_id}/games/${games[tableMeta.rowIndex]._id}/edit`}
-              >
-                Edit Game
-              </Link>
+                <Link
+                  to={`/user/${this.props.match.params.user_id}/games/${
+                    games.find(game => game.title === tableMeta.rowData[1])!._id
+                  }/edit`}
+                >
+                  Edit Game
+                </Link>
               </>
             );
           }
@@ -119,11 +151,11 @@ export class Games extends React.Component<
     const options = {
       responsive: "stacked",
       pagination: false,
-      filter: false,
+      filter: true,
       print: false,
       download: false,
       viewColumns: false,
-      selectableRows: 'none',
+      selectableRows: "none"
       //  filterType: 'checkbox',
       // onRowClick
       // onCellClick
@@ -137,12 +169,15 @@ export class Games extends React.Component<
           {console.log("user games: ", games)}
 
           {/* only appear for logged in user, no one else */}
-          <Link to={`/user/${this.props.match.params.user_id}/games/add`}>
-            Add Game
-          </Link>
-
+          <ButtonWrapper>
+            <Button component={ Link } to={`/user/${this.props.match.params.user_id}/games/add`} variant="contained" color="primary">
+              Add Game
+            </Button>
+          </ButtonWrapper>
+          
+          
           <MUIDataTable
-            title={"Employee List"}
+            title={"My Inventory"}
             data={data}
             columns={columns}
             options={options}
