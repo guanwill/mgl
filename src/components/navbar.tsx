@@ -11,8 +11,9 @@ import { logoutUser } from "../actions/auth/authActions";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import { NavBrandWrapper, NavButtonWrapper } from "../styles/styles";
+import Grid from "@material-ui/core/Grid";
 
 interface Props {
   userInformation: IAuthenticatedDetails;
@@ -22,26 +23,22 @@ interface State {}
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   menuButton: {
     marginRight: theme.spacing(2)
-  },
-  title: {
-    width: '100%',
-    textAlign: 'left',
-    // fontFamily: 'Press Start 2P',
   },
   authButton: {
     boxShadow: "none",
     "&:hover": {
       boxShadow: "none"
-    },
+    }
   },
-  navButtonWrapper: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'flex-end'
+  appbar: {
+    border: "3px solid white"
+  },
+  toolbar: {
+    margin: '7px'
   }
 }));
 
@@ -61,36 +58,39 @@ export class Navbar extends React.Component<
       const classes = useStyles({});
       return (
         <div className={classes.root}>
-          <AppBar position="static">
-            <Toolbar>
-              <Typography className={classes.title}>
-                <h2 className={classes.title}>
-                  A HERO'S BAG
-                  </h2>
-              </Typography>
-              <div className={classes.navButtonWrapper}>
-                {isTokenExpired() ? guestLinks(classes) : authLinks(classes)}
-              </div>
-              
+          <AppBar className={classes.appbar} position="static">
+            <Toolbar className={classes.toolbar}>
+              <Grid container spacing={1}>
+                <Grid item md={6} xs={12}>
+                  <NavBrandWrapper>A HERO'S BAG</NavBrandWrapper>
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <NavButtonWrapper>
+                    {isTokenExpired()
+                      ? guestLinks(classes)
+                      : authLinks(classes)}
+                  </NavButtonWrapper>
+                </Grid>
+              </Grid>
             </Toolbar>
           </AppBar>
         </div>
       );
     };
 
-    const authLinks = (classes) => {
+    const authLinks = classes => {
       return (
         <Button
-            className={classes.authButton}
-            onClick={this.onLogout.bind(this)}
-            variant="contained"
-            color="primary"
-          >
-            Logout
-      </Button>
-      )
-    }
-      
+          className={classes.authButton}
+          onClick={this.onLogout.bind(this)}
+          variant="contained"
+          color="primary"
+        >
+          Logout
+        </Button>
+      );
+    };
+
     const guestLinks = classes => {
       return (
         <>

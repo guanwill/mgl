@@ -87,7 +87,7 @@ export class Register extends React.Component<
     const { userInformation } = this.props;
 
     return (
-      <div className="container" style={{ marginTop: "50px", width: "700px" }}>
+      <div className="container">
         <h2 style={{ marginBottom: "40px" }}>Registration</h2>
 
         <p>{userInformation.message}</p>
