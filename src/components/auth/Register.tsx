@@ -6,6 +6,11 @@ import { AppState } from "../../store";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
 
+// Materialui
+import Container from "@material-ui/core/Container";
+import Button from "@material-ui/core/Button";
+import { InputField, PageTitle } from "../../styles/styles";
+
 interface Props {
   userInformation: IAuthenticatedDetails;
   callRegisterApi: Function
@@ -87,15 +92,14 @@ export class Register extends React.Component<
     const { userInformation } = this.props;
 
     return (
-      <div className="container">
-        <h2 style={{ marginBottom: "40px" }}>Registration</h2>
+      <Container>
+        <PageTitle>Registration</PageTitle>
 
         <p>{userInformation.message}</p>
 
-        <form onSubmit={this.handleSubmit}>
-          <div className="form-group"></div>
-          <div className="form-group">
-            <input
+        <form id="register" onSubmit={this.handleSubmit}>
+          <div>
+            <InputField
               type="email"
               placeholder="Email"
               className="form-control"
@@ -104,8 +108,8 @@ export class Register extends React.Component<
               value={this.state.username}
             />
           </div>
-          <div className="form-group">
-            <input
+          <div>
+            <InputField
               type="password"
               placeholder="Password"
               className="form-control"
@@ -114,8 +118,8 @@ export class Register extends React.Component<
               value={this.state.password}
             />
           </div>
-          <div className="form-group">
-            <input
+          <div>
+            <InputField
               type="password"
               placeholder="Confirm Password"
               className="form-control"
@@ -125,13 +129,22 @@ export class Register extends React.Component<
             />
             <p>{this.state.password_validation}</p>
           </div>
-          <div className="form-group">
-            <button disabled={this.state.submit_disabled} type="submit" className="btn btn-primary">
+          <div>
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={this.state.submit_disabled}
+            type="submit"
+            form="register"
+          >
+            Register
+          </Button>
+            {/* <button disabled={this.state.submit_disabled} type="submit" className="btn btn-primary">
               Register User
-            </button>
+            </button> */}
           </div>
         </form>
-      </div>
+      </Container>
     );
   }
 }
