@@ -7,11 +7,43 @@ import isTokenExpired from "../helpers/isTokenExpired";
 import { IAuthenticatedDetails } from "../model/auth/auth";
 import { logoutUser } from "../actions/auth/authActions";
 
+// MaterialUI
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+
 interface Props {
   userInformation: IAuthenticatedDetails;
   logoutUser: Function;
 }
 interface State {}
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2)
+  },
+  title: {
+    width: '100%',
+    textAlign: 'left',
+    // fontFamily: 'Press Start 2P',
+  },
+  authButton: {
+    boxShadow: "none",
+    "&:hover": {
+      boxShadow: "none"
+    },
+  },
+  navButtonWrapper: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'flex-end'
+  }
+}));
 
 export class Navbar extends React.Component<
   Props & RouteComponentProps,
@@ -25,32 +57,76 @@ export class Navbar extends React.Component<
   };
 
   public render() {
-    const authLinks = (
-      <ul className="navbar-nav ml-auto">
-        <a href="#" className="nav-link" onClick={this.onLogout.bind(this)}>
-          Logout
-        </a>
-      </ul>
-    );
-    const guestLinks = (
-      <ul className="navbar-nav ml-auto">
-        <li className="nav-item">
-          <Link className="nav-link" to="/register">
-            Sign Up
+    const NavBar = () => {
+      const classes = useStyles({});
+      return (
+        <div className={classes.root}>
+          <AppBar position="static">
+            <Toolbar>
+              <Typography className={classes.title}>
+                <h2 className={classes.title}>
+                  A HERO'S BAG
+                  </h2>
+              </Typography>
+              <div className={classes.navButtonWrapper}>
+                {isTokenExpired() ? guestLinks(classes) : authLinks(classes)}
+              </div>
+              
+            </Toolbar>
+          </AppBar>
+        </div>
+      );
+    };
+
+    const authLinks = (classes) => {
+      return (
+        <Button
+            className={classes.authButton}
+            onClick={this.onLogout.bind(this)}
+            variant="contained"
+            color="primary"
+          >
+            Logout
+      </Button>
+      )
+    }
+      
+    const guestLinks = classes => {
+      return (
+        <>
+          <Button
+            className={classes.authButton}
+            component={Link}
+            to={`/register`}
+            variant="contained"
+            color="primary"
+          >
+            Register
+          </Button>
+
+          <Button
+            className={classes.authButton}
+            component={Link}
+            to={`/login`}
+            variant="contained"
+            color="primary"
+          >
+            Login
+          </Button>
+
+          {/* <Link className="nav-link" to="/register">
+            <Button color="inherit">Register</Button>
           </Link>
-        </li>
-        <li className="nav-item">
           <Link className="nav-link" to="/login">
             Sign In
-          </Link>
-        </li>
-      </ul>
-    );
+          </Link> */}
+        </>
+      );
+    };
+
     return (
       <>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          {isTokenExpired() ? guestLinks : authLinks}
-        </div>
+        <NavBar />
       </>
     );
   }

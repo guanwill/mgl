@@ -15,6 +15,7 @@ import Container from "@material-ui/core/Container";
 import MUIDataTable from "mui-datatables";
 import Button from "@material-ui/core/Button";
 import { ButtonWrapper } from "../../styles/styles";
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 interface Props {
   userGames: IUserGamesStore;
@@ -165,6 +166,8 @@ export class Games extends React.Component<
       <>
         <Container>
           <h1>My Inventory</h1>
+
+          <VisibilityIcon/>
 
           {console.log("user games: ", games)}
 

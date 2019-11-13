@@ -34,8 +34,7 @@ const Main = () => {
           <Route exact path='/user/:user_id/games/:game_id/edit' component={EditGame}/>
         </Switch>
       </main>      
-    </Provider>
-
+    </Provider>    
   )
 }
 
