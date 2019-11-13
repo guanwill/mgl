@@ -6,6 +6,11 @@ import { AppState } from "../../store";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
 
+// Materialui
+import Container from "@material-ui/core/Container";
+import Button from "@material-ui/core/Button";
+import { InputField, PageTitle, ButtonWrapper } from "../../styles/styles";
+
 interface Props {
   userInformation: IAuthenticatedDetails;
   callLoginApi: Function;
@@ -43,7 +48,9 @@ export class Login extends React.Component<Props & RouteComponentProps, State> {
   componentDidUpdate = prevProps => {
     if (this.props.userInformation.user.verified) {
       console.log("verified", this.props.userInformation.user.verified);
-      this.props.history.push(`/user/${this.props.userInformation.user._id}/games`);
+      this.props.history.push(
+        `/user/${this.props.userInformation.user._id}/games`
+      );
     } else if (this.props.userInformation.user.verified === prevProps) {
       this.props.history.push("/login");
     }
@@ -58,23 +65,23 @@ export class Login extends React.Component<Props & RouteComponentProps, State> {
   };
 
   componentWillMount = () => {
-    this.props.userInformation.message = ''
+    this.props.userInformation.message = "";
   };
 
   public render() {
     const { userInformation } = this.props;
     return (
-      <>
-        <h1>Login</h1>
+      <Container>
+        <PageTitle>Login</PageTitle>
 
         {console.log("user info: ", userInformation)}
         <p>{userInformation.user.username}</p>
         <p>{userInformation.message}</p>
 
         <div>
-          <form onSubmit={this.handleSubmit}>
-            <div className="form-group">
-              <input
+          <form id="login" onSubmit={this.handleSubmit}>
+            <div>
+              <InputField
                 type="email"
                 placeholder="Email"
                 className="form-control"
@@ -83,8 +90,8 @@ export class Login extends React.Component<Props & RouteComponentProps, State> {
                 value={this.state.username}
               />
             </div>
-            <div className="form-group">
-              <input
+            <div>
+              <InputField
                 type="password"
                 placeholder="Password"
                 className="form-control"
@@ -93,14 +100,21 @@ export class Login extends React.Component<Props & RouteComponentProps, State> {
                 value={this.state.password}
               />
             </div>
-            <div className="form-group">
-              <button type="submit" className="btn btn-primary">
-                Login User
-              </button>
+            <div>
+              <ButtonWrapper>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  form="login"
+                >
+                  Login
+                </Button>
+              </ButtonWrapper>
             </div>
           </form>
         </div>
-      </>
+      </Container>
     );
   }
 }
