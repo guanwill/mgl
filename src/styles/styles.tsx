@@ -15,8 +15,16 @@ export const LinkWrapper = styled.div`
   }
 `;
 
+export const BackLinkWrapper = styled.div`
+  width: 100%;
+  text-align: left;
+  a {
+    text-decoration: none;
+  }
+`;
+
 export const PageTitle = styled.h2`
-  margin: 40px 0 20px 0;
+  margin: 20px 0 20px 0;
   font-style: italic;
 `;
 
@@ -90,5 +98,11 @@ export const MuiTableWrapper = styled.div`
   border: 1px solid lightgrey;
   div {
     box-shadow: none;
+  }
+  th {
+    font-weight: bold;
+    font-style: italic;
+    font-size: 15px;
+    color: grey;
   }
 `;

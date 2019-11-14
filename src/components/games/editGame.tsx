@@ -7,7 +7,6 @@ import {
 import { AppState, IUserGamesStore } from "../../store";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
-import moment from "moment";
 
 // MUI
 import Container from "@material-ui/core/Container";
@@ -18,10 +17,9 @@ import {
   SelectField,
   TextAreaField,
   PageTitle,
-  LinkWrapper,
-  ContainerInner
+  ContainerInner,
+  BackLinkWrapper
 } from "../../styles/styles";
-import VisibilityIcon from "@material-ui/icons/Visibility";
 import { Link } from "react-router-dom";
 
 interface Props {
@@ -149,159 +147,153 @@ export class EditGame extends React.Component<
     return (
       <Container>
         <ContainerInner>
-        <PageTitle>Edit Game</PageTitle>
+          <BackLinkWrapper>
+            <Link to={`/user/${this.props.match.params.user_id}/games/`}>
+              Back
+            </Link>
+          </BackLinkWrapper>
+          <PageTitle>Edit Game</PageTitle>
 
-        <div>
-          <form id="EditGame" onSubmit={this.handleSubmit}>
-            <div>
-              <InputField
-                type="input"
-                placeholder="Title"
-                className="form-control"
-                name="title"
-                value={this.state.title}
-                required={true}
-                onChange={e => this.handleInputChange(e)}
-              />
-            </div>
+          <div>
+            <form id="EditGame" onSubmit={this.handleSubmit}>
+              <div>
+                <InputField
+                  type="input"
+                  placeholder="Title"
+                  className="form-control"
+                  name="title"
+                  value={this.state.title}
+                  required={true}
+                  onChange={e => this.handleInputChange(e)}
+                />
+              </div>
 
-            <div>
-              <SelectField
-                name="genre"
-                id="genre"
-                value={this.state.genre ? this.state.genre : ""}
-                onChange={e => this.handleInputChange(e)}
-              >
-                <option value="">Select Genre</option>
-                <option value="adventure">Adventure</option>
-                <option value="action">Action</option>
-                <option value="fighting">Fighting</option>
-                <option value="fps">FPS</option>
-                <option value="sport">Sport</option>
-                <option value="rpg">RPG</option>
-                <option value="puzzle">Puzzle</option>
-                <option value="simulation">Simulation</option>
-                <option value="other">Other</option>
-              </SelectField>
-            </div>
+              <div>
+                <SelectField
+                  name="genre"
+                  id="genre"
+                  value={this.state.genre ? this.state.genre : ""}
+                  onChange={e => this.handleInputChange(e)}
+                >
+                  <option value="">Select Genre</option>
+                  <option value="adventure">Adventure</option>
+                  <option value="action">Action</option>
+                  <option value="fighting">Fighting</option>
+                  <option value="fps">FPS</option>
+                  <option value="sport">Sport</option>
+                  <option value="rpg">RPG</option>
+                  <option value="puzzle">Puzzle</option>
+                  <option value="simulation">Simulation</option>
+                  <option value="other">Other</option>
+                </SelectField>
+              </div>
 
-            <div>
-              <SelectField
-                name="platform"
-                id="platform"
-                value={this.state.platform}
-                onChange={e => this.handleInputChange(e)}
-                required={true}
-              >
-                <option value="">Select Platform</option>
-                <option value="playstation">Playstation</option>
-                <option value="xbox">XBOX</option>
-                <option value="switch">Nintendo Switch</option>
-                <option value="pc">PC</option>
-                <option value="Other">Other</option>
-              </SelectField>
-            </div>
+              <div>
+                <SelectField
+                  name="platform"
+                  id="platform"
+                  value={this.state.platform}
+                  onChange={e => this.handleInputChange(e)}
+                  required={true}
+                >
+                  <option value="">Select Platform</option>
+                  <option value="playstation">Playstation</option>
+                  <option value="xbox">XBOX</option>
+                  <option value="switch">Nintendo Switch</option>
+                  <option value="pc">PC</option>
+                  <option value="Other">Other</option>
+                </SelectField>
+              </div>
 
-            <div>
-              <InputField
-                type="input"
-                placeholder="Release date"
-                className="form-control"
-                name="release_date"
-                onFocus={e => (e.target.type = "date")}
-                value={
-                  this.state.release_date
-                    ? moment(new Date(this.state.release_date)).format(
-                        "DD/MM/YYYY"
-                      )
-                    : ""
-                }
-                onChange={e => this.handleInputChange(e)}
-              />
-            </div>
+              <div>
+                <InputField
+                  type="input"
+                  placeholder="Release date"
+                  className="form-control"
+                  name="release_date"
+                  onFocus={e => (e.target.type = "date")}
+                  value={this.state.release_date ? this.state.release_date : ""}
+                  onChange={e => this.handleInputChange(e)}
+                />
+              </div>
 
-            <div>
-              <SelectField
-                name="status"
-                id="status"
-                value={this.state.status}
-                onChange={e => this.handleInputChange(e)}
-                required={true}
-              >
-                <option value="">select Status</option>
-                <option value="playing">Playing</option>
-                <option value="finished">Finished</option>
-                <option value="on_hold">On Hold</option>
-                <option value="wishlist">On Wishlist</option>
-                <option value="maybe">Maybe</option>
-                <option value="started">Just Started</option>
-                <option value="half_way">Half way</option>
-              </SelectField>
-            </div>
+              <div>
+                <SelectField
+                  name="status"
+                  id="status"
+                  value={this.state.status}
+                  onChange={e => this.handleInputChange(e)}
+                  required={true}
+                >
+                  <option value="">select Status</option>
+                  <option value="playing">Playing</option>
+                  <option value="finished">Finished</option>
+                  <option value="on_hold">On Hold</option>
+                  <option value="wishlist">On Wishlist</option>
+                  <option value="maybe">Maybe</option>
+                  <option value="started">Just Started</option>
+                  <option value="half_way">Half way</option>
+                </SelectField>
+              </div>
 
-            <div>
-              <InputField
-                type="number"
-                placeholder="Rating"
-                className="form-control"
-                name="rating"
-                value={this.state.rating ? this.state.rating : Number("")}
-                onChange={e => this.handleInputChange(e)}
-              />
-            </div>
+              <div>
+                <InputField
+                  type="number"
+                  placeholder="Rating"
+                  className="form-control"
+                  name="rating"
+                  value={this.state.rating ? this.state.rating : Number("")}
+                  onChange={e => this.handleInputChange(e)}
+                />
+              </div>
 
-            <div>
+              <div>
+                <TextAreaField
+                  placeholder="Review"
+                  className="form-control"
+                  name="review"
+                  value={this.state.review ? this.state.review : ""}
+                  onChange={e => this.handleInputChange(e)}
+                />
+              </div>
+
               <TextAreaField
-                placeholder="Review"
+                placeholder="Comments"
                 className="form-control"
-                name="review"
-                value={this.state.review ? this.state.review : ""}
+                name="comments"
+                value={this.state.comments ? this.state.comments : ""}
                 onChange={e => this.handleInputChange(e)}
               />
-            </div>
 
-            <TextAreaField
-              placeholder="Comments"
-              className="form-control"
-              name="comments"
-              value={this.state.comments ? this.state.comments : ""}
-              onChange={e => this.handleInputChange(e)}
-            />
-
-            <div>
-              <ButtonWrapper>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  type="submit"
-                  form="EditGame"
-                >
-                  Update Game
-                </Button>
-              </ButtonWrapper>
-              <ButtonWrapper>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  type="submit"
-                  onClick={() => {
-                    this.deleteGame(
-                      this.props.match.params.user_id,
-                      this.props.match.params.game_id
-                    );
-                  }}
-                >
-                  Delete Game
-                </Button>
-              </ButtonWrapper>
-              <LinkWrapper>
-                <Link to={`/user/${this.props.match.params.user_id}/games/`}>
-                  Back
-                </Link>
-              </LinkWrapper>
-            </div>
-          </form>
-        </div>
+              <div>
+                <ButtonWrapper>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    type="submit"
+                    form="EditGame"
+                  >
+                    Update Game
+                  </Button>
+                </ButtonWrapper>
+                <ButtonWrapper>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    type="submit"
+                    onClick={() => {
+                      this.deleteGame(
+                        this.props.match.params.user_id,
+                        this.props.match.params.game_id
+                      );
+                    }}
+                  >
+                    Delete Game
+                  </Button>
+                </ButtonWrapper>
+              </div>
+            </form>
+          </div>
         </ContainerInner>
       </Container>
     );

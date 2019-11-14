@@ -83,7 +83,7 @@ export class Games extends React.Component<
       },
       {
         name: "release_date",
-        label: "Release Date",
+        label: "Date",
         options: {
           filter: false,
           sort: true,
@@ -141,7 +141,7 @@ export class Games extends React.Component<
     const data = games;
 
     const options = {
-      responsive: "stacked",
+      responsive: "scrollMaxHeight",
       pagination: false,
       filter: true,
       print: false,

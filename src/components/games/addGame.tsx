@@ -14,8 +14,8 @@ import {
   ButtonWrapper,
   SelectField,
   TextAreaField,
-  LinkWrapper,
-  ContainerInner
+  ContainerInner,
+  BackLinkWrapper
 } from "../../styles/styles";
 import { Link } from "react-router-dom";
 
@@ -111,6 +111,11 @@ export class AddGame extends React.Component<
     return (
       <Container>
         <ContainerInner>
+          <BackLinkWrapper>
+            <Link to={`/user/${this.props.match.params.user_id}/games/`}>
+              Back
+            </Link>
+          </BackLinkWrapper>
           <PageTitle>Add Game</PageTitle>
 
           <p>{this.props.userGames.message}</p>
@@ -229,11 +234,6 @@ export class AddGame extends React.Component<
                     Add Game
                   </Button>
                 </ButtonWrapper>
-                <LinkWrapper>
-                  <Link to={`/user/${this.props.match.params.user_id}/games/`}>
-                    Back
-                  </Link>
-                </LinkWrapper>
               </div>
             </form>
           </div>
