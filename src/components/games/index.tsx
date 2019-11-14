@@ -14,8 +14,12 @@ import moment from "moment";
 import Container from "@material-ui/core/Container";
 import MUIDataTable from "mui-datatables";
 import Button from "@material-ui/core/Button";
-import { ButtonWrapper } from "../../styles/styles";
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import {
+  ButtonWrapper,
+  MuiTableWrapper,
+  ContainerInner
+} from "../../styles/styles";
+import VisibilityIcon from "@material-ui/icons/Visibility";
 
 interface Props {
   userGames: IUserGamesStore;
@@ -56,8 +60,6 @@ export class Games extends React.Component<
       this.props.callDeleteGameApi(user_id, game_id);
     }
   };
-
-  
 
   public render() {
     const { games } = this.props.userGames;
@@ -113,7 +115,7 @@ export class Games extends React.Component<
         }
       },
       {
-        name: "actions",
+        name: "Actions",
         label: "Actions",
         options: {
           filter: false,
@@ -122,23 +124,12 @@ export class Games extends React.Component<
           customBodyRender: (value, tableMeta, updateValue) => {
             return (
               <>
-                <button
-                  onClick={() => {
-                    const game = games.find(
-                      game => game.title === tableMeta.rowData[1]
-                    )!;
-                    this.deleteGame(this.props.match.params.user_id, game);
-                  }}
-                >
-                  Delete
-                </button>
-
                 <Link
                   to={`/user/${this.props.match.params.user_id}/games/${
                     games.find(game => game.title === tableMeta.rowData[1])!._id
                   }/edit`}
                 >
-                  Edit Game
+                  <VisibilityIcon />
                 </Link>
               </>
             );
@@ -165,26 +156,32 @@ export class Games extends React.Component<
     return (
       <>
         <Container>
-          <h1>My Inventory</h1>
+          <ContainerInner>
+            <h1>My Inventory</h1>
 
-          <VisibilityIcon/>
+            {console.log("user games: ", games)}
 
-          {console.log("user games: ", games)}
+            {/* only appear for logged in user, no one else */}
+            <ButtonWrapper>
+              <Button
+                component={Link}
+                to={`/user/${this.props.match.params.user_id}/games/add`}
+                variant="outlined"
+                color="primary"
+              >
+                Add Game
+              </Button>
+            </ButtonWrapper>
 
-          {/* only appear for logged in user, no one else */}
-          <ButtonWrapper>
-            <Button component={ Link } to={`/user/${this.props.match.params.user_id}/games/add`} variant="contained" color="primary">
-              Add Game
-            </Button>
-          </ButtonWrapper>
-          
-          
-          <MUIDataTable
-            title={"My Inventory"}
-            data={data}
-            columns={columns}
-            options={options}
-          />
+            <MuiTableWrapper>
+              <MUIDataTable
+                title={""}
+                data={data}
+                columns={columns}
+                options={options}
+              />
+            </MuiTableWrapper>
+          </ContainerInner>
         </Container>
       </>
     );

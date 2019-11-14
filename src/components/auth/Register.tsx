@@ -139,9 +139,6 @@ export class Register extends React.Component<
           >
             Register
           </Button>
-            {/* <button disabled={this.state.submit_disabled} type="submit" className="btn btn-primary">
-              Register User
-            </button> */}
           </div>
         </form>
       </Container>

@@ -1,13 +1,43 @@
 import React from "react";
 import { connect } from "react-redux";
-import { callUpdateGameApi } from "../../actions/game/gameActions";
+import {
+  callUpdateGameApi,
+  callDeleteGameApi
+} from "../../actions/game/gameActions";
 import { AppState, IUserGamesStore } from "../../store";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
-import moment from 'moment';
+import moment from "moment";
+
+// MUI
+import Container from "@material-ui/core/Container";
+import Button from "@material-ui/core/Button";
+import {
+  ButtonWrapper,
+  InputField,
+  SelectField,
+  TextAreaField,
+  PageTitle,
+  LinkWrapper,
+  ContainerInner
+} from "../../styles/styles";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import { Link } from "react-router-dom";
 
 interface Props {
-  callUpdateGameApi(title: string, genre: string, platform: string, release_date: string, status: string, rating: number, review: string, comments: string, user_id: string, game_id: string): void;
+  callUpdateGameApi(
+    title: string,
+    genre: string,
+    platform: string,
+    release_date: string,
+    status: string,
+    rating: number,
+    review: string,
+    comments: string,
+    user_id: string,
+    game_id: string
+  ): void;
+  callDeleteGameApi(user_id: string, game_id: string);
   userGames: IUserGamesStore;
 }
 
@@ -53,12 +83,18 @@ export class EditGame extends React.Component<
     await this.setState(newState);
   };
 
+  deleteGame = (user_id, game_id) => {
+    if (window.confirm("Delete Game?")) {
+      this.props.callDeleteGameApi(user_id, game_id);
+    }
+  };
+
   handleSubmit = async e => {
     e.preventDefault();
 
     await this.props.callUpdateGameApi(
       this.state.title,
-      
+
       this.state.genre ? this.state.genre : "",
       this.state.platform,
       this.state.release_date ? this.state.release_date : "",
@@ -89,35 +125,36 @@ export class EditGame extends React.Component<
     const gamesList = this.props.userGames.games;
     const gameToEditId = this.props.match.params.game_id;
     const gameToEdit = gamesList.find(game => game._id === gameToEditId);
-    
+
     let newGameState;
 
     if (gameToEdit) {
-        newGameState = {
-            _id: gameToEdit._id,
-            user: gameToEdit.user,
-            title: gameToEdit.title,
-            genre: gameToEdit.genre,
-            platform: gameToEdit.platform,
-            release_date: gameToEdit.release_date,
-            status: gameToEdit.status,
-            rating: gameToEdit.rating,
-            review: gameToEdit.review,
-            comments: gameToEdit.comments
-        }
-        this.setState(newGameState)
-    }      
-  }
+      newGameState = {
+        _id: gameToEdit._id,
+        user: gameToEdit.user,
+        title: gameToEdit.title,
+        genre: gameToEdit.genre,
+        platform: gameToEdit.platform,
+        release_date: gameToEdit.release_date,
+        status: gameToEdit.status,
+        rating: gameToEdit.rating,
+        review: gameToEdit.review,
+        comments: gameToEdit.comments
+      };
+      this.setState(newGameState);
+    }
+  };
 
   public render() {
     return (
-      <>
-        <h1>Edit Game</h1>
+      <Container>
+        <ContainerInner>
+        <PageTitle>Edit Game</PageTitle>
 
         <div>
-          <form onSubmit={this.handleSubmit}>
-            <div className="form-group">
-              <input
+          <form id="EditGame" onSubmit={this.handleSubmit}>
+            <div>
+              <InputField
                 type="input"
                 placeholder="Title"
                 className="form-control"
@@ -126,78 +163,84 @@ export class EditGame extends React.Component<
                 required={true}
                 onChange={e => this.handleInputChange(e)}
               />
-            </div>            
-
-            <div className="form-group">
-                <select
-                    name="genre"
-                    id="genre"
-                    value={this.state.genre ? this.state.genre : ""}
-                    onChange={e => this.handleInputChange(e)}
-                >
-                    <option value="">Please select</option>
-                    <option value="adventure">Adventure</option>
-                    <option value="action">Action</option>
-                    <option value="fighting">Fighting</option>
-                    <option value="fps">FPS</option>
-                    <option value="sport">Sport</option>
-                    <option value="rpg">RPG</option>
-                    <option value="puzzle">Puzzle</option>
-                    <option value="simulation">Simulation</option>
-                    <option value="other">Other</option>
-                </select>
             </div>
 
-            <div className="form-group">
-                <select
-                    name="platform"
-                    id="platform"
-                    value={this.state.platform}
-                    onChange={e => this.handleInputChange(e)}
-                    required={true}
-                >
-                    <option value="">Please select</option>
-                    <option value="playstation">Playstation</option>
-                    <option value="xbox">XBOX</option>
-                    <option value="switch">Nintendo Switch</option>
-                    <option value="pc">PC</option>
-                    <option value="Other">Other</option>
-                </select>
+            <div>
+              <SelectField
+                name="genre"
+                id="genre"
+                value={this.state.genre ? this.state.genre : ""}
+                onChange={e => this.handleInputChange(e)}
+              >
+                <option value="">Select Genre</option>
+                <option value="adventure">Adventure</option>
+                <option value="action">Action</option>
+                <option value="fighting">Fighting</option>
+                <option value="fps">FPS</option>
+                <option value="sport">Sport</option>
+                <option value="rpg">RPG</option>
+                <option value="puzzle">Puzzle</option>
+                <option value="simulation">Simulation</option>
+                <option value="other">Other</option>
+              </SelectField>
             </div>
 
-            <div className="form-group">
-              <input
+            <div>
+              <SelectField
+                name="platform"
+                id="platform"
+                value={this.state.platform}
+                onChange={e => this.handleInputChange(e)}
+                required={true}
+              >
+                <option value="">Select Platform</option>
+                <option value="playstation">Playstation</option>
+                <option value="xbox">XBOX</option>
+                <option value="switch">Nintendo Switch</option>
+                <option value="pc">PC</option>
+                <option value="Other">Other</option>
+              </SelectField>
+            </div>
+
+            <div>
+              <InputField
                 type="input"
                 placeholder="Release date"
                 className="form-control"
                 name="release_date"
-                onFocus={(e) => e.target.type = 'date'}
-                value={this.state.release_date ? moment(new Date(this.state.release_date)).format("DD/MM/YYYY") : ""}
+                onFocus={e => (e.target.type = "date")}
+                value={
+                  this.state.release_date
+                    ? moment(new Date(this.state.release_date)).format(
+                        "DD/MM/YYYY"
+                      )
+                    : ""
+                }
                 onChange={e => this.handleInputChange(e)}
               />
             </div>
 
-            <div className="form-group">
-                <select
-                    name="status"
-                    id="status"
-                    value={this.state.status}
-                    onChange={e => this.handleInputChange(e)}
-                    required={true}
-                >
-                    <option value="">Please select</option>
-                    <option value="playing">Playing</option>
-                    <option value="finished">Finished</option>
-                    <option value="on_hold">On Hold</option>
-                    <option value="wishlist">On Wishlist</option>
-                    <option value="maybe">Maybe</option>
-                    <option value="started">Just Started</option>
-                    <option value="half_way">Half way</option>
-                </select>
+            <div>
+              <SelectField
+                name="status"
+                id="status"
+                value={this.state.status}
+                onChange={e => this.handleInputChange(e)}
+                required={true}
+              >
+                <option value="">select Status</option>
+                <option value="playing">Playing</option>
+                <option value="finished">Finished</option>
+                <option value="on_hold">On Hold</option>
+                <option value="wishlist">On Wishlist</option>
+                <option value="maybe">Maybe</option>
+                <option value="started">Just Started</option>
+                <option value="half_way">Half way</option>
+              </SelectField>
             </div>
 
-            <div className="form-group">
-              <input
+            <div>
+              <InputField
                 type="number"
                 placeholder="Rating"
                 className="form-control"
@@ -207,32 +250,60 @@ export class EditGame extends React.Component<
               />
             </div>
 
-            <div className="form-group">
-              <textarea
-              placeholder="Review"
-              className="form-control"
-              name="review"
-              value={this.state.review ? this.state.review : ""}
-              onChange={e => this.handleInputChange(e)}
-              />                
+            <div>
+              <TextAreaField
+                placeholder="Review"
+                className="form-control"
+                name="review"
+                value={this.state.review ? this.state.review : ""}
+                onChange={e => this.handleInputChange(e)}
+              />
             </div>
 
-            <textarea
+            <TextAreaField
               placeholder="Comments"
               className="form-control"
               name="comments"
               value={this.state.comments ? this.state.comments : ""}
               onChange={e => this.handleInputChange(e)}
-              />                
+            />
 
-            <div className="form-group">
-              <button type="submit" className="btn btn-primary">
-                Update
-              </button>
+            <div>
+              <ButtonWrapper>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  type="submit"
+                  form="EditGame"
+                >
+                  Update Game
+                </Button>
+              </ButtonWrapper>
+              <ButtonWrapper>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  type="submit"
+                  onClick={() => {
+                    this.deleteGame(
+                      this.props.match.params.user_id,
+                      this.props.match.params.game_id
+                    );
+                  }}
+                >
+                  Delete Game
+                </Button>
+              </ButtonWrapper>
+              <LinkWrapper>
+                <Link to={`/user/${this.props.match.params.user_id}/games/`}>
+                  Back
+                </Link>
+              </LinkWrapper>
             </div>
           </form>
         </div>
-      </>
+        </ContainerInner>
+      </Container>
     );
   }
 }
@@ -242,7 +313,8 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const mapDispatchToProps = {
-  callUpdateGameApi
+  callUpdateGameApi,
+  callDeleteGameApi
 };
 
 export default connect(

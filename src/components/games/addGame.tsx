@@ -5,8 +5,32 @@ import { AppState, IUserGamesStore } from "../../store";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
 
+// Materialui
+import Container from "@material-ui/core/Container";
+import Button from "@material-ui/core/Button";
+import {
+  InputField,
+  PageTitle,
+  ButtonWrapper,
+  SelectField,
+  TextAreaField,
+  LinkWrapper,
+  ContainerInner
+} from "../../styles/styles";
+import { Link } from "react-router-dom";
+
 interface Props {
-  callAddGameApi(title: string, genre: string, platform: string, release_date: string, status: string, rating: number, review: string, comments: string, user_id: string): void;
+  callAddGameApi(
+    title: string,
+    genre: string,
+    platform: string,
+    release_date: string,
+    status: string,
+    rating: number,
+    review: string,
+    comments: string,
+    user_id: string
+  ): void;
   userGames: IUserGamesStore;
 }
 
@@ -85,123 +109,136 @@ export class AddGame extends React.Component<
 
   public render() {
     return (
-      <>
-        <h1>Add Game</h1>
+      <Container>
+        <ContainerInner>
+          <PageTitle>Add Game</PageTitle>
 
-        <p>{this.props.userGames.message}</p>
+          <p>{this.props.userGames.message}</p>
 
-        <div>
-          <form onSubmit={this.handleSubmit}>
-            <div className="form-group"></div>
-            <div className="form-group">
-              <input
-                type="input"
-                placeholder="Title"
-                className="form-control"
-                name="title"
-                required={true}
-                onChange={(e) => this.handleInputChange(e)}
-              />
-            </div>
+          <div>
+            <form id="AddGame" onSubmit={this.handleSubmit}>
+              <div>
+                <InputField
+                  type="input"
+                  placeholder="Title"
+                  className="form-control"
+                  name="title"
+                  required={true}
+                  onChange={e => this.handleInputChange(e)}
+                />
+              </div>
 
-            <div className="form-group">
-                <select
-                    name="genre"
-                    id="genre"
-                    onChange={e => this.handleInputChange(e)}
+              <div>
+                <SelectField
+                  name="genre"
+                  id="genre"
+                  onChange={e => this.handleInputChange(e)}
                 >
-                    <option value="">Please select</option>
-                    <option value="adventure">Adventure</option>
-                    <option value="action">Action</option>
-                    <option value="fighting">Fighting</option>
-                    <option value="fps">FPS</option>
-                    <option value="sport">Sport</option>
-                    <option value="rpg">RPG</option>
-                    <option value="puzzle">Puzzle</option>
-                    <option value="simulation">Simulation</option>
-                    <option value="other">Other</option>
-                </select>
-            </div>
+                  <option value="">Select Genre</option>
+                  <option value="adventure">Adventure</option>
+                  <option value="action">Action</option>
+                  <option value="fighting">Fighting</option>
+                  <option value="fps">FPS</option>
+                  <option value="sport">Sport</option>
+                  <option value="rpg">RPG</option>
+                  <option value="puzzle">Puzzle</option>
+                  <option value="simulation">Simulation</option>
+                  <option value="other">Other</option>
+                </SelectField>
+              </div>
 
-            <div className="form-group">
-                <select
-                    name="platform"
-                    id="platform"
-                    onChange={e => this.handleInputChange(e)}
-                    required={true}
+              <div>
+                <SelectField
+                  name="platform"
+                  id="platform"
+                  onChange={e => this.handleInputChange(e)}
+                  required={true}
                 >
-                    <option value="">Please select</option>
-                    <option value="playstation">Playstation</option>
-                    <option value="xbox">XBOX</option>
-                    <option value="switch">Nintendo Switch</option>
-                    <option value="pc">PC</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
+                  <option value="">Select Platform</option>
+                  <option value="playstation">Playstation</option>
+                  <option value="xbox">XBOX</option>
+                  <option value="switch">Nintendo Switch</option>
+                  <option value="pc">PC</option>
+                  <option value="Other">Other</option>
+                </SelectField>
+              </div>
 
-            <div className="form-group">
-              <input
-                type="input"
-                placeholder="Release date"
+              <div>
+                <InputField
+                  type="input"
+                  placeholder="Release date"
+                  className="form-control"
+                  name="release_date"
+                  onFocus={e => (e.target.type = "date")}
+                  onChange={e => this.handleInputChange(e)}
+                />
+              </div>
+
+              <div>
+                <SelectField
+                  name="status"
+                  id="status"
+                  onChange={e => this.handleInputChange(e)}
+                  required={true}
+                >
+                  <option value="">Select Status</option>
+                  <option value="playing">Playing</option>
+                  <option value="finished">Finished</option>
+                  <option value="on_hold">On Hold</option>
+                  <option value="wishlist">On Wishlist</option>
+                  <option value="maybe">Maybe</option>
+                  <option value="started">Just Started</option>
+                  <option value="half_way">Half way</option>
+                </SelectField>
+              </div>
+
+              <div>
+                <InputField
+                  type="number"
+                  placeholder="Rating"
+                  className="form-control"
+                  name="rating"
+                  onChange={e => this.handleInputChange(e)}
+                />
+              </div>
+
+              <div>
+                <TextAreaField
+                  placeholder="Review"
+                  className="form-control"
+                  name="review"
+                  onChange={e => this.handleInputChange(e)}
+                />
+              </div>
+
+              <TextAreaField
+                placeholder="Comments"
                 className="form-control"
-                name="release_date"
-                onFocus={(e) => e.target.type = 'date'}
+                name="comments"
                 onChange={e => this.handleInputChange(e)}
               />
-            </div>
 
-            <div className="form-group">
-                <select
-                    name="status"
-                    id="status"
-                    onChange={e => this.handleInputChange(e)}
-                    required={true}
-                >
-                    <option value="">Please select</option>
-                    <option value="playing">Playing</option>
-                    <option value="finished">Finished</option>
-                    <option value="on_hold">On Hold</option>
-                    <option value="wishlist">On Wishlist</option>
-                    <option value="maybe">Maybe</option>
-                    <option value="started">Just Started</option>
-                    <option value="half_way">Half way</option>
-                </select>
-            </div>
-
-            <div className="form-group">
-              <input
-                type="number"
-                placeholder="Rating"
-                className="form-control"
-                name="rating"
-                onChange={e => this.handleInputChange(e)}
-              />
-            </div>
-
-            <div className="form-group">
-              <textarea
-              placeholder="Review"
-              className="form-control"
-              name="review"
-              onChange={e => this.handleInputChange(e)}
-              />                
-            </div>
-
-            <textarea
-              placeholder="Comments"
-              className="form-control"
-              name="comments"
-              onChange={e => this.handleInputChange(e)}
-              />
-
-            <div className="form-group">
-              <button type="submit" className="btn btn-primary">
-                Add Game
-              </button>
-            </div>
-          </form>
-        </div>
-      </>
+              <div>
+                <ButtonWrapper>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    type="submit"
+                    form="AddGame"
+                  >
+                    Add Game
+                  </Button>
+                </ButtonWrapper>
+                <LinkWrapper>
+                  <Link to={`/user/${this.props.match.params.user_id}/games/`}>
+                    Back
+                  </Link>
+                </LinkWrapper>
+              </div>
+            </form>
+          </div>
+        </ContainerInner>
+      </Container>
     );
   }
 }

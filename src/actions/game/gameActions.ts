@@ -51,7 +51,8 @@ export const callFetchGamesApi = (user_id: string): Function => async (
             }
         }
         const gamesResponse: IGamesApiResponse = await api.gameApi.fetchGames(user_id, config);
-        return dispatch(loadedGames(gamesResponse.games));
+        const sortedGames = gamesResponse.games.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)); 
+        return dispatch(loadedGames(sortedGames));
 
     } catch (e) {
         return e
