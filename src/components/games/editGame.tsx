@@ -84,6 +84,7 @@ export class EditGame extends React.Component<
   deleteGame = (user_id, game_id) => {
     if (window.confirm("Delete Game?")) {
       this.props.callDeleteGameApi(user_id, game_id);
+      this.props.history.push(`/user/${this.props.match.params.user_id}/games`);
     }
   };
 
@@ -176,15 +177,15 @@ export class EditGame extends React.Component<
                   onChange={e => this.handleInputChange(e)}
                 >
                   <option value="">Select Genre</option>
-                  <option value="adventure">Adventure</option>
-                  <option value="action">Action</option>
-                  <option value="fighting">Fighting</option>
-                  <option value="fps">FPS</option>
-                  <option value="sport">Sport</option>
-                  <option value="rpg">RPG</option>
-                  <option value="puzzle">Puzzle</option>
-                  <option value="simulation">Simulation</option>
-                  <option value="other">Other</option>
+                  <option value="Adventure">Adventure</option>
+                  <option value="Action">Action</option>
+                  <option value="Fighting">Fighting</option>
+                  <option value="FPS">FPS</option>
+                  <option value="Sport">Sport</option>
+                  <option value="RPG">RPG</option>
+                  <option value="Puzzle">Puzzle</option>
+                  <option value="Simulation">Simulation</option>
+                  <option value="Other">Other</option>
                 </SelectField>
               </div>
 
@@ -197,10 +198,10 @@ export class EditGame extends React.Component<
                   required={true}
                 >
                   <option value="">Select Platform</option>
-                  <option value="playstation">Playstation</option>
-                  <option value="xbox">XBOX</option>
-                  <option value="switch">Nintendo Switch</option>
-                  <option value="pc">PC</option>
+                  <option value="Playstation">Playstation</option>
+                  <option value="XBOX">XBOX</option>
+                  <option value="Switch">Nintendo Switch</option>
+                  <option value="PC">PC</option>
                   <option value="Other">Other</option>
                 </SelectField>
               </div>
@@ -225,14 +226,14 @@ export class EditGame extends React.Component<
                   onChange={e => this.handleInputChange(e)}
                   required={true}
                 >
-                  <option value="">select Status</option>
-                  <option value="playing">Playing</option>
-                  <option value="finished">Finished</option>
-                  <option value="on_hold">On Hold</option>
-                  <option value="wishlist">On Wishlist</option>
-                  <option value="maybe">Maybe</option>
-                  <option value="started">Just Started</option>
-                  <option value="half_way">Half way</option>
+                  <option value="">Select Status</option>
+                  <option value="Playing">Playing</option>
+                  <option value="Finished">Finished</option>
+                  <option value="On Hold">On Hold</option>
+                  <option value="Wishlist">On Wishlist</option>
+                  <option value="Maybe">Maybe</option>
+                  <option value="Started">Just Started</option>
+                  <option value="Half_way">Half way</option>
                 </SelectField>
               </div>
 
@@ -276,23 +277,23 @@ export class EditGame extends React.Component<
                     Update Game
                   </Button>
                 </ButtonWrapper>
-                <ButtonWrapper>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    type="submit"
-                    onClick={() => {
-                      this.deleteGame(
-                        this.props.match.params.user_id,
-                        this.props.match.params.game_id
-                      );
-                    }}
-                  >
-                    Delete Game
-                  </Button>
-                </ButtonWrapper>
               </div>
             </form>
+            <ButtonWrapper>
+              <Button
+                variant="contained"
+                color="secondary"
+                type="submit"
+                onClick={() => {
+                  this.deleteGame(
+                    this.props.match.params.user_id,
+                    this.props.match.params.game_id
+                  );
+                }}
+              >
+                Delete Game
+              </Button>
+            </ButtonWrapper>
           </div>
         </ContainerInner>
       </Container>
