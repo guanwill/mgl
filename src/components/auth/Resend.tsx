@@ -5,14 +5,16 @@ import { callResendVerificationApi } from "../../actions/auth/authActions";
 import { AppState } from "../../store";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
+import { Container, Button } from "@material-ui/core";
+import { PageTitle, InputField, ButtonWrapper } from "../../styles/styles";
 
 interface Props {
   userInformation: IAuthenticatedDetails;
-  callResendVerificationApi: Function
+  callResendVerificationApi: Function;
 }
 
 interface State {
-  email: string
+  email: string;
 }
 
 export class Resend extends React.Component<
@@ -22,21 +24,24 @@ export class Resend extends React.Component<
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
+      email: ""
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleInputChange = async (event) => {
-    const newState = { [event.target.name]: event.target.value } as Pick<State, keyof State>;
+  handleInputChange = async event => {
+    const newState = { [event.target.name]: event.target.value } as Pick<
+      State,
+      keyof State
+    >;
     await this.setState(newState);
-  }
+  };
 
-  handleSubmit = async (e) => {
+  handleSubmit = async e => {
     e.preventDefault();
     await this.props.callResendVerificationApi(this.state.email);
-  }
+  };
 
   public componentDidMount() {
     if (!isTokenExpired()) {
@@ -46,36 +51,45 @@ export class Resend extends React.Component<
   }
 
   componentWillMount = () => {
-    this.props.userInformation.message = ''
+    this.props.userInformation.message = "";
   };
 
   public render() {
     const { userInformation } = this.props;
 
     return (
-      <div className="container" style={{ marginTop: "50px", width: "700px" }}>
-        <h2 style={{ marginBottom: "40px" }}>Resend Verification Token</h2>
+      <Container>
+        <PageTitle>Resend Verification Token</PageTitle>
 
         <p>{userInformation.message}</p>
 
-        <form onSubmit={this.handleSubmit}>
-          <div className="form-group">
-            <input
+        <form id="resend_verify" onSubmit={this.handleSubmit}>
+          <div>
+            <InputField
               type="email"
               placeholder="Email"
               className="form-control"
               name="email"
+              required
               onChange={this.handleInputChange}
               value={this.state.email}
             />
           </div>
-          <div className="form-group">
-            <button type="submit" className="btn btn-primary">
-              Send verification token
-            </button>
+
+          <div>
+            <ButtonWrapper>
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                form="resend_verify"
+              >
+                Send
+              </Button>
+            </ButtonWrapper>
           </div>
         </form>
-      </div>
+      </Container>
     );
   }
 }
@@ -88,7 +102,4 @@ const mapDispatchToProps = {
   callResendVerificationApi
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Resend);
+export default connect(mapStateToProps, mapDispatchToProps)(Resend);

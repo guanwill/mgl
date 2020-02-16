@@ -30,12 +30,18 @@ const useStyles = makeStyles(theme => ({
   },
   authButton: {
     boxShadow: "none",
+    height: "max-content",
+    width: "100px",
+    margin: "5px",
     "&:hover": {
       boxShadow: "none"
-    }
+    }    
   },
   appbar: {
-    border: "3px solid white"
+    borderBottom: "2px dotted lightgrey",
+    boxShadow: "none",
+    background: 'white',
+    color: '#3f51b5',
   },
   toolbar: {
     margin: '7px'
@@ -83,7 +89,7 @@ export class Navbar extends React.Component<
         <Button
           className={classes.authButton}
           onClick={this.onLogout.bind(this)}
-          variant="contained"
+          variant="outlined"
           color="primary"
         >
           Logout
@@ -98,7 +104,7 @@ export class Navbar extends React.Component<
             className={classes.authButton}
             component={Link}
             to={`/register`}
-            variant="contained"
+            variant="outlined"
             color="primary"
           >
             Register
@@ -108,7 +114,7 @@ export class Navbar extends React.Component<
             className={classes.authButton}
             component={Link}
             to={`/login`}
-            variant="contained"
+            variant="outlined"
             color="primary"
           >
             Login

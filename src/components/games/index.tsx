@@ -17,7 +17,8 @@ import Button from "@material-ui/core/Button";
 import {
   ButtonWrapper,
   MuiTableWrapper,
-  ContainerInner
+  ContainerInner,
+  SubHeadingWrapper
 } from "../../styles/styles";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 
@@ -157,7 +158,9 @@ export class Games extends React.Component<
       <>
         <Container>
           <ContainerInner>
-            <h1>My Inventory</h1>
+            <SubHeadingWrapper>
+              <h1>Inventory</h1>
+            </SubHeadingWrapper>            
 
             {console.log("user games: ", games)}
 

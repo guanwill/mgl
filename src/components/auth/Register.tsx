@@ -9,11 +9,11 @@ import isTokenExpired from "../../helpers/isTokenExpired";
 // Materialui
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
-import { InputField, PageTitle } from "../../styles/styles";
+import { InputField, PageTitle, ButtonWrapper } from "../../styles/styles";
 
 interface Props {
   userInformation: IAuthenticatedDetails;
-  callRegisterApi: Function
+  callRegisterApi: Function;
 }
 
 interface State {
@@ -21,7 +21,7 @@ interface State {
   password: string;
   password_confirm: string;
   password_validation: string;
-  submit_disabled: boolean;  
+  submit_disabled: boolean;
 }
 
 export class Register extends React.Component<
@@ -35,47 +35,60 @@ export class Register extends React.Component<
       password: "",
       password_confirm: "",
       password_validation: "",
-      submit_disabled: true,      
+      submit_disabled: true
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleInputChange = async (event) => {
-    const newState = { [event.target.name]: event.target.value } as Pick<State, keyof State>;
+  handleInputChange = async event => {
+    const newState = { [event.target.name]: event.target.value } as Pick<
+      State,
+      keyof State
+    >;
     await this.setState(newState);
-  }
+  };
 
-  handlePasswordChange = async (event) => {
-    const newState = { [event.target.name]: event.target.value } as Pick<State, keyof State>;
+  handlePasswordChange = async event => {
+    const newState = { [event.target.name]: event.target.value } as Pick<
+      State,
+      keyof State
+    >;
     await this.setState(newState);
     this.validateFields();
-  }
+  };
 
-  handleSubmit = async (e) => {
+  handleSubmit = async e => {
     e.preventDefault();
     await this.props.callRegisterApi(this.state.username, this.state.password);
-    if (this.props.userInformation.user._id && this.props.userInformation.user._id.length) {
-      this.props.history.push('/login')
+    if (
+      this.props.userInformation.user._id &&
+      this.props.userInformation.user._id.length
+    ) {
+      this.props.history.push("/login");
     } else {
-      this.props.history.push('/register')
+      this.props.history.push("/register");
     }
-  }
+  };
 
   validateFields = () => {
-    if (this.state.password.length && this.state.password_confirm.length && this.state.password === this.state.password_confirm) {
+    if (
+      this.state.password.length &&
+      this.state.password_confirm.length &&
+      this.state.password === this.state.password_confirm
+    ) {
       this.setState({
         submit_disabled: false,
         password_validation: ""
-      })
+      });
     } else {
       this.setState({
         submit_disabled: true,
         password_validation: "Password mismatch"
-      })
+      });
     }
-  }
+  };
 
   public componentDidMount() {
     if (!isTokenExpired()) {
@@ -85,7 +98,7 @@ export class Register extends React.Component<
   }
 
   componentWillMount = () => {
-    this.props.userInformation.message = ''
+    this.props.userInformation.message = "";
   };
 
   public render() {
@@ -130,15 +143,17 @@ export class Register extends React.Component<
             <p>{this.state.password_validation}</p>
           </div>
           <div>
-          <Button
-            variant="contained"
-            color="primary"
-            disabled={this.state.submit_disabled}
-            type="submit"
-            form="register"
-          >
-            Register
-          </Button>
+            <ButtonWrapper>
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={this.state.submit_disabled}
+                type="submit"
+                form="register"
+              >
+                Register
+              </Button>
+            </ButtonWrapper>
           </div>
         </form>
       </Container>
@@ -154,7 +169,4 @@ const mapDispatchToProps = {
   callRegisterApi
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Register);
+export default connect(mapStateToProps, mapDispatchToProps)(Register);
