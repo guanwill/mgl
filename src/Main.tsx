@@ -14,6 +14,8 @@ import Games from './components/games';
 import AddGame from './components/games/addGame';
 import EditGame from './components/games/editGame';
 
+import HomePage from './components/home/index'
+
 const Main = () => {
   const store = configureStore();
 
@@ -22,7 +24,7 @@ const Main = () => {
       <Navbar />
       <main>
         <Switch>
-          {/* <Route exact path='/' component={Home}/> */}
+          <Route exact path='/' component={HomePage}/>
           <Route path='/login' component={Login}/>
           <Route path='/register' component={Register}/>
           <Route path='/verify/:id' component={Verify}/>

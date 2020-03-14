@@ -27,6 +27,15 @@ export const SubHeadingWrapper = styled.div`
   }
 `;
 
+export const SubHeadingWrapper2 = styled.div`
+  h1 {
+    font-size: 15px;
+    font-family: "Press Start 2P";
+    padding: 30px 10px 10px 10px;
+    color: #3a3a3a;
+  }
+`;
+
 export const BackLinkWrapper = styled.div`
   width: 100%;
   text-align: left;
@@ -149,6 +158,32 @@ export const MuiTableWrapper = styled.div`
     .MuiTableRow-root td:nth-child(10)
     {
       display: none;
+    }
+  }
+`;
+
+// UPCOMING GAMES
+export const NewGamesContainer = styled.div`
+  text-align: left;
+  align-items: center;
+  padding: 10px;
+  border-top: 1px solid lightgrey;
+  border-bottom: 1px solid lightgrey;
+  margin: 10px 0;
+  div {
+    align-items: center;
+  }
+  .upcomingGameContainer {
+    font-size: 11px;
+    padding: 10px;
+  }
+  img {
+    width: 40px;
+    border-radius: 50%;
+  }
+  @media (max-width: 414px) {  
+    .upcomingGameContainer {
+      padding: 30px 0;
     }
   }
 `;
