@@ -126,7 +126,7 @@ export const TextAreaField = styled.textarea.attrs(props => ({
 
 // TABLE
 export const MuiTableWrapper = styled.div`
-  border: 1px solid lightgrey;
+  // border: 1px solid lightgrey;
   div {
     box-shadow: none;
   }
