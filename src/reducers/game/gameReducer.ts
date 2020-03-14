@@ -31,7 +31,7 @@ export default function gameReducer(
             // Return a new object
             return {
               ...game,  // copy the existing item
-              ...action.payload.game  // replace the email addr
+              ...action.payload.game  // replace with updated item
             }
           }      
           return game; // Leave every other item unchanged

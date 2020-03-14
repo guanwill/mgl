@@ -2,16 +2,11 @@ import { combineReducers } from 'redux';
 import userInformation from '../reducers/auth/authReducer';
 import userGames from '../reducers/game/gameReducer';
 import { IAuthenticatedDetails } from '../model/auth/auth'
-import { IGame } from '../model/game/game';
+import { IUserGamesStore } from '../model/game/game';
 
 interface IStore {
     userInformation: IAuthenticatedDetails;
     userGames: IUserGamesStore
-}
-
-export interface IUserGamesStore {
-    games: IGame[];
-    message?: string;
 }
 
 export const initialState: IStore = {

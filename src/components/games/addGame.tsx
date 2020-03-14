@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { callAddGameApi } from "../../actions/game/gameActions";
-import { AppState, IUserGamesStore } from "../../store";
+import { AppState } from "../../store";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
 
@@ -18,6 +18,7 @@ import {
   BackLinkWrapper
 } from "../../styles/styles";
 import { Link } from "react-router-dom";
+import { IUserGamesStore } from "../../model/game/game";
 
 interface Props {
   callAddGameApi(

@@ -45,6 +45,7 @@ export const PageTitle = styled.h2`
 `;
 
 // NAVBAR
+// navbar also has its own component inline styles
 export const NavBrandWrapper = styled.p`
   font-family: "Press Start 2P";
   text-align: left;

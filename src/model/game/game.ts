@@ -1,3 +1,8 @@
+export interface IUserGamesStore {
+    games: IGame[];
+    message?: string;
+}
+
 export interface IGame {
     _id: string,
     title: string,

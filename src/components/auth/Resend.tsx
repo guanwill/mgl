@@ -26,8 +26,6 @@ export class Resend extends React.Component<
     this.state = {
       email: ""
     };
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleInputChange = async event => {

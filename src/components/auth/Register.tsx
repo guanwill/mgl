@@ -37,9 +37,6 @@ export class Register extends React.Component<
       password_validation: "",
       submit_disabled: true
     };
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleInputChange = async event => {

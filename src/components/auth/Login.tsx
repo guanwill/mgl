@@ -28,11 +28,9 @@ export class Login extends React.Component<Props & RouteComponentProps, State> {
       username: "",
       password: ""
     };
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleInputChange(event: { target: { name: any; value: any } }) {
+  handleInputChange = (event: { target: { name: any; value: any } }) => {
     const newState = { [event.target.name]: event.target.value } as Pick<
       State,
       keyof State
@@ -40,7 +38,7 @@ export class Login extends React.Component<Props & RouteComponentProps, State> {
     this.setState(newState);
   }
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
     this.props.callLoginApi(this.state.username, this.state.password);
   }

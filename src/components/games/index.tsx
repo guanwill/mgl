@@ -4,7 +4,8 @@ import {
   callFetchGamesApi,
   callDeleteGameApi
 } from "../../actions/game/gameActions";
-import { AppState, IUserGamesStore } from "../../store";
+import { AppState } from "../../store";
+import { IUserGamesStore } from "../../model/game/game";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
 import { Link } from "react-router-dom";

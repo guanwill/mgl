@@ -4,7 +4,7 @@ import {
   callUpdateGameApi,
   callDeleteGameApi
 } from "../../actions/game/gameActions";
-import { AppState, IUserGamesStore } from "../../store";
+import { AppState } from "../../store";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
 
@@ -21,6 +21,7 @@ import {
   BackLinkWrapper
 } from "../../styles/styles";
 import { Link } from "react-router-dom";
+import { IUserGamesStore } from "../../model/game/game";
 
 interface Props {
   callUpdateGameApi(
@@ -93,7 +94,6 @@ export class EditGame extends React.Component<
 
     await this.props.callUpdateGameApi(
       this.state.title,
-
       this.state.genre ? this.state.genre : "",
       this.state.platform,
       this.state.release_date ? this.state.release_date : "",
@@ -101,7 +101,6 @@ export class EditGame extends React.Component<
       this.state.rating ? this.state.rating : Number(""),
       this.state.review ? this.state.review : "",
       this.state.comments ? this.state.comments : "",
-
       this.props.match.params.user_id,
       this.props.match.params.game_id
     );

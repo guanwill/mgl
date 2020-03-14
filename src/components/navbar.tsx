@@ -119,13 +119,6 @@ export class Navbar extends React.Component<
           >
             Login
           </Button>
-
-          {/* <Link className="nav-link" to="/register">
-            <Button color="inherit">Register</Button>
-          </Link>
-          <Link className="nav-link" to="/login">
-            Sign In
-          </Link> */}
         </>
       );
     };
