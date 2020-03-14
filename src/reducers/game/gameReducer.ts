@@ -1,5 +1,6 @@
-import { initialState, IUserGamesStore } from "../../store";
+import { initialState } from "../../store";
 import { IGameAction, GameActionType } from "../../actions/game/gameActions";
+import { IUserGamesStore } from "../../model/game/game";
 
 export default function gameReducer(
   state: IUserGamesStore = initialState.userGames,
