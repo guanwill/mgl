@@ -94,6 +94,25 @@ export const InputField = styled.input.attrs(props => ({
   margin: 5px;
 `;
 
+export const SearchField = styled.input.attrs(props => ({
+  type: props.type,
+  placeholder: props.placeholder,
+  className: props.className,
+  name: props.name,
+  onChange: props.onChange,
+  value: props.value
+}))`
+  padding: 10px;
+  border-radius: 3px;
+  border: 0;
+  border-bottom: 2px solid grey;
+  width: 270px;
+  margin: 5px;
+  :focus {
+    outline: none;
+  }
+`;
+
 export const SelectField = styled.select.attrs(props => ({
   id: props.id,
   className: props.className,
@@ -162,7 +181,7 @@ export const MuiTableWrapper = styled.div`
   }
 `;
 
-// UPCOMING GAMES
+// HOME PAGE GAMES
 export const NewGamesContainer = styled.div`
   text-align: left;
   align-items: center;
@@ -183,6 +202,29 @@ export const NewGamesContainer = styled.div`
   }
   @media (max-width: 414px) {  
     .upcomingGameContainer {
+      padding: 30px 0;
+    }
+  }
+`;
+
+export const SearchGamesContainer = styled.div`
+  text-align: left;
+  align-items: center;
+  padding: 10px;
+  margin: 10px 0;
+  div {
+    align-items: center;
+  }
+  .searchGameContainer {
+    font-size: 11px;
+    padding: 10px;
+  }
+  img {
+    width: 40px;
+    // border-radius: 50%;
+  }
+  @media (max-width: 414px) {  
+    .searchGameContainer {
       padding: 30px 0;
     }
   }

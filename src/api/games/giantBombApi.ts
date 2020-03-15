@@ -19,4 +19,13 @@ export default class GameApi {
         }
     }
 
+    public searchGame = async (query: string): Promise<any> => {
+        try {
+            const response = await this.httpClient.post(`${this.hostName}/game_info/search_games/${query}`, {});
+            return response.data
+        } catch (err) {
+            console.log('ERR ', err);
+            throw (err);
+        }
+    }
 }
