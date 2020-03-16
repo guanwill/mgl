@@ -33,7 +33,7 @@ const NewGames: React.FC = () => {
 
   const onError = e => {
     e.target.src =
-      "https://lh3.googleusercontent.com/proxy/xWWV_nV4sy3Tby4JZvsnx30CzHCuOf93iOZnCWx-gdDyLcqRNpLEAcuOpt3VAGeJ8bCoVq5iigfBxmbakyZ5a0gXQPTF0B7uvVMF";
+    "https://i.postimg.cc/28ngFvKc/defaultfailedphoto.jpg";    
   };
 
   return (
