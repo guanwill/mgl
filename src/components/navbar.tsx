@@ -88,7 +88,7 @@ export class Navbar extends React.Component<
       return (
         <Button
           className={classes.authButton}
-          onClick={this.onLogout.bind(this)}
+          onClick={(e) => this.onLogout(e)}
           variant="outlined"
           color="primary"
         >
