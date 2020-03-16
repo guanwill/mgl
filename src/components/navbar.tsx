@@ -12,7 +12,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
-import { NavBrandWrapper, NavButtonWrapper } from "../styles/styles";
+import {
+  NavBrandWrapper,
+  NavButtonWrapper,
+  NavBrandWrapperLinkWrapper
+} from "../styles/styles";
 import Grid from "@material-ui/core/Grid";
 
 interface Props {
@@ -35,16 +39,16 @@ const useStyles = makeStyles(theme => ({
     margin: "5px",
     "&:hover": {
       boxShadow: "none"
-    }    
+    }
   },
   appbar: {
     borderBottom: "2px dotted lightgrey",
     boxShadow: "none",
-    background: 'white',
-    color: '#3f51b5',
+    background: "white",
+    color: "#3f51b5"
   },
   toolbar: {
-    margin: '7px'
+    margin: "7px"
   }
 }));
 
@@ -68,7 +72,11 @@ export class Navbar extends React.Component<
             <Toolbar className={classes.toolbar}>
               <Grid container spacing={1}>
                 <Grid item md={6} xs={12}>
-                  <NavBrandWrapper>A HERO'S BAG</NavBrandWrapper>
+                  <NavBrandWrapperLinkWrapper>
+                    <Link to={`/`}>
+                      <NavBrandWrapper>A HERO'S BAG</NavBrandWrapper>
+                    </Link>
+                  </NavBrandWrapperLinkWrapper>
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <NavButtonWrapper>
@@ -88,7 +96,7 @@ export class Navbar extends React.Component<
       return (
         <Button
           className={classes.authButton}
-          onClick={(e) => this.onLogout(e)}
+          onClick={e => this.onLogout(e)}
           variant="outlined"
           color="primary"
         >
@@ -139,7 +147,4 @@ const mapDispatchToProps = {
   logoutUser
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withRouter(Navbar));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar));

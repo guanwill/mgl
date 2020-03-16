@@ -10,8 +10,13 @@ import {
   SearchField,
   SearchGamesContainer
 } from "../../styles/styles";
+import { useHistory } from "react-router-dom";
+import getAuthenticatedUser from "../../helpers/getAuthenticatedUser";
 
 const SearchGames: React.FC = () => {
+  let history = useHistory();
+  // let location = useLocation();
+  // let params = useParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchGames, setSearchGames] = useState([]);
   const [loading, setLoading] = useState(null);
@@ -30,9 +35,21 @@ const SearchGames: React.FC = () => {
   };
 
   const onError = e => {
-    e.target.src =
-      "https://lh3.googleusercontent.com/proxy/xWWV_nV4sy3Tby4JZvsnx30CzHCuOf93iOZnCWx-gdDyLcqRNpLEAcuOpt3VAGeJ8bCoVq5iigfBxmbakyZ5a0gXQPTF0B7uvVMF";
+    e.target.src = "https://i.postimg.cc/28ngFvKc/defaultfailedphoto.jpg";
   };
+
+  const addSearchedGame = (game) => {
+    console.log('searchedgame....', game);
+
+    const searchedGame = {
+      title: game.name,
+      release_date: game.original_release_date,      
+    }
+
+    
+    const userId = getAuthenticatedUser();
+    history.push(`/user/${userId}/games/add`)
+  }
 
   return (
     <Container>
@@ -85,15 +102,22 @@ const SearchGames: React.FC = () => {
                     <Grid item xs={12} sm={12} md={1}>
                       <img alt="" src={game.image.icon_url} onError={onError} />
                     </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={12}
-                      md={3}
-                    >
+                    <Grid item xs={12} sm={12} md={3}>
                       <b>
                         <Link href={game.site_detail_url}>{game.name}</Link>
                       </b>
+                      <ButtonWrapper>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          type="submit"
+                          onClick={() => {                            
+                            addSearchedGame(game)
+                          }}
+                        >
+                          add
+                        </Button>
+                      </ButtonWrapper>
                     </Grid>
                     <Grid item xs={12} sm={12} md={3}>
                       {game.platforms.map(platform => platform.name).join(", ")}

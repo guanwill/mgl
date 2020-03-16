@@ -67,6 +67,15 @@ export const NavBrandWrapper = styled.p`
   }
 `;
 
+export const NavBrandWrapperLinkWrapper = styled.div`
+  a {
+    text-decoration: none;
+  }
+  a:visited {
+    color: #3f51b5;
+  }
+`;
+
 export const NavButtonWrapper = styled.div`
   width: 100%;
   display: flex;
