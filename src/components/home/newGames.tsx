@@ -15,13 +15,6 @@ const NewGames: React.FC = () => {
   const [newGames, setNewGames] = useState([]);
   const [loading, setLoading] = useState(true);
   
-
-  const getLatestGames = async (api: IApi) => {
-    const response = await api.giantBombApi.fetchLatestGames();
-    setNewGames(response.results);
-    setLoading(false);
-  };
-
   useEffect(() => {
     getLatestGames(api);
   }, []);
@@ -31,13 +24,9 @@ const NewGames: React.FC = () => {
       flexGrow: 1
     }
   }));
-
   const classes = useStyles({});
 
-  //   const strip = html => {
-  //     var doc = new DOMParser().parseFromString(html, "text/html");
-  //     return doc.body.textContent || "";
-  //   };
+  const userId = getAuthenticatedUser();
 
   const onError = e => {
     e.target.src =
@@ -51,9 +40,14 @@ const NewGames: React.FC = () => {
     }
 
     dispatch(addSearchedGame(gameToAdd))
-    const userId = getAuthenticatedUser();
     history.push(`/user/${userId}/games/add`)
   }
+
+  const getLatestGames = async (api: IApi) => {
+    const response = await api.giantBombApi.fetchLatestGames();
+    setNewGames(response.results);
+    setLoading(false);
+  };
 
   return (
     <Container>
@@ -72,6 +66,8 @@ const NewGames: React.FC = () => {
                   <b>
                     <Link href={game.site_detail_url}>{game.name}</Link>
                   </b>
+                  {
+                    userId && 
                   <AddGameButtonWrapper>
                         <Button
                           className='addGameButton'
@@ -83,6 +79,7 @@ const NewGames: React.FC = () => {
                           <AddCircleOutlineIcon/>
                         </Button>
                       </AddGameButtonWrapper>
+                  }
                 </Grid>
                 <Grid item xs={12} sm={12} md={2}>
                   {game.original_release_date

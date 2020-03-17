@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import moment from "moment";
 import api from "../../api";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 import { addSearchedGame } from "../../actions/game/gameActions";
 import { Container, Grid, Link, Button } from "@material-ui/core";
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
 import {
   SubHeadingWrapper2,
@@ -26,6 +26,8 @@ const SearchGames: React.FC = () => {
   const [searchGames, setSearchGames] = useState([]);
   const [loading, setLoading] = useState(null);
 
+  const userId = getAuthenticatedUser();
+
   const handleSubmit = async e => {
     e.preventDefault();
     setLoading(true);
@@ -43,16 +45,15 @@ const SearchGames: React.FC = () => {
     e.target.src = "https://i.postimg.cc/28ngFvKc/defaultfailedphoto.jpg";
   };
 
-  const addGame = (game) => {
+  const addGame = game => {
     const searchedGame = {
       title: game.name,
-      release_date: moment(game.original_release_date).format('YYYY-MM-DD'),
-    }
+      release_date: moment(game.original_release_date).format("YYYY-MM-DD")
+    };
 
-    dispatch(addSearchedGame(searchedGame))
-    const userId = getAuthenticatedUser();
-    history.push(`/user/${userId}/games/add`)
-  }
+    dispatch(addSearchedGame(searchedGame));
+    history.push(`/user/${userId}/games/add`);
+  };
 
   return (
     <Container>
@@ -108,17 +109,19 @@ const SearchGames: React.FC = () => {
                       <b>
                         <Link href={game.site_detail_url}>{game.name}</Link>
                       </b>
-                      <AddGameButtonWrapper>
-                        <Button
-                          className='addGameButton'
-                          type="submit"
-                          onClick={() => {                            
-                            addGame(game)
-                          }}
-                        >
-                          <AddCircleOutlineIcon/>
-                        </Button>
-                      </AddGameButtonWrapper>
+                      {userId && (
+                        <AddGameButtonWrapper>
+                          <Button
+                            className="addGameButton"
+                            type="submit"
+                            onClick={() => {
+                              addGame(game);
+                            }}
+                          >
+                            <AddCircleOutlineIcon />
+                          </Button>
+                        </AddGameButtonWrapper>
+                      )}
                     </Grid>
                     <Grid item xs={12} sm={12} md={3}>
                       {game.platforms.map(platform => platform.name).join(", ")}
