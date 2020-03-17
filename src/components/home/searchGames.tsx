@@ -4,6 +4,7 @@ import api from "../../api";
 import { useDispatch } from 'react-redux';
 import { addSearchedGame } from "../../actions/game/gameActions";
 import { Container, Grid, Link, Button } from "@material-ui/core";
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 // import SearchOutlinedIcon from "@material-ui/icons/SearchOutlined";
 
 import {
@@ -11,7 +12,8 @@ import {
   ContainerInner,
   ButtonWrapper,
   SearchField,
-  SearchGamesContainer
+  SearchGamesContainer,
+  AddGameButtonWrapper
 } from "../../styles/styles";
 import { useHistory } from "react-router-dom";
 import getAuthenticatedUser from "../../helpers/getAuthenticatedUser";
@@ -108,18 +110,19 @@ const SearchGames: React.FC = () => {
                       <b>
                         <Link href={game.site_detail_url}>{game.name}</Link>
                       </b>
-                      <ButtonWrapper>
+                      <AddGameButtonWrapper>
                         <Button
-                          variant="contained"
-                          color="secondary"
+                          // variant="contained"
+                          // color="default"
+                          className='addGameButton'
                           type="submit"
                           onClick={() => {                            
                             addGame(game)
                           }}
                         >
-                          add
+                          <AddCircleOutlineIcon/>
                         </Button>
-                      </ButtonWrapper>
+                      </AddGameButtonWrapper>
                     </Grid>
                     <Grid item xs={12} sm={12} md={3}>
                       {game.platforms.map(platform => platform.name).join(", ")}

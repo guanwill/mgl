@@ -9,7 +9,7 @@ export const ButtonWrapper = styled.div`
   margin: 20px;
   button {
     box-shadow: none;
-  }  
+  }
 `;
 
 export const LinkWrapper = styled.div`
@@ -171,20 +171,18 @@ export const MuiTableWrapper = styled.div`
   td {
     padding: 5px;
   }
-  @media (max-width: 414px) {  
+  @media (max-width: 414px) {
     td {
       font-size: 12px;
-    }  
-    // .MuiTableRow-head th:nth-child(3), 
+    }
+    // .MuiTableRow-head th:nth-child(3),
     .MuiTableRow-head th:nth-child(4),
-    .MuiTableRow-head th:nth-child(5)
-    {
+    .MuiTableRow-head th:nth-child(5) {
       display: none;
     }
     // .MuiTableRow-root td:nth-child(6),
     .MuiTableRow-root td:nth-child(8),
-    .MuiTableRow-root td:nth-child(10)
-    {
+    .MuiTableRow-root td:nth-child(10) {
       display: none;
     }
   }
@@ -209,7 +207,7 @@ export const NewGamesContainer = styled.div`
     width: 40px;
     border-radius: 50%;
   }
-  @media (max-width: 414px) {  
+  @media (max-width: 414px) {
     .upcomingGameContainer {
       padding: 30px 0;
     }
@@ -232,9 +230,22 @@ export const SearchGamesContainer = styled.div`
     width: 40px;
     // border-radius: 50%;
   }
-  @media (max-width: 414px) {  
+  @media (max-width: 414px) {
     .searchGameContainer {
       padding: 30px 0;
+    }
+  }
+`;
+
+export const AddGameButtonWrapper = styled.div`
+  display: inline-block;
+  .addGameButton {
+    color: #83407b;
+    svg {
+      font-size: 13px;
+    }
+    :hover {
+      background: none;
     }
   }
 `;
