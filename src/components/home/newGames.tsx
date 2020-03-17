@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
 import api, { IApi } from "../../api";
-import { Container, Grid, Link, makeStyles } from "@material-ui/core";
+import { Container, Grid, Link, makeStyles, Button } from "@material-ui/core";
 import moment from "moment";
-import { NewGamesContainer, SubHeadingWrapper2 } from "../../styles/styles";
+import { NewGamesContainer, SubHeadingWrapper2, AddGameButtonWrapper } from "../../styles/styles";
+import { useHistory } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { addSearchedGame } from "../../actions/game/gameActions";
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import getAuthenticatedUser from "../../helpers/getAuthenticatedUser";
 
 const NewGames: React.FC = () => {
+  const history = useHistory();
+  const dispatch = useDispatch();
   const [newGames, setNewGames] = useState([]);
   const [loading, setLoading] = useState(true);
+  
 
   const getLatestGames = async (api: IApi) => {
     const response = await api.giantBombApi.fetchLatestGames();
@@ -36,6 +44,17 @@ const NewGames: React.FC = () => {
     "https://i.postimg.cc/28ngFvKc/defaultfailedphoto.jpg";    
   };
 
+  const addGame = (game) => {
+    const gameToAdd = {
+      title: game.name,
+      release_date: moment(game.original_release_date).format('YYYY-MM-DD'),
+    }
+
+    dispatch(addSearchedGame(gameToAdd))
+    const userId = getAuthenticatedUser();
+    history.push(`/user/${userId}/games/add`)
+  }
+
   return (
     <Container>
       <div className={classes.root}>
@@ -53,6 +72,17 @@ const NewGames: React.FC = () => {
                   <b>
                     <Link href={game.site_detail_url}>{game.name}</Link>
                   </b>
+                  <AddGameButtonWrapper>
+                        <Button
+                          className='addGameButton'
+                          type="submit"
+                          onClick={() => {                            
+                            addGame(game)
+                          }}
+                        >
+                          <AddCircleOutlineIcon/>
+                        </Button>
+                      </AddGameButtonWrapper>
                 </Grid>
                 <Grid item xs={12} sm={12} md={2}>
                   {game.original_release_date
@@ -65,12 +95,6 @@ const NewGames: React.FC = () => {
                 <Grid item xs={12} sm={12} md={4}>
                   {game.deck}
                 </Grid>
-                {/* <Grid item xs={1}>
-                df
-              </Grid>
-              <Grid item xs={1}>
-                dsf
-              </Grid> */}
               </Grid>
             </div>
           ))}

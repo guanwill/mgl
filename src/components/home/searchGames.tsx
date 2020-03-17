@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { addSearchedGame } from "../../actions/game/gameActions";
 import { Container, Grid, Link, Button } from "@material-ui/core";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-// import SearchOutlinedIcon from "@material-ui/icons/SearchOutlined";
 
 import {
   SubHeadingWrapper2,
@@ -86,7 +85,6 @@ const SearchGames: React.FC = () => {
                     form="searchGame"
                   >
                     Search
-                    {/* <SearchOutlinedIcon/> */}
                   </Button>
                 </ButtonWrapper>
               </div>
@@ -112,8 +110,6 @@ const SearchGames: React.FC = () => {
                       </b>
                       <AddGameButtonWrapper>
                         <Button
-                          // variant="contained"
-                          // color="default"
                           className='addGameButton'
                           type="submit"
                           onClick={() => {                            
