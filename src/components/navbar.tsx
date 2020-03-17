@@ -18,6 +18,7 @@ import {
   NavBrandWrapperLinkWrapper
 } from "../styles/styles";
 import Grid from "@material-ui/core/Grid";
+import getAuthenticatedUser from "../helpers/getAuthenticatedUser";
 
 interface Props {
   userInformation: IAuthenticatedDetails;
@@ -66,6 +67,8 @@ export class Navbar extends React.Component<
   public render() {
     const NavBar = () => {
       const classes = useStyles({});
+      const userId = getAuthenticatedUser();
+
       return (
         <div className={classes.root}>
           <AppBar className={classes.appbar} position="static">
@@ -82,7 +85,7 @@ export class Navbar extends React.Component<
                   <NavButtonWrapper>
                     {isTokenExpired()
                       ? guestLinks(classes)
-                      : authLinks(classes)}
+                      : authLinks(classes, userId)}
                   </NavButtonWrapper>
                 </Grid>
               </Grid>
@@ -92,16 +95,27 @@ export class Navbar extends React.Component<
       );
     };
 
-    const authLinks = classes => {
+    const authLinks = (classes, userId) => {
       return (
-        <Button
-          className={classes.authButton}
-          onClick={e => this.onLogout(e)}
-          variant="outlined"
-          color="primary"
-        >
-          Logout
-        </Button>
+        <>
+          <Button
+            className={classes.authButton}
+            component={Link}
+            to={`/user/${userId}/games`}
+            variant="contained"
+            color="primary"
+          >
+            MY LIST
+          </Button>
+          <Button
+            className={classes.authButton}
+            onClick={e => this.onLogout(e)}
+            variant="outlined"
+            color="primary"
+          >
+            Logout
+          </Button>
+        </>
       );
     };
 
