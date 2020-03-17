@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import api, { IApi } from "../../api";
 import { Container, Grid, Link, makeStyles, Button } from "@material-ui/core";
 import moment from "moment";
-import { NewGamesContainer, SubHeadingWrapper2, AddGameButtonWrapper } from "../../styles/styles";
+import {
+  NewGamesContainer,
+  SubHeadingWrapper2,
+  AddGameButtonWrapper
+} from "../../styles/styles";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 import { addSearchedGame } from "../../actions/game/gameActions";
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import getAuthenticatedUser from "../../helpers/getAuthenticatedUser";
 
 const NewGames: React.FC = () => {
@@ -14,7 +18,7 @@ const NewGames: React.FC = () => {
   const dispatch = useDispatch();
   const [newGames, setNewGames] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     getLatestGames(api);
   }, []);
@@ -29,19 +33,18 @@ const NewGames: React.FC = () => {
   const userId = getAuthenticatedUser();
 
   const onError = e => {
-    e.target.src =
-    "https://i.postimg.cc/28ngFvKc/defaultfailedphoto.jpg";    
+    e.target.src = "https://i.postimg.cc/28ngFvKc/defaultfailedphoto.jpg";
   };
 
-  const addGame = (game) => {
+  const addGame = game => {
     const gameToAdd = {
       title: game.name,
-      release_date: moment(game.original_release_date).format('YYYY-MM-DD'),
-    }
+      release_date: moment(game.original_release_date).format("YYYY-MM-DD")
+    };
 
-    dispatch(addSearchedGame(gameToAdd))
-    history.push(`/user/${userId}/games/add`)
-  }
+    dispatch(addSearchedGame(gameToAdd));
+    history.push(`/user/${userId}/games/add`);
+  };
 
   const getLatestGames = async (api: IApi) => {
     const response = await api.giantBombApi.fetchLatestGames();
@@ -56,45 +59,54 @@ const NewGames: React.FC = () => {
           <h1>Latest Games</h1>
         </SubHeadingWrapper2>
         <NewGamesContainer>
-          {loading ? <p>loading...</p> : newGames.map(game => (
-            <div className="upcomingGameContainer" key={game.id}>
-              <Grid container spacing={3}>
-                <Grid item xs={12} sm={12} md={1}>
-                  <img alt="" src={game.image.icon_url} onError={onError} />
-                </Grid>
-                <Grid className="upcomingGameName" item xs={12} sm={12} md={3}>
-                  <b>
-                    <Link href={game.site_detail_url}>{game.name}</Link>
-                  </b>
-                  {
-                    userId && 
-                  <AddGameButtonWrapper>
+          {loading ? (
+            <p>loading...</p>
+          ) : (
+            newGames.map(game => (
+              <div className="upcomingGameContainer" key={game.id}>
+                <Grid container spacing={3}>
+                  <Grid item xs={12} sm={12} md={1}>
+                    <img alt="" src={game.image.icon_url} onError={onError} />
+                  </Grid>
+                  <Grid
+                    className="upcomingGameName"
+                    item
+                    xs={12}
+                    sm={12}
+                    md={3}
+                  >
+                    <b>
+                      <Link href={game.site_detail_url}>{game.name}</Link>
+                    </b>
+                    {userId && (
+                      <AddGameButtonWrapper>
                         <Button
-                          className='addGameButton'
+                          className="addGameButton"
                           type="submit"
-                          onClick={() => {                            
-                            addGame(game)
+                          onClick={() => {
+                            addGame(game);
                           }}
                         >
-                          <AddCircleOutlineIcon/>
+                          <AddCircleOutlineIcon />
                         </Button>
                       </AddGameButtonWrapper>
-                  }
+                    )}
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={2}>
+                    {game.original_release_date
+                      ? moment(game.original_release_date).format("DD/MM/YYYY")
+                      : "N/A"}
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={2}>
+                    {game.platforms.map(platform => platform.name).join(", ")}
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={4}>
+                    {game.deck}
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} sm={12} md={2}>
-                  {game.original_release_date
-                    ? moment(game.original_release_date).format("DD/MM/YYYY")
-                    : "N/A"}
-                </Grid>
-                <Grid item xs={12} sm={12} md={2}>
-                  {game.platforms.map(platform => platform.name).join(", ")}
-                </Grid>
-                <Grid item xs={12} sm={12} md={4}>
-                  {game.deck}
-                </Grid>
-              </Grid>
-            </div>
-          ))}
+              </div>
+            ))
+          )}
         </NewGamesContainer>
       </div>
     </Container>
