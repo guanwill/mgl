@@ -3,6 +3,11 @@ export interface IUserGamesStore {
     message?: string;
 }
 
+export interface IGameToAdd {
+    title: string;
+    release_date: string;
+}
+
 export interface IGame {
     _id: string,
     title: string,

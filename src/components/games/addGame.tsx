@@ -18,7 +18,7 @@ import {
   BackLinkWrapper
 } from "../../styles/styles";
 import { Link } from "react-router-dom";
-import { IUserGamesStore } from "../../model/game/game";
+import { IUserGamesStore, IGameToAdd } from "../../model/game/game";
 
 interface Props {
   callAddGameApi(
@@ -33,6 +33,7 @@ interface Props {
     user_id: string
   ): void;
   userGames: IUserGamesStore;
+  gameToAdd: IGameToAdd;
 }
 
 interface State {
@@ -96,12 +97,18 @@ export class AddGame extends React.Component<
       console.log("IS EXPIRED? ", isTokenExpired());
       this.props.history.push("/login");
     }
+    if (this.props.gameToAdd) {
+      this.setState({
+        title: this.props.gameToAdd && this.props.gameToAdd.title,
+        release_date: this.props.gameToAdd && this.props.gameToAdd.release_date
+      })
+    }
   };
 
   componentDidUpdate = prevProps => {
     if (this.props.userGames.message === "Game added") {
       this.props.history.push(`/user/${this.props.match.params.user_id}/games`);
-    }
+    }        
   };
 
   componentWillMount = () => {
@@ -126,6 +133,7 @@ export class AddGame extends React.Component<
               <div>
                 <InputField
                   type="input"
+                  value={this.state.title}
                   placeholder="Title"
                   className="form-control"
                   name="title"
@@ -171,11 +179,11 @@ export class AddGame extends React.Component<
 
               <div>
                 <InputField
-                  type="input"
+                  type="date"
+                  value={this.state.release_date}
                   placeholder="Release date"
                   className="form-control"
                   name="release_date"
-                  onFocus={e => (e.target.type = "date")}
                   onChange={e => this.handleInputChange(e)}
                 />
               </div>
@@ -245,7 +253,8 @@ export class AddGame extends React.Component<
 }
 
 const mapStateToProps = (state: AppState) => ({
-  userGames: state.userGames
+  userGames: state.userGames,
+  gameToAdd: state.gameToAdd
 });
 
 const mapDispatchToProps = {

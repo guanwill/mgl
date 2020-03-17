@@ -2,7 +2,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../../store';
 import { IApi } from '../../api';
 import _ from 'lodash';
-import { IGame, IGamesApiResponse, IGameApiResponse, IUserGamesStore } from '../../model/game/game';
+import { IGame, IGamesApiResponse, IGameApiResponse, IUserGamesStore, IGameToAdd } from '../../model/game/game';
 
 export interface IConfig {
     headers: {
@@ -14,7 +14,8 @@ export enum GameActionType {
     LOAD_GAMES = 'LOAD_GAMES',
     ADD_GAME = "ADD_GAME",
     DELETE_GAME = "DELETE_GAME",
-    UPDATE_GAME = "UPDATE_GAME"
+    UPDATE_GAME = "UPDATE_GAME",
+    ADD_SEARCHED_GAME = 'ADD_SEARCHED_GAME'
 }
 
 export interface IGameAction {
@@ -78,7 +79,8 @@ export const callAddGameApi = (title: string, genre: string, platform: string, r
             }
         }
         const gamesResponse = await api.gameApi.addGame(title, genre, platform, release_date, status, rating, review, comments, user_id, config);
-        return dispatch(addGameSuccess(gamesResponse));
+        dispatch(addGameSuccess(gamesResponse));
+        return dispatch(clearSearchedGame());
     } catch (e) {
         return e
     }    
@@ -132,4 +134,23 @@ export const callUpdateGameApi = (title: string, genre: string, platform: string
     } catch (e) {
         return e
     }    
+}
+
+export const addSearchedGame = (payload: IGameToAdd): IGameAction => {
+    return {
+        type: GameActionType.ADD_SEARCHED_GAME,
+        payload: payload,
+    }
+}
+
+export const clearSearchedGame = (): IGameAction => {
+    const resetResults = {
+        title: "",
+        release_date: ""
+    }
+
+    return {
+        type: GameActionType.ADD_SEARCHED_GAME,
+        payload: resetResults,
+    }
 }

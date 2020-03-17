@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 import { connect } from "react-redux";
 import {
   callUpdateGameApi,
@@ -133,7 +134,7 @@ export class EditGame extends React.Component<
         title: gameToEdit.title,
         genre: gameToEdit.genre,
         platform: gameToEdit.platform,
-        release_date: gameToEdit.release_date,
+        release_date: moment(gameToEdit.release_date).format('YYYY-MM-DD'),
         status: gameToEdit.status,
         rating: gameToEdit.rating,
         review: gameToEdit.review,
@@ -207,11 +208,10 @@ export class EditGame extends React.Component<
 
               <div>
                 <InputField
-                  type="input"
+                  type="date"
                   placeholder="Release date"
                   className="form-control"
                   name="release_date"
-                  onFocus={e => (e.target.type = "date")}
                   value={this.state.release_date ? this.state.release_date : ""}
                   onChange={e => this.handleInputChange(e)}
                 />

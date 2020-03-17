@@ -1,5 +1,8 @@
 import React, { useState } from "react";
+import moment from "moment";
 import api from "../../api";
+import { useDispatch } from 'react-redux';
+import { addSearchedGame } from "../../actions/game/gameActions";
 import { Container, Grid, Link, Button } from "@material-ui/core";
 // import SearchOutlinedIcon from "@material-ui/icons/SearchOutlined";
 
@@ -14,7 +17,8 @@ import { useHistory } from "react-router-dom";
 import getAuthenticatedUser from "../../helpers/getAuthenticatedUser";
 
 const SearchGames: React.FC = () => {
-  let history = useHistory();
+  const history = useHistory();
+  const dispatch = useDispatch();
   // let location = useLocation();
   // let params = useParams();
   const [searchQuery, setSearchQuery] = useState("");
@@ -38,15 +42,13 @@ const SearchGames: React.FC = () => {
     e.target.src = "https://i.postimg.cc/28ngFvKc/defaultfailedphoto.jpg";
   };
 
-  const addSearchedGame = (game) => {
-    console.log('searchedgame....', game);
-
+  const addGame = (game) => {
     const searchedGame = {
       title: game.name,
-      release_date: game.original_release_date,      
+      release_date: moment(game.original_release_date).format('YYYY-MM-DD'),
     }
 
-    
+    dispatch(addSearchedGame(searchedGame))
     const userId = getAuthenticatedUser();
     history.push(`/user/${userId}/games/add`)
   }
@@ -112,7 +114,7 @@ const SearchGames: React.FC = () => {
                           color="secondary"
                           type="submit"
                           onClick={() => {                            
-                            addSearchedGame(game)
+                            addGame(game)
                           }}
                         >
                           add
