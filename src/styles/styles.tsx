@@ -157,6 +157,7 @@ export const MuiTableWrapper = styled.div`
   // border: 1px solid lightgrey;
   div {
     box-shadow: none;
+    max-height: fit-content;
   }
   th {
     font-weight: bold;
