@@ -10,7 +10,7 @@ export interface IApi {
 }
 
 export default {
-    authApi: new AuthApi(httpClient, 'http://localhost:3001'),
-    gameApi: new GameApi(httpClient, 'http://localhost:3001'),
-    giantBombApi: new GiantBombApi(httpClient, 'http://localhost:3001')
+    authApi: new AuthApi(httpClient, 'https://abh-backend.herokuapp.com' || 'http://localhost:8000'),
+    gameApi: new GameApi(httpClient, 'https://abh-backend.herokuapp.com' || 'http://localhost:8000'),
+    giantBombApi: new GiantBombApi(httpClient, 'https://abh-backend.herokuapp.com' || 'http://localhost:8000')
 } as IApi;
