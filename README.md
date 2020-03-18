@@ -10,3 +10,4 @@
 * React
 * Redux
 * Typescript
+* Makes calls to passport_boilerplate repository
