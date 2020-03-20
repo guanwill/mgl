@@ -11,11 +11,12 @@ export interface IConfig {
 }
 
 export enum GameActionType {
-    LOAD_GAMES = 'LOAD_GAMES',
-    ADD_GAME = "ADD_GAME",
-    DELETE_GAME = "DELETE_GAME",
-    UPDATE_GAME = "UPDATE_GAME",
-    ADD_SEARCHED_GAME = 'ADD_SEARCHED_GAME'
+  LOAD_GAMES = 'LOAD_GAMES',
+  ADD_GAME = "ADD_GAME",
+  DELETE_GAME = "DELETE_GAME",
+  UPDATE_GAME = "UPDATE_GAME",
+  ADD_SEARCHED_GAME = 'ADD_SEARCHED_GAME',
+  CLEAR_SEARCHED_GAME = "CLEAR_SEARCHED_GAME"
 }
 
 export interface IGameAction {
@@ -150,7 +151,23 @@ export const clearSearchedGame = (): IGameAction => {
     }
 
     return {
-        type: GameActionType.ADD_SEARCHED_GAME,
+        type: GameActionType.CLEAR_SEARCHED_GAME,
         payload: resetResults,
     }
 }
+
+export const executeClearSearchedGame = (): Function => async (
+    dispatch: ThunkDispatch<AppState, void, IGameAction>,
+    state: AppState,
+    api: IApi
+) => { 
+    console.log('hiii2');   
+    return dispatch(clearSearchedGame);
+}
+
+// export const executeClearSearchedGame = (): Function => async (
+//     dispatch
+// ) => {
+//     console.log('hi2');
+//     dispatch(clearSearchedGame);
+// }

@@ -12,6 +12,11 @@ export default function gameReducer(
         ...state,
         ...action.payload
       };
+    case GameActionType.CLEAR_SEARCHED_GAME:
+      return {
+        ...state,
+        ...action.payload
+      };
     default:
       return state;
   }
