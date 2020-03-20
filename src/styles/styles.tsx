@@ -3,12 +3,23 @@ import "./fonts.css";
 
 export const ContainerInner = styled.div`
   margin: 30px 0;
+  @media (max-width: 414px) {
+    margin: 10px;
+  }
 `;
 
 export const ButtonWrapper = styled.div`
-  margin: 20px;
+  margin: 10px;
   button {
     box-shadow: none;
+  }
+  @media (max-width: 414px) {
+    a {
+      font-size: 10px;
+    }
+    button {
+      font-size: 10px;
+    }
   }
 `;
 
@@ -64,6 +75,7 @@ export const NavBrandWrapper = styled.p`
   }
   @media (max-width: 414px) {
     padding: 10px 0;
+    margin-bottom: 5px;
   }
 `;
 
@@ -84,6 +96,14 @@ export const NavButtonWrapper = styled.div`
   align-items: center;
   @media (max-width: 414px) {
     justify-content: center;
+    button {
+      font-size: 10px;
+      width: 80px;
+    }
+    a {
+      font-size: 10px;
+      width: 80px;
+    }
   }
 `;
 
@@ -174,7 +194,8 @@ export const MuiTableWrapper = styled.div`
   }
   @media (max-width: 414px) {
     td {
-      font-size: 12px;
+      font-size: 11px;
+      padding: 2px;
     }
     // .MuiTableRow-head th:nth-child(3),
     .MuiTableRow-head th:nth-child(4),
@@ -198,11 +219,14 @@ export const NewGamesContainer = styled.div`
   border-bottom: 1px solid lightgrey;
   margin: 10px 0;
   div {
-    align-items: center;
+    align-items: center;    
   }
   .upcomingGameContainer {
     font-size: 11px;
     padding: 10px;
+    button {
+      min-width: 10px;
+    }
   }
   img {
     width: 40px;
@@ -211,6 +235,12 @@ export const NewGamesContainer = styled.div`
   @media (max-width: 414px) {
     .upcomingGameContainer {
       padding: 30px 0;
+      div {
+        padding: 3px;
+      }
+      button {
+        min-width: 10px;
+      }
     }
   }
 `;
