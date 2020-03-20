@@ -2,7 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import {
   callFetchGamesApi,
-  callDeleteGameApi
+  callDeleteGameApi,
+  executeClearSearchedGame
 } from "../../actions/game/gameActions";
 import { AppState } from "../../store";
 import { IUserGamesStore } from "../../model/game/game";
@@ -27,6 +28,7 @@ interface Props {
   userGames: IUserGamesStore;
   callFetchGamesApi(user_id: string): void;
   callDeleteGameApi(user_id: string, game_id: string): void;
+  executeClearSearchedGame(): void
 }
 
 interface State {}
@@ -62,6 +64,11 @@ export class Games extends React.Component<
       this.props.callDeleteGameApi(user_id, game_id);
     }
   };
+
+  redirectToAddGamePage = () => {
+    this.props.executeClearSearchedGame();
+    this.props.history.push(`/user/${this.props.match.params.user_id}/games/add`)
+  }
 
   public render() {
     const { games } = this.props.userGames;
@@ -168,10 +175,11 @@ export class Games extends React.Component<
             {/* only appear for logged in user, no one else */}
             <ButtonWrapper>
               <Button
-                component={Link}
-                to={`/user/${this.props.match.params.user_id}/games/add`}
                 variant="outlined"
                 color="primary"
+                onClick={() => {
+                  this.redirectToAddGamePage();
+                }}
               >
                 Add Game
               </Button>
@@ -198,7 +206,8 @@ const mapStateToProps = (state: AppState) => ({
 
 const mapDispatchToProps = {
   callFetchGamesApi,
-  callDeleteGameApi
+  callDeleteGameApi,
+  executeClearSearchedGame
 };
 
 export default connect(

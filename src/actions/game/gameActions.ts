@@ -155,3 +155,9 @@ export const clearSearchedGame = (): IGameAction => {
         payload: resetResults,
     }
 }
+
+export const executeClearSearchedGame = (): Function => async (
+    dispatch
+) => {
+    dispatch(clearSearchedGame());
+}
