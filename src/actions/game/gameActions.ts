@@ -155,19 +155,3 @@ export const clearSearchedGame = (): IGameAction => {
         payload: resetResults,
     }
 }
-
-export const executeClearSearchedGame = (): Function => async (
-    dispatch: ThunkDispatch<AppState, void, IGameAction>,
-    state: AppState,
-    api: IApi
-) => { 
-    console.log('hiii2');   
-    return dispatch(clearSearchedGame);
-}
-
-// export const executeClearSearchedGame = (): Function => async (
-//     dispatch
-// ) => {
-//     console.log('hi2');
-//     dispatch(clearSearchedGame);
-// }
