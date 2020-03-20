@@ -264,6 +264,12 @@ export const SearchGamesContainer = styled.div`
   @media (max-width: 414px) {
     .searchGameContainer {
       padding: 30px 0;
+      div {
+        padding: 3px;
+      }
+      button {
+        min-width: 10px;
+      }
     }
   }
 `;
