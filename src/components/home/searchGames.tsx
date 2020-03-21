@@ -124,10 +124,10 @@ const SearchGames: React.FC = () => {
                       )}
                     </Grid>
                     <Grid item xs={12} sm={12} md={3}>
-                      {game.platforms.map(platform => platform.name).join(", ")}
+                      {game.platforms && game.platforms.map(platform => platform.name).join(", ")}
                     </Grid>
                     <Grid item xs={12} sm={12} md={5}>
-                      {game.deck}
+                      {game.deck ? game.deck : ''}
                     </Grid>
                   </Grid>
                 </div>

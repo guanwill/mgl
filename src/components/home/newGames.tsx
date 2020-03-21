@@ -98,10 +98,10 @@ const NewGames: React.FC = () => {
                       : "N/A"}
                   </Grid>
                   <Grid item xs={12} sm={12} md={2}>
-                    {game.platforms.map(platform => platform.name).join(", ")}
+                    {game.platforms && game.platforms.map(platform => platform.name).join(", ")}
                   </Grid>
                   <Grid item xs={12} sm={12} md={4}>
-                    {game.deck}
+                    {game.deck ? game.deck : ''}
                   </Grid>
                 </Grid>
               </div>
