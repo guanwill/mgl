@@ -4,6 +4,8 @@ import { callAddGameApi } from "../../actions/game/gameActions";
 import { AppState } from "../../store";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
+import { withRouter } from 'react-router-dom';
+
 
 // Materialui
 import Container from "@material-ui/core/Container";
@@ -117,6 +119,7 @@ export class AddGame extends React.Component<
   };
 
   private goBackToPreviousPage = () => {
+    console.log('history', this.props.history);
     this.props.history.goBack();
   };
 
@@ -275,4 +278,4 @@ const mapDispatchToProps = {
   callAddGameApi
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddGame);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AddGame));
