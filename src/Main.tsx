@@ -8,13 +8,14 @@ import Register from './components/auth/Register';
 import Verify from './components/auth/Verify';
 import Resend from './components/auth/Resend';
 import Password from './components/auth/Password';
-import Navbar from './components/navbar';
 
 import Games from './components/games';
 import AddGame from './components/games/addGame';
 import EditGame from './components/games/editGame';
 
 import HomePage from './components/home/index'
+import Navbar from './components/navbar';
+import Footer from './components/footer';
 
 const Main = () => {
   const store = configureStore();
@@ -35,7 +36,8 @@ const Main = () => {
           <Route exact path='/user/:user_id/games/add' component={AddGame}/>
           <Route exact path='/user/:user_id/games/:game_id/edit' component={EditGame}/>
         </Switch>
-      </main>      
+      </main> 
+      <Footer />     
     </Provider>    
   )
 }

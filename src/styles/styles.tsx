@@ -289,3 +289,16 @@ export const AddGameButtonWrapper = styled.div`
     }
   }
 `;
+
+// FOOTER
+export const FooterContainer = styled.div`
+  border-top: 2px dotted lightgrey;
+  height: 50px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  a {
+    color: black;
+  }
+`;
