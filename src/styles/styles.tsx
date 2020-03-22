@@ -196,6 +196,9 @@ export const MuiTableWrapper = styled.div`
     padding: 5px;
   }
   @media (max-width: 414px) {
+    div[class*="MUIDataTable-responsiveScrollMaxHeight"] {
+      max-height: fit-content !important; // to force override materialui table scroll
+    }
     td {
       font-size: 11px;
       padding: 2px;
@@ -292,9 +295,8 @@ export const AddGameButtonWrapper = styled.div`
 
 // FOOTER
 export const FooterContainer = styled.div`
-  border-top: 2px dotted lightgrey;
-  height: 50px;
-  margin-top: 20px;
+  // border-top: 2px dotted lightgrey;
+  margin: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
