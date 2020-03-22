@@ -4,8 +4,6 @@ import { callAddGameApi } from "../../actions/game/gameActions";
 import { AppState } from "../../store";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
-import { withRouter } from 'react-router-dom';
-
 
 // Materialui
 import Container from "@material-ui/core/Container";
@@ -19,9 +17,9 @@ import {
   ContainerInner,
   BackLinkWrapper
 } from "../../styles/styles";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { IUserGamesStore, IGameToAdd } from "../../model/game/game";
-// import { Link as MaterialUiLink } from "@material-ui/core";
+import { Link as MaterialUiLink } from "@material-ui/core";
 
 interface Props {
   callAddGameApi(
@@ -119,8 +117,11 @@ export class AddGame extends React.Component<
   };
 
   private goBackToPreviousPage = () => {
-    console.log('history', this.props.history);
-    this.props.history.goBack();
+    if (this.props.gameToAdd.title) {
+      this.props.history.push(`/`);
+    } else {
+      this.props.history.push(`/user/${this.props.match.params.user_id}/games`);
+    }
   };
 
   public render() {
@@ -128,18 +129,18 @@ export class AddGame extends React.Component<
       <Container>
         <ContainerInner>
           <BackLinkWrapper>
-            <Link 
+            {/* <Link 
               to={`/user/${this.props.match.params.user_id}/games/`}>
               Back
-            </Link>
-            {/* <MaterialUiLink
+            </Link> */}
+            <MaterialUiLink
               href="#"
               onClick={() => {
                 this.goBackToPreviousPage();
               }}
             >
               Back
-            </MaterialUiLink> */}
+            </MaterialUiLink>
           </BackLinkWrapper>
           <PageTitle>Add Game</PageTitle>
 
@@ -278,4 +279,4 @@ const mapDispatchToProps = {
   callAddGameApi
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AddGame));
+export default connect(mapStateToProps, mapDispatchToProps)(AddGame);
