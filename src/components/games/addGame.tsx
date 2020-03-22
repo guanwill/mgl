@@ -19,9 +19,9 @@ import {
   ContainerInner,
   BackLinkWrapper
 } from "../../styles/styles";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { IUserGamesStore, IGameToAdd } from "../../model/game/game";
-import { Link as MaterialUiLink } from "@material-ui/core";
+// import { Link as MaterialUiLink } from "@material-ui/core";
 
 interface Props {
   callAddGameApi(
@@ -128,18 +128,18 @@ export class AddGame extends React.Component<
       <Container>
         <ContainerInner>
           <BackLinkWrapper>
-            {/* <Link 
+            <Link 
               to={`/user/${this.props.match.params.user_id}/games/`}>
               Back
-            </Link> */}
-            <MaterialUiLink
+            </Link>
+            {/* <MaterialUiLink
               href="#"
               onClick={() => {
                 this.goBackToPreviousPage();
               }}
             >
               Back
-            </MaterialUiLink>
+            </MaterialUiLink> */}
           </BackLinkWrapper>
           <PageTitle>Add Game</PageTitle>
 
