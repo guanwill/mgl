@@ -17,8 +17,9 @@ import {
   ContainerInner,
   BackLinkWrapper
 } from "../../styles/styles";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { IUserGamesStore, IGameToAdd } from "../../model/game/game";
+import { Link as MaterialUiLink } from "@material-ui/core";
 
 interface Props {
   callAddGameApi(
@@ -101,18 +102,22 @@ export class AddGame extends React.Component<
       this.setState({
         title: this.props.gameToAdd && this.props.gameToAdd.title,
         release_date: this.props.gameToAdd && this.props.gameToAdd.release_date
-      })
+      });
     }
   };
 
   componentDidUpdate = prevProps => {
     if (this.props.userGames.message === "Game added") {
       this.props.history.push(`/user/${this.props.match.params.user_id}/games`);
-    }        
+    }
   };
 
   componentWillMount = () => {
     this.props.userGames.message = "";
+  };
+
+  private goBackToPreviousPage = () => {
+    this.props.history.goBack();
   };
 
   public render() {
@@ -120,9 +125,18 @@ export class AddGame extends React.Component<
       <Container>
         <ContainerInner>
           <BackLinkWrapper>
-            <Link to={`/user/${this.props.match.params.user_id}/games/`}>
+            {/* <Link 
+              to={`/user/${this.props.match.params.user_id}/games/`}>
               Back
-            </Link>
+            </Link> */}
+            <MaterialUiLink
+              href="#"
+              onClick={() => {
+                this.goBackToPreviousPage();
+              }}
+            >
+              Back
+            </MaterialUiLink>
           </BackLinkWrapper>
           <PageTitle>Add Game</PageTitle>
 
@@ -261,7 +275,4 @@ const mapDispatchToProps = {
   callAddGameApi
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AddGame);
+export default connect(mapStateToProps, mapDispatchToProps)(AddGame);

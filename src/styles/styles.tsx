@@ -53,6 +53,9 @@ export const BackLinkWrapper = styled.div`
   a {
     text-decoration: none;
   }
+  a:hover {
+    text-decoration: none;
+  }
 `;
 
 export const PageTitle = styled.h2`
