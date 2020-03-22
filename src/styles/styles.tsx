@@ -295,11 +295,9 @@ export const AddGameButtonWrapper = styled.div`
 
 // FOOTER
 export const FooterContainer = styled.div`
-  // border-top: 2px dotted lightgrey;
   margin: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 20px;
+  width: -webkit-fill-available;
   a {
     color: black;
   }
