@@ -180,7 +180,7 @@ export const MuiTableWrapper = styled.div`
   // border: 1px solid lightgrey;
   div {
     box-shadow: none;
-    max-height: fit-content;
+    max-height: fit-content !important; // to force override materialui table scroll
   }
   th {
     font-weight: bold;
