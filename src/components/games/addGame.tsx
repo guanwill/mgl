@@ -62,7 +62,7 @@ export class AddGame extends React.Component<
       title: "",
       genre: "",
       platform: "",
-      release_date: "",
+      release_date: null,
       status: "",
       rating: null,
       review: "",
@@ -84,7 +84,7 @@ export class AddGame extends React.Component<
       this.state.title,
       this.state.genre ? this.state.genre : "",
       this.state.platform,
-      this.state.release_date ? this.state.release_date : "",
+      this.state.release_date ? this.state.release_date : null,
       this.state.status,
       this.state.rating ? this.state.rating : Number(""),
       this.state.review ? this.state.review : "",
@@ -101,7 +101,7 @@ export class AddGame extends React.Component<
     if (this.props.gameToAdd) {
       this.setState({
         title: this.props.gameToAdd && this.props.gameToAdd.title,
-        release_date: this.props.gameToAdd && this.props.gameToAdd.release_date
+        release_date: this.props.gameToAdd && this.props.gameToAdd.release_date !== 'Invalid date' ? this.props.gameToAdd.release_date : null
       });
     }
   };
