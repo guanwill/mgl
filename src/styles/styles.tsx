@@ -204,13 +204,15 @@ export const MuiTableWrapper = styled.div`
       padding: 2px;
     }
     // .MuiTableRow-head th:nth-child(3),
-    .MuiTableRow-head th:nth-child(4),
-    .MuiTableRow-head th:nth-child(5) {
+    .MuiTableRow-head th:nth-child(4)
+    // .MuiTableRow-head th:nth-child(5) 
+    {
       display: none;
     }
     // .MuiTableRow-root td:nth-child(6),
-    .MuiTableRow-root td:nth-child(8),
-    .MuiTableRow-root td:nth-child(10) {
+    .MuiTableRow-root td:nth-child(8)
+    // .MuiTableRow-root td:nth-child(10) 
+    {
       display: none;
     }
   }
