@@ -231,8 +231,6 @@ export class EditGame extends React.Component<
                   <option value="On Hold">On Hold</option>
                   <option value="Wishlist">On Wishlist</option>
                   <option value="Maybe">Maybe</option>
-                  <option value="Started">Just Started</option>
-                  <option value="Half_way">Half way</option>
                 </SelectField>
               </div>
 

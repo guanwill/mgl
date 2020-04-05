@@ -16,6 +16,7 @@ import {
 } from "../../styles/styles";
 import { useHistory } from "react-router-dom";
 import getAuthenticatedUser from "../../helpers/getAuthenticatedUser";
+import isTokenExpired from "../../helpers/isTokenExpired";
 
 const SearchGames: React.FC = () => {
   const history = useHistory();
@@ -27,6 +28,7 @@ const SearchGames: React.FC = () => {
   const [loading, setLoading] = useState(null);
 
   const userId = getAuthenticatedUser();
+  const isUserTokenExpired = isTokenExpired();
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -109,7 +111,7 @@ const SearchGames: React.FC = () => {
                       <b>
                         <Link href={game.site_detail_url}>{game.name}</Link>
                       </b>
-                      {userId && (
+                      {userId && !isUserTokenExpired && (
                         <AddGameButtonWrapper>
                           <Button
                             className="addGameButton"

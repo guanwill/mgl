@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { addSearchedGame } from "../../actions/game/gameActions";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import getAuthenticatedUser from "../../helpers/getAuthenticatedUser";
+import isTokenExpired from "../../helpers/isTokenExpired";
 
 const NewGames: React.FC = () => {
   const history = useHistory();
@@ -31,6 +32,7 @@ const NewGames: React.FC = () => {
   const classes = useStyles({});
 
   const userId = getAuthenticatedUser();
+  const isUserTokenExpired = isTokenExpired();
 
   const onError = e => {
     e.target.src = "https://i.postimg.cc/28ngFvKc/defaultfailedphoto.jpg";
@@ -78,7 +80,7 @@ const NewGames: React.FC = () => {
                     <b>
                       <Link href={game.site_detail_url}>{game.name}</Link>
                     </b>
-                    {userId && (
+                    {userId && !isUserTokenExpired && (
                       <AddGameButtonWrapper>
                         <Button
                           className="addGameButton"
