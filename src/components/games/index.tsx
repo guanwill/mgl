@@ -3,32 +3,28 @@ import { connect } from "react-redux";
 import {
   callFetchGamesApi,
   callDeleteGameApi,
-  executeClearSearchedGame
+  executeClearSearchedGame,
 } from "../../actions/game/gameActions";
 import { AppState } from "../../store";
-import { IUserGamesStore } from "../../model/game/game";
+import { IUserGamesStore, GameStatus } from "../../model/game/game";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
-import { Link } from "react-router-dom";
-import moment from "moment";
 
 // MUI
 import Container from "@material-ui/core/Container";
-import MUIDataTable from "mui-datatables";
 import Button from "@material-ui/core/Button";
 import {
   ButtonWrapper,
-  MuiTableWrapper,
   ContainerInner,
-  SubHeadingWrapper
+  SubHeadingWrapper,
 } from "../../styles/styles";
-import VisibilityIcon from "@material-ui/icons/Visibility";
+import GameTable from "./gameTable";
 
 interface Props {
   userGames: IUserGamesStore;
   callFetchGamesApi(user_id: string): void;
   callDeleteGameApi(user_id: string, game_id: string): void;
-  executeClearSearchedGame(): void
+  executeClearSearchedGame(): void;
 }
 
 interface State {}
@@ -67,100 +63,40 @@ export class Games extends React.Component<
 
   redirectToAddGamePage = () => {
     this.props.executeClearSearchedGame();
-    this.props.history.push(`/user/${this.props.match.params.user_id}/games/add`)
-  }
+    this.props.history.push(
+      `/user/${this.props.match.params.user_id}/games/add`
+    );
+  };
 
   public render() {
     const { games } = this.props.userGames;
 
-    const columns = [
-      {
-        name: "",
-        label: "",
-        options: {
-          filter: false,
-          sort: false
-        }
-      },
-      {
-        name: "title",
-        label: "Title",
-        options: {
-          filter: false,
-          sort: true
-        }
-      },
-      {
-        name: "release_date",
-        label: "Date",
-        options: {
-          filter: false,
-          sort: true,
-          customBodyRender: (value, tableMeta, updateValue) => {
-            const game = games.find(
-              game => game.title === tableMeta.rowData[1]
-            )!;
-            const release_date = game.release_date;
-            if (release_date) {
-              return moment(new Date(release_date)).format("DD/MM/YYYY");
-            }
-          }
-        }
-      },
-      {
-        name: "platform",
-        label: "Platform",
-        options: {
-          filter: true,
-          sort: true
-        }
-      },
-      {
-        name: "status",
-        label: "Status",
-        options: {
-          filter: true,
-          sort: true
-        }
-      },
-      {
-        name: "Actions",
-        label: "Actions",
-        options: {
-          filter: false,
-          sort: false,
+    const gamesPlaying = games.filter((g) => g.status === GameStatus.PLAYING);
+    const gamesFinished = games.filter((g) => g.status === GameStatus.FINISHED);
+    const gamesOnHold = games.filter((g) => g.status === GameStatus.ON_HOLD);
+    const gamesWishlistWithNullReleaseDate = games.filter(
+      (g) => g.status === GameStatus.WISHLIST && g.release_date === null
+    );
+    const gamesWishlistWithReleaseDate = games.filter(
+      (g) => g.status === GameStatus.WISHLIST && g.release_date !== null
+    );
+    const gamesMaybeWithNullReleaseDate = games.filter(
+      (g) => g.status === GameStatus.MAYBE && g.release_date === null
+    );
+    const gamesMaybeWithReleaseDate = games.filter(
+      (g) => g.status === GameStatus.MAYBE && g.release_date !== null
+    );
 
-          customBodyRender: (value, tableMeta, updateValue) => {
-            return (
-              <>
-                <Link
-                  to={`/user/${this.props.match.params.user_id}/games/${
-                    games.find(game => game.title === tableMeta.rowData[1])!._id
-                  }/edit`}
-                >
-                  <VisibilityIcon />
-                </Link>
-              </>
-            );
-          }
-        }
-      }
+    const gamesWishListAndMaybeWithReleaseDate = [...gamesWishlistWithReleaseDate, ...gamesMaybeWithReleaseDate].sort((a, b) => {
+      return (
+        new Date(a.release_date).getTime() - new Date(b.release_date).getTime()
+      );
+    });
+    const gamesWishlist = [
+      ...gamesWishListAndMaybeWithReleaseDate,
+      ...gamesWishlistWithNullReleaseDate,
+      ...gamesMaybeWithNullReleaseDate
     ];
-
-    const data = games;
-
-    const options = {
-      responsive: "scrollMaxHeight",
-      pagination: false,
-      filter: true,
-      print: false,
-      download: false,
-      viewColumns: false,
-      selectableRows: "none"
-      //  filterType: 'checkbox',
-      // onRowClick
-      // onCellClick
-    };
 
     return (
       <>
@@ -168,7 +104,7 @@ export class Games extends React.Component<
           <ContainerInner>
             <SubHeadingWrapper>
               <h1>Inventory</h1>
-            </SubHeadingWrapper>            
+            </SubHeadingWrapper>
 
             {console.log("user games: ", games)}
 
@@ -185,14 +121,26 @@ export class Games extends React.Component<
               </Button>
             </ButtonWrapper>
 
-            <MuiTableWrapper>
-              <MUIDataTable
-                title={""}
-                data={data}
-                columns={columns}
-                options={options}
-              />
-            </MuiTableWrapper>
+            <GameTable
+              title="Playing"
+              games={gamesPlaying}
+              userId={this.props.match.params.user_id}
+            />
+            <GameTable
+              title="Wishlist"
+              games={gamesWishlist}
+              userId={this.props.match.params.user_id}
+            />
+            <GameTable
+              title="On Hold"
+              games={gamesOnHold}
+              userId={this.props.match.params.user_id}
+            />
+            <GameTable
+              title="Finished"
+              games={gamesFinished}
+              userId={this.props.match.params.user_id}
+            />
           </ContainerInner>
         </Container>
       </>
@@ -201,16 +149,13 @@ export class Games extends React.Component<
 }
 
 const mapStateToProps = (state: AppState) => ({
-  userGames: state.userGames
+  userGames: state.userGames,
 });
 
 const mapDispatchToProps = {
   callFetchGamesApi,
   callDeleteGameApi,
-  executeClearSearchedGame
+  executeClearSearchedGame,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Games);
+export default connect(mapStateToProps, mapDispatchToProps)(Games);

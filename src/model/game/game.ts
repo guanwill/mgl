@@ -36,3 +36,11 @@ export interface IGameApiResponse {
     games: IGame,
     message?: string
 }
+
+export enum GameStatus {
+    PLAYING = "Playing",
+    FINISHED = "Finished",
+    ON_HOLD = "On Hold",
+    WISHLIST = "Wishlist",
+    MAYBE = "Maybe"
+}

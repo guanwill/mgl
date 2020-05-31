@@ -195,6 +195,12 @@ export const MuiTableWrapper = styled.div`
   td {
     padding: 5px;
   }
+  [class*="MuiTypography-h6"] {
+    text-align: left;
+    font-size: 16px;
+    color: lightgrey;
+    font-family: "Press Start 2P";
+  }
   @media (max-width: 414px) {
     div[class*="MUIDataTable-responsiveScrollMaxHeight"] {
       max-height: fit-content !important; // to force override materialui table scroll
@@ -202,6 +208,12 @@ export const MuiTableWrapper = styled.div`
     td {
       font-size: 11px;
       padding: 2px;
+    }
+    [class*="MuiTypography-h6"] {
+      font-size: 11px;
+    }
+    [class*="MuiToolbar-root"] {
+      min-height: 0;
     }
     // .MuiTableRow-head th:nth-child(3),
     .MuiTableRow-head th:nth-child(4)
@@ -216,6 +228,10 @@ export const MuiTableWrapper = styled.div`
       display: none;
     }
   }
+`;
+
+export const GameTableWrapper = styled.div`
+  margin-bottom: 30px;
 `;
 
 // HOME PAGE GAMES
