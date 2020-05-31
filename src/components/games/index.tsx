@@ -87,7 +87,10 @@ export class Games extends React.Component<
       (g) => g.status === GameStatus.MAYBE && g.release_date !== null
     );
 
-    const gamesWishListAndMaybeWithReleaseDate = [...gamesWishlistWithReleaseDate, ...gamesMaybeWithReleaseDate].sort((a, b) => {
+    const gamesWishListAndMaybeWithReleaseDate = [
+      ...gamesWishlistWithReleaseDate,
+      ...gamesMaybeWithReleaseDate,
+    ].sort((a, b) => {
       return (
         new Date(a.release_date).getTime() - new Date(b.release_date).getTime()
       );
@@ -95,7 +98,7 @@ export class Games extends React.Component<
     const gamesWishlist = [
       ...gamesWishListAndMaybeWithReleaseDate,
       ...gamesWishlistWithNullReleaseDate,
-      ...gamesMaybeWithNullReleaseDate
+      ...gamesMaybeWithNullReleaseDate,
     ];
 
     return (
@@ -121,26 +124,36 @@ export class Games extends React.Component<
               </Button>
             </ButtonWrapper>
 
-            <GameTable
-              title="Playing"
-              games={gamesPlaying}
-              userId={this.props.match.params.user_id}
-            />
-            <GameTable
-              title="Wishlist"
-              games={gamesWishlist}
-              userId={this.props.match.params.user_id}
-            />
-            <GameTable
-              title="On Hold"
-              games={gamesOnHold}
-              userId={this.props.match.params.user_id}
-            />
-            <GameTable
-              title="Finished"
-              games={gamesFinished}
-              userId={this.props.match.params.user_id}
-            />
+            {gamesPlaying.length ? (
+              <GameTable
+                title="Playing"
+                games={gamesPlaying}
+                userId={this.props.match.params.user_id}
+              />
+            ) : (
+              ""
+            )}
+            {gamesWishlist.length ? (
+              <GameTable
+                title="Wishlist"
+                games={gamesWishlist}
+                userId={this.props.match.params.user_id}
+              />
+            ) : ""}
+            {gamesOnHold.length ? (
+              <GameTable
+                title="On Hold"
+                games={gamesOnHold}
+                userId={this.props.match.params.user_id}
+              />
+            ): ""}
+            {gamesFinished ? (
+              <GameTable
+                title="Finished"
+                games={gamesFinished}
+                userId={this.props.match.params.user_id}
+              />
+            ): ""}
           </ContainerInner>
         </Container>
       </>
