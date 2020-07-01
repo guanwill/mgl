@@ -1,6 +1,7 @@
 export interface IUserGamesStore {
     games: IGame[];
     message?: string;
+    isLoading?: boolean;
 }
 
 export interface IGameToAdd {

@@ -11,12 +11,13 @@ export interface IConfig {
 }
 
 export enum GameActionType {
-  LOAD_GAMES = 'LOAD_GAMES',
-  ADD_GAME = "ADD_GAME",
-  DELETE_GAME = "DELETE_GAME",
-  UPDATE_GAME = "UPDATE_GAME",
-  ADD_SEARCHED_GAME = 'ADD_SEARCHED_GAME',
-  CLEAR_SEARCHED_GAME = "CLEAR_SEARCHED_GAME"
+    LOAD_GAMES = 'LOAD_GAMES',
+    ADD_GAME = "ADD_GAME",
+    DELETE_GAME = "DELETE_GAME",
+    UPDATE_GAME = "UPDATE_GAME",
+    ADD_SEARCHED_GAME = 'ADD_SEARCHED_GAME',
+    CLEAR_SEARCHED_GAME = "CLEAR_SEARCHED_GAME",
+    IS_LOADING = "IS_LOADING"
 }
 
 export interface IGameAction {
@@ -41,11 +42,19 @@ export const loadedGames = (payload: IGame[]): IGameAction => {
     }
 }
 
+export const isLoading = (payload: boolean): IGameAction => {
+    return {
+        type: GameActionType.IS_LOADING,
+        payload: payload,
+    }
+}
+
 export const callFetchGamesApi = (user_id: string): Function => async (
     dispatch: ThunkDispatch<AppState, void, IGameAction>,
     state: AppState,
     api: IApi
 ) => {
+    dispatch(isLoading(true));
     try {
         let config: IConfig = {
             headers: {
@@ -56,8 +65,10 @@ export const callFetchGamesApi = (user_id: string): Function => async (
         const sortedGames = gamesResponse.games.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)); 
         return dispatch(loadedGames(sortedGames));
 
-    } catch (e) {
+    } catch (e) {        
         return e
+    } finally {
+        dispatch(isLoading(false));
     }
 }
 
@@ -73,6 +84,7 @@ export const callAddGameApi = (title: string, genre: string, platform: string, r
     state: AppState,
     api: IApi
 ) => {
+    dispatch(isLoading(true));
     try {
         let config: IConfig = {
             headers: {
@@ -84,7 +96,9 @@ export const callAddGameApi = (title: string, genre: string, platform: string, r
         return dispatch(clearSearchedGame());
     } catch (e) {
         return e
-    }    
+    } finally {
+        dispatch(isLoading(false));
+    }
 }
 
 export const deleteGameSuccess = (payload: IUserGamesStore): IGameAction => {
@@ -124,6 +138,7 @@ export const callUpdateGameApi = (title: string, genre: string, platform: string
     state: AppState,
     api: IApi
 ) => {
+    dispatch(isLoading(true));
     try {
         let config: IConfig = {
             headers: {
@@ -134,7 +149,9 @@ export const callUpdateGameApi = (title: string, genre: string, platform: string
         return dispatch(updateGameSuccess(gamesResponse));
     } catch (e) {
         return e
-    }    
+    } finally {
+        dispatch(isLoading(false));
+    }
 }
 
 export const addSearchedGame = (payload: IGameToAdd): IGameAction => {

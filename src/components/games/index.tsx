@@ -69,7 +69,7 @@ export class Games extends React.Component<
   };
 
   public render() {
-    const { games } = this.props.userGames;
+    const { games, isLoading } = this.props.userGames;
 
     const gamesPlaying = games.filter((g) => g.status === GameStatus.PLAYING);
     const gamesFinished = games.filter((g) => g.status === GameStatus.FINISHED);
@@ -123,37 +123,48 @@ export class Games extends React.Component<
                 Add Game
               </Button>
             </ButtonWrapper>
-
-            {gamesPlaying.length ? (
-              <GameTable
-                title="Playing"
-                games={gamesPlaying}
-                userId={this.props.match.params.user_id}
-              />
+            {isLoading ? (
+              <p style={{ margin: "30px 0" }}>loading...</p>
             ) : (
-              ""
+              <>
+                {gamesPlaying.length ? (
+                  <GameTable
+                    title="Playing"
+                    games={gamesPlaying}
+                    userId={this.props.match.params.user_id}
+                  />
+                ) : (
+                  ""
+                )}
+                {gamesWishlist.length ? (
+                  <GameTable
+                    title="Wishlist"
+                    games={gamesWishlist}
+                    userId={this.props.match.params.user_id}
+                  />
+                ) : (
+                  ""
+                )}
+                {gamesOnHold.length ? (
+                  <GameTable
+                    title="On Hold"
+                    games={gamesOnHold}
+                    userId={this.props.match.params.user_id}
+                  />
+                ) : (
+                  ""
+                )}
+                {gamesFinished ? (
+                  <GameTable
+                    title="Finished"
+                    games={gamesFinished}
+                    userId={this.props.match.params.user_id}
+                  />
+                ) : (
+                  ""
+                )}
+              </>
             )}
-            {gamesWishlist.length ? (
-              <GameTable
-                title="Wishlist"
-                games={gamesWishlist}
-                userId={this.props.match.params.user_id}
-              />
-            ) : ""}
-            {gamesOnHold.length ? (
-              <GameTable
-                title="On Hold"
-                games={gamesOnHold}
-                userId={this.props.match.params.user_id}
-              />
-            ): ""}
-            {gamesFinished ? (
-              <GameTable
-                title="Finished"
-                games={gamesFinished}
-                userId={this.props.match.params.user_id}
-              />
-            ): ""}
           </ContainerInner>
         </Container>
       </>

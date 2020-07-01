@@ -248,6 +248,8 @@ export class AddGame extends React.Component<
                 onChange={e => this.handleInputChange(e)}
               />
 
+              {this.props.userGames.isLoading && <p>loading...</p>}
+
               <div>
                 <ButtonWrapper>
                   <Button
