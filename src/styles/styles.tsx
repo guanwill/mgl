@@ -363,11 +363,11 @@ export const PublicGamesListItemContainerInner = styled.div`
     background: transparent;  /* makes scrollbar invisible */
   }
   p {
-    margin: 5px;
+    margin: 0;
   }
   
   @media (max-width: 414px) {
-    margin-bottom: 0px;
+    margin-bottom: 20px;
   }
 `
 export const PublicGameDate = styled.span`

@@ -96,7 +96,7 @@ export class PublicGamesList extends React.Component<
                 ) : (
                   ""
                 )}
-                {gamesFinished ? (
+                {gamesFinished.length ? (
                   <PublicGamesListItem title="Finished" games={gamesFinished} />
                 ) : (
                   ""
