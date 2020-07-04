@@ -21,6 +21,16 @@ export default class GameApi {
         }
     }
 
+    public fetchPublicGamesListForUser = async (user_id: string): Promise<IGamesApiResponse> => {
+        try {
+            const response = await this.httpClient.get(`${this.hostName}/api/v1/public/games/user/${user_id}`);
+            return response.data.data
+        } catch (err) {
+            console.log('ERR ', err);
+            throw (err);
+        }
+    }
+
     public addGame = async (title: string, genre: string, platform: string, release_date: string, status: string, rating: number, review: string, comments: string, user_id: string, config: IConfig): Promise<IGamesApiResponse> => {
         try {
             const payload = {

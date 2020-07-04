@@ -178,3 +178,21 @@ export const executeClearSearchedGame = (): Function => async (
 ) => {
     dispatch(clearSearchedGame());
 }
+
+export const getPublicGamesListForUser = (user_id: string): Function => async (
+    dispatch: ThunkDispatch<AppState, void, IGameAction>,
+    state: AppState,
+    api: IApi
+) => {
+    dispatch(isLoading(true));
+    try {
+        const gamesResponse: IGamesApiResponse = await api.gameApi.fetchPublicGamesListForUser(user_id);
+        const sortedGames = gamesResponse.games.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)); 
+        return dispatch(loadedGames(sortedGames));
+
+    } catch (e) {        
+        return e
+    } finally {
+        dispatch(isLoading(false));
+    }
+}

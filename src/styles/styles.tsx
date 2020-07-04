@@ -320,3 +320,58 @@ export const FooterContainer = styled.div`
     color: black;
   }
 `;
+
+// PUBLIC GAMES LIST
+export const AlignLeft = styled.div`
+  text-align: left;
+`;
+
+export const PublicGamesStatusText = styled.p`
+  font-weight: bold;
+  color: #b4b1b1;
+  font-style: italic;
+  @media (max-width: 414px) {
+    font-size: 13px;
+  }
+`;
+
+export const PublicGameName = styled.span`
+  @media (max-width: 414px) {
+    font-size: 11px;
+  }
+`;
+
+export const PublicGamesListItemContainerInner = styled.div`
+  white-space: nowrap;
+  overflow-x: scroll;
+  ::-webkit-scrollbar {
+    width: 0px;  /* Remove scrollbar space */
+    background: transparent;  /* makes scrollbar invisible */
+  }
+  p {
+    margin: 5px;
+  }
+  
+  @media (max-width: 414px) {
+    margin-bottom: 0px;
+  }
+`
+export const PublicGameDate = styled.span`
+  color: #faa0a0;
+  font-size: 13px;
+  font-style: italic;
+
+  @media (max-width: 414px) {
+    font-size: 9px;    
+  }
+`
+export const PublicGamePlatform = styled.span`
+  color: #adadf6;
+  font-style: italic;
+  margin: 0 12px;
+  font-size: 13px;
+
+  @media (max-width: 414px) {
+    font-size: 9px;
+  }
+`
