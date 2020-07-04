@@ -9,16 +9,20 @@ import { AppState } from "../../store";
 import { IUserGamesStore, GameStatus } from "../../model/game/game";
 import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
+import GameTable from "./gameTable";
 
 // MUI
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
+import ShareIcon from "@material-ui/icons/Share";
 import {
   ButtonWrapper,
   ContainerInner,
   SubHeadingWrapper,
+  AlignRight,
+  ShareLink,
 } from "../../styles/styles";
-import GameTable from "./gameTable";
+import { Link as MaterialUiLink } from "@material-ui/core";
 
 interface Props {
   userGames: IUserGamesStore;
@@ -68,6 +72,17 @@ export class Games extends React.Component<
     );
   };
 
+  copyShareLink = () => {
+    var textField = document.createElement("textarea");
+    textField.innerText =
+      window.location.host +
+      `/public/games/user/${this.props.match.params.user_id}`;
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand("copy");
+    textField.remove();
+  };
+
   public render() {
     const { games, isLoading } = this.props.userGames;
 
@@ -105,6 +120,19 @@ export class Games extends React.Component<
       <>
         <Container>
           <ContainerInner>
+            <ShareLink>
+              <AlignRight>
+                <MaterialUiLink
+                  href="#"
+                  onClick={() => {
+                    this.copyShareLink();
+                  }}
+                >
+                  <ShareIcon />
+                </MaterialUiLink>
+              </AlignRight>
+            </ShareLink>
+
             <SubHeadingWrapper>
               <h1>Inventory</h1>
             </SubHeadingWrapper>

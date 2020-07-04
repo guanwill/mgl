@@ -67,6 +67,24 @@ export const PageTitle = styled.h2`
   font-weight: normal;
 `;
 
+export const AlignLeft = styled.div`
+  text-align: left;
+`;
+
+export const AlignRight = styled.div`
+  text-align: right;
+`;
+
+// INVENTORY
+export const ShareLink = styled.div`
+  a {
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: none;
+  }
+`;
+
 // NAVBAR
 // navbar also has its own component inline styles
 export const NavBrandWrapper = styled.p`
@@ -322,10 +340,6 @@ export const FooterContainer = styled.div`
 `;
 
 // PUBLIC GAMES LIST
-export const AlignLeft = styled.div`
-  text-align: left;
-`;
-
 export const PublicGamesStatusText = styled.p`
   font-weight: bold;
   color: #b4b1b1;
