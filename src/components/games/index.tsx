@@ -75,7 +75,7 @@ export class Games extends React.Component<
   copyShareLink = () => {
     var textField = document.createElement("textarea");
     textField.innerText =
-      `https://${window.location.host}/public/games/user/${this.props.match.params.user_id}`;
+      `http://${window.location.host}/public/games/user/${this.props.match.params.user_id}`;
     document.body.appendChild(textField);
     textField.select();
     document.execCommand("copy");
