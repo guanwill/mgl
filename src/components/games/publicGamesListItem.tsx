@@ -24,7 +24,7 @@ const PublicGamesListItem: React.FC<Props> = ({ title, games }) => {
           <AlignLeft>
             <PublicGamesStatusText>{title}</PublicGamesStatusText>
             {games.map((game) => (
-              <p key={game._id}><PublicGameName>{game.title}</PublicGameName> <PublicGamePlatform>{game.platform}</PublicGamePlatform> {title == GameStatus.WISHLIST && <PublicGameDate>{moment(new Date(game.release_date)).format("DD/MM/YYYY")}</PublicGameDate>}</p>
+              <p key={game._id}><PublicGameName>{game.title}</PublicGameName> <PublicGamePlatform>{game.platform}</PublicGamePlatform> {title == GameStatus.WISHLIST && game.release_date && <PublicGameDate>{moment(new Date(game.release_date)).format("DD/MM/YYYY")}</PublicGameDate>}</p>
             ))}
           </AlignLeft>
         </PublicGamesListItemContainerInner>
