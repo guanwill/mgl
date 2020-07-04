@@ -34,8 +34,8 @@ const SearchGames: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     setSearchQuery("");
-    const response = await api.giantBombApi.searchGame(searchQuery);
-    setSearchGames(response);
+    const response = await api.giantBombApi.searchGameV2(searchQuery);
+    setSearchGames(response.data.searchGames);
     setLoading(false);
   };
 

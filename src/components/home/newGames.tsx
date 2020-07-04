@@ -49,8 +49,8 @@ const NewGames: React.FC = () => {
   };
 
   const getLatestGames = async (api: IApi) => {
-    const response = await api.giantBombApi.fetchLatestGames();
-    setNewGames(response.results);
+    const response = await api.giantBombApi.fetchLatestGamesV2();
+    setNewGames(response.data.latestGames);
     setLoading(false);
   };
 
