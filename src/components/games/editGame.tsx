@@ -6,7 +6,6 @@ import {
   callDeleteGameApi
 } from "../../actions/game/gameActions";
 import { AppState } from "../../store";
-import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
 
 // MUI

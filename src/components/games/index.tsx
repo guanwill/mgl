@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import {
   callFetchGamesApi,
@@ -7,7 +7,6 @@ import {
 } from "../../actions/game/gameActions";
 import { AppState } from "../../store";
 import { IUserGamesStore, GameStatus } from "../../model/game/game";
-import { RouteComponentProps } from "react-router";
 import isTokenExpired from "../../helpers/isTokenExpired";
 import GameTable from "./gameTable";
 
@@ -23,175 +22,156 @@ import {
   ShareLink,
 } from "../../styles/styles";
 import { Link as MaterialUiLink } from "@material-ui/core";
+import { useParams, useHistory } from "react-router-dom";
 
 interface Props {
   userGames: IUserGamesStore;
   callFetchGamesApi(user_id: string): void;
-  callDeleteGameApi(user_id: string, game_id: string): void;
   executeClearSearchedGame(): void;
 }
 
-interface State {}
+const Games: React.FC<Props> = ({
+  userGames,
+  callFetchGamesApi,
+  executeClearSearchedGame
+}) => {
+  const history = useHistory();
+  const { user_id } = useParams();
 
-interface RouteParams {
-  user_id: string;
-  game_id: string;
-}
+  console.log("user games: ", userGames.games)
 
-export class Games extends React.Component<
-  Props & RouteComponentProps<RouteParams>,
-  State
-> {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+  const redirectToAddGamePage = () => {
+    executeClearSearchedGame(); // do we need this? add game has its own
+    history.push(`/user/${user_id}/games/add`);
+  };
 
-  componentDidMount = async () => {
+  const copyShareLink = async () => {
+    const text = `https://${window.location.host}/public/games/user/${user_id}`;
+    await navigator.clipboard.writeText(text)
+  };
+  
+  useEffect(() => {
     if (isTokenExpired()) {
       console.log("IS EXPIRED? ", isTokenExpired());
-      this.props.history.push("/login");
+      history.push("/login");
     }
-    await this.props.callFetchGamesApi(this.props.match.params.user_id);
-  };
+    callFetchGamesApi(user_id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  componentWillMount = async () => {
-    this.props.userGames.message = "";
-  };
+  // Sort games
+  const { games, isLoading } = userGames;
 
-  deleteGame = (user_id, game_id) => {
-    if (window.confirm("Delete Game?")) {
-      this.props.callDeleteGameApi(user_id, game_id);
-    }
-  };
+  const gamesPlaying = games.filter((g) => g.status === GameStatus.PLAYING);
+  const gamesFinished = games.filter((g) => g.status === GameStatus.FINISHED);
+  const gamesOnHold = games.filter((g) => g.status === GameStatus.ON_HOLD);
+  const gamesWishlistWithNullReleaseDate = games.filter(
+    (g) => g.status === GameStatus.WISHLIST && g.release_date === null
+  );
+  const gamesWishlistWithReleaseDate = games.filter(
+    (g) => g.status === GameStatus.WISHLIST && g.release_date !== null
+  );
+  const gamesMaybeWithNullReleaseDate = games.filter(
+    (g) => g.status === GameStatus.MAYBE && g.release_date === null
+  );
+  const gamesMaybeWithReleaseDate = games.filter(
+    (g) => g.status === GameStatus.MAYBE && g.release_date !== null
+  );
 
-  redirectToAddGamePage = () => {
-    this.props.executeClearSearchedGame();
-    this.props.history.push(
-      `/user/${this.props.match.params.user_id}/games/add`
-    );
-  };
-
-  copyShareLink = () => {
-    const text = `https://${window.location.host}/public/games/user/${this.props.match.params.user_id}`;
-    navigator.clipboard.writeText(text)
-  };
-
-  public render() {
-    const { games, isLoading } = this.props.userGames;
-
-    const gamesPlaying = games.filter((g) => g.status === GameStatus.PLAYING);
-    const gamesFinished = games.filter((g) => g.status === GameStatus.FINISHED);
-    const gamesOnHold = games.filter((g) => g.status === GameStatus.ON_HOLD);
-    const gamesWishlistWithNullReleaseDate = games.filter(
-      (g) => g.status === GameStatus.WISHLIST && g.release_date === null
-    );
-    const gamesWishlistWithReleaseDate = games.filter(
-      (g) => g.status === GameStatus.WISHLIST && g.release_date !== null
-    );
-    const gamesMaybeWithNullReleaseDate = games.filter(
-      (g) => g.status === GameStatus.MAYBE && g.release_date === null
-    );
-    const gamesMaybeWithReleaseDate = games.filter(
-      (g) => g.status === GameStatus.MAYBE && g.release_date !== null
-    );
-
-    const gamesWishListAndMaybeWithReleaseDate = [
-      ...gamesWishlistWithReleaseDate,
-      ...gamesMaybeWithReleaseDate,
-    ].sort((a, b) => {
-      return (
-        new Date(a.release_date).getTime() - new Date(b.release_date).getTime()
-      );
-    });
-    const gamesWishlist = [
-      ...gamesWishListAndMaybeWithReleaseDate,
-      ...gamesWishlistWithNullReleaseDate,
-      ...gamesMaybeWithNullReleaseDate,
-    ];
-
+  const gamesWishListAndMaybeWithReleaseDate = [
+    ...gamesWishlistWithReleaseDate,
+    ...gamesMaybeWithReleaseDate,
+  ].sort((a, b) => {
     return (
-      <>
-        <Container>
-          <ContainerInner>
+      new Date(a.release_date).getTime() - new Date(b.release_date).getTime()
+    );
+  });
+  const gamesWishlist = [
+    ...gamesWishListAndMaybeWithReleaseDate,
+    ...gamesWishlistWithNullReleaseDate,
+    ...gamesMaybeWithNullReleaseDate,
+  ];
+
+  return (
+    <>
+      <Container>
+        <ContainerInner>
+          
             <ShareLink>
-              <AlignRight>
-                <MaterialUiLink
-                  href="#"
-                  onClick={() => {
-                    this.copyShareLink();
-                  }}
-                >
-                  <ShareIcon />
-                </MaterialUiLink>
-              </AlignRight>
-            </ShareLink>
-
-            <SubHeadingWrapper>
-              <h1>Inventory</h1>
-            </SubHeadingWrapper>
-
-            {console.log("user games: ", games)}
-
-            {/* only appear for logged in user, no one else */}
-            <ButtonWrapper>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => {
-                  this.redirectToAddGamePage();
+            <AlignRight>
+              <MaterialUiLink
+                href="#"
+                onClick={async () => {
+                  await copyShareLink();
                 }}
               >
-                Add Game
-              </Button>
-            </ButtonWrapper>
-            {isLoading ? (
-              <p style={{ margin: "30px 0" }}>loading...</p>
-            ) : (
-              <>
-                {gamesPlaying.length ? (
-                  <GameTable
-                    title="Playing"
-                    games={gamesPlaying}
-                    userId={this.props.match.params.user_id}
-                  />
-                ) : (
-                  ""
-                )}
-                {gamesWishlist.length ? (
-                  <GameTable
-                    title="Wishlist"
-                    games={gamesWishlist}
-                    userId={this.props.match.params.user_id}
-                  />
-                ) : (
-                  ""
-                )}
-                {gamesOnHold.length ? (
-                  <GameTable
-                    title="On Hold"
-                    games={gamesOnHold}
-                    userId={this.props.match.params.user_id}
-                  />
-                ) : (
-                  ""
-                )}
-                {gamesFinished.length ? (
-                  <GameTable
-                    title="Finished"
-                    games={gamesFinished}
-                    userId={this.props.match.params.user_id}
-                  />
-                ) : (
-                  ""
-                )}
-              </>
-            )}
-          </ContainerInner>
-        </Container>
-      </>
-    );
-  }
+                <ShareIcon />
+              </MaterialUiLink>
+            </AlignRight>
+          </ShareLink>          
+
+          <SubHeadingWrapper>
+            <h1>Inventory</h1>
+          </SubHeadingWrapper>          
+
+          {/* only appear for logged in user, no one else */}
+          <ButtonWrapper>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => {
+                redirectToAddGamePage();
+              }}
+            >
+              Add Game
+            </Button>
+          </ButtonWrapper>
+          {isLoading ? (
+            <p style={{ margin: "30px 0" }}>loading...</p>
+          ) : (
+            <>
+              {gamesPlaying.length ? (
+                <GameTable
+                  title="Playing"
+                  games={gamesPlaying}
+                  userId={user_id}
+                />
+              ) : (
+                ""
+              )}
+              {gamesWishlist.length ? (
+                <GameTable
+                  title="Wishlist"
+                  games={gamesWishlist}
+                  userId={user_id}
+                />
+              ) : (
+                ""
+              )}
+              {gamesOnHold.length ? (
+                <GameTable
+                  title="On Hold"
+                  games={gamesOnHold}
+                  userId={user_id}
+                />
+              ) : (
+                ""
+              )}
+              {gamesFinished.length ? (
+                <GameTable
+                  title="Finished"
+                  games={gamesFinished}
+                  userId={user_id}
+                />
+              ) : (
+                ""
+              )}
+            </>
+          )}
+        </ContainerInner>
+      </Container>
+    </>
+  );
 }
 
 const mapStateToProps = (state: AppState) => ({
