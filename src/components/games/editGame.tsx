@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { connect } from "react-redux";
 import {
@@ -21,7 +21,7 @@ import {
   ContainerInner,
   BackLinkWrapper
 } from "../../styles/styles";
-import { Link } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { IUserGamesStore } from "../../model/game/game";
 
 interface Props {
@@ -57,72 +57,58 @@ interface RouteParams {
   game_id: string;
 }
 
-export class EditGame extends React.Component<
-  Props & RouteComponentProps<RouteParams>,
-  State
-> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      title: "",
-      genre: "",
-      platform: "",
-      release_date: "",
-      status: "",
-      rating: null,
-      review: "",
-      comments: ""
-    };
-  }
+const EditGame: React.FC<Props> = ({
+  callUpdateGameApi,
+  callDeleteGameApi,
+  userGames
+}) => {
+  const history = useHistory();
+  const { user_id, game_id } = useParams();
+  const [game, setGame] = useState(null)
 
-  handleInputChange = async event => {
+  const handleInputChange = async event => {
     const newState = { [event.target.name]: event.target.value } as Pick<
       State,
       keyof State
     >;
-    await this.setState(newState);
+    await setGame({...game, ...newState});
   };
 
-  deleteGame = (user_id, game_id) => {
+  const deleteGame = (user_id, game_id) => {
     if (window.confirm("Delete Game?")) {
-      this.props.callDeleteGameApi(user_id, game_id);
-      this.props.history.push(`/user/${this.props.match.params.user_id}/games`);
+      callDeleteGameApi(user_id, game_id);
+      history.push(`/user/${user_id}/games`);
     }
   };
 
-  handleSubmit = async e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-
-    await this.props.callUpdateGameApi(
-      this.state.title,
-      this.state.genre ? this.state.genre : "",
-      this.state.platform,
-      this.state.release_date && this.state.release_date !== 'Invalid date' ? this.state.release_date : null,
-      this.state.status,
-      this.state.rating ? this.state.rating : Number(""),
-      this.state.review ? this.state.review : "",
-      this.state.comments ? this.state.comments : "",
-      this.props.match.params.user_id,
-      this.props.match.params.game_id
+    await callUpdateGameApi(
+      game.title,
+      game.genre ? game.genre : "",
+      game.platform,
+      game.release_date && game.release_date !== 'Invalid date' ? game.release_date : null,
+      game.status,
+      game.rating ? game.rating : Number(""),
+      game.review ? game.review : "",
+      game.comments ? game.comments : "",
+      user_id,
+      game_id
     );
   };
 
-  componentDidMount = async () => {
+  useEffect(() => {
+    if (userGames.message === "Game updated") {
+      history.push(`/user/${user_id}/games`);
+    }
+
     if (isTokenExpired()) {
       console.log("IS EXPIRED? ", isTokenExpired());
-      this.props.history.push("/login");
+      history.push("/login");
     }
-  };
 
-  componentDidUpdate = prevProps => {
-    if (this.props.userGames.message === "Game updated") {
-      this.props.history.push(`/user/${this.props.match.params.user_id}/games`);
-    }
-  };
-
-  componentWillMount = () => {
-    const gamesList = this.props.userGames.games;
-    const gameToEditId = this.props.match.params.game_id;
+    const gamesList = userGames.games;
+    const gameToEditId = game_id;
     const gameToEdit = gamesList.find(game => game._id === gameToEditId);
 
     let newGameState;
@@ -140,164 +126,163 @@ export class EditGame extends React.Component<
         review: gameToEdit.review,
         comments: gameToEdit.comments
       };
-      this.setState(newGameState);
+      setGame(newGameState);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userGames.message]);
 
-  public render() {
-    return (
-      <Container>
-        <ContainerInner>
-          <BackLinkWrapper>
-            <Link to={`/user/${this.props.match.params.user_id}/games/`}>
-              Back
-            </Link>
-          </BackLinkWrapper>
-          <PageTitle>Edit Game</PageTitle>
+  return (
+    <Container>
+      <ContainerInner>
+        <BackLinkWrapper>
+          <Link to={`/user/${user_id}/games/`}>
+            Back
+          </Link>
+        </BackLinkWrapper>
+        <PageTitle>Edit Game</PageTitle>
 
-          <div>
-            <form id="EditGame" onSubmit={this.handleSubmit}>
-              <div>
-                <InputField
-                  type="input"
-                  placeholder="Title"
-                  className="form-control"
-                  name="title"
-                  value={this.state.title}
-                  required={true}
-                  onChange={e => this.handleInputChange(e)}
-                />
-              </div>
-
-              <div>
-                <SelectField
-                  name="genre"
-                  id="genre"
-                  value={this.state.genre ? this.state.genre : ""}
-                  onChange={e => this.handleInputChange(e)}
-                >
-                  <option value="">Select Genre</option>
-                  <option value="Adventure">Adventure</option>
-                  <option value="Action">Action</option>
-                  <option value="Fighting">Fighting</option>
-                  <option value="FPS">FPS</option>
-                  <option value="Sport">Sport</option>
-                  <option value="RPG">RPG</option>
-                  <option value="Puzzle">Puzzle</option>
-                  <option value="Simulation">Simulation</option>
-                  <option value="Other">Other</option>
-                </SelectField>
-              </div>
-
-              <div>
-                <SelectField
-                  name="platform"
-                  id="platform"
-                  value={this.state.platform}
-                  onChange={e => this.handleInputChange(e)}
-                  required={true}
-                >
-                  <option value="">Select Platform</option>
-                  <option value="Playstation">Playstation</option>
-                  <option value="XBOX">XBOX</option>
-                  <option value="Switch">Nintendo Switch</option>
-                  <option value="PC">PC</option>
-                  <option value="Other">Other</option>
-                </SelectField>
-              </div>
-
-              <div>
-                <InputField
-                  type="date"
-                  placeholder="Release date"
-                  className="form-control"
-                  name="release_date"
-                  value={this.state.release_date ? this.state.release_date : ""}
-                  onChange={e => this.handleInputChange(e)}
-                />
-              </div>
-
-              <div>
-                <SelectField
-                  name="status"
-                  id="status"
-                  value={this.state.status}
-                  onChange={e => this.handleInputChange(e)}
-                  required={true}
-                >
-                  <option value="">Select Status</option>
-                  <option value="Playing">Playing</option>
-                  <option value="Finished">Finished</option>
-                  <option value="On Hold">On Hold</option>
-                  <option value="Wishlist">On Wishlist</option>
-                  <option value="Maybe">Maybe</option>
-                </SelectField>
-              </div>
-
-              <div>
-                <InputField
-                  type="number"
-                  placeholder="Rating"
-                  className="form-control"
-                  name="rating"
-                  value={this.state.rating ? this.state.rating : Number("")}
-                  onChange={e => this.handleInputChange(e)}
-                />
-              </div>
-
-              <div>
-                <TextAreaField
-                  placeholder="Review"
-                  className="form-control"
-                  name="review"
-                  value={this.state.review ? this.state.review : ""}
-                  onChange={e => this.handleInputChange(e)}
-                />
-              </div>
-
-              <TextAreaField
-                placeholder="Comments"
+        <div>
+          <form id="EditGame" onSubmit={handleSubmit}>
+            <div>
+              <InputField
+                type="input"
+                placeholder="Title"
                 className="form-control"
-                name="comments"
-                value={this.state.comments ? this.state.comments : ""}
-                onChange={e => this.handleInputChange(e)}
+                name="title"
+                value={game ? game.title : ""}
+                required={true}
+                onChange={e => handleInputChange(e)}
               />
+            </div>
 
-              {this.props.userGames.isLoading && <p>loading...</p>}
-
-              <div>
-                <ButtonWrapper>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    type="submit"
-                    form="EditGame"
-                  >
-                    Update Game
-                  </Button>
-                </ButtonWrapper>
-              </div>
-            </form>
-            <ButtonWrapper>
-              <Button
-                variant="contained"
-                color="secondary"
-                type="submit"
-                onClick={() => {
-                  this.deleteGame(
-                    this.props.match.params.user_id,
-                    this.props.match.params.game_id
-                  );
-                }}
+            <div>
+              <SelectField
+                name="genre"
+                id="genre"
+                value={game ? game.genre : ""}
+                onChange={e => handleInputChange(e)}
               >
-                Delete Game
-              </Button>
-            </ButtonWrapper>
-          </div>
-        </ContainerInner>
-      </Container>
-    );
-  }
+                <option value="">Select Genre</option>
+                <option value="Adventure">Adventure</option>
+                <option value="Action">Action</option>
+                <option value="Fighting">Fighting</option>
+                <option value="FPS">FPS</option>
+                <option value="Sport">Sport</option>
+                <option value="RPG">RPG</option>
+                <option value="Puzzle">Puzzle</option>
+                <option value="Simulation">Simulation</option>
+                <option value="Other">Other</option>
+              </SelectField>
+            </div>
+
+            <div>
+              <SelectField
+                name="platform"
+                id="platform"
+                value={game ? game.platform : ""}
+                onChange={e => handleInputChange(e)}
+                required={true}
+              >
+                <option value="">Select Platform</option>
+                <option value="Playstation">Playstation</option>
+                <option value="XBOX">XBOX</option>
+                <option value="Switch">Nintendo Switch</option>
+                <option value="PC">PC</option>
+                <option value="Other">Other</option>
+              </SelectField>
+            </div>
+
+            <div>
+              <InputField
+                type="date"
+                placeholder="Release date"
+                className="form-control"
+                name="release_date"
+                value={game ? game.release_date : ""}
+                onChange={e => handleInputChange(e)}
+              />
+            </div>
+
+            <div>
+              <SelectField
+                name="status"
+                id="status"
+                value={game ? game.status : ""}
+                onChange={e => handleInputChange(e)}
+                required={true}
+              >
+                <option value="">Select Status</option>
+                <option value="Playing">Playing</option>
+                <option value="Finished">Finished</option>
+                <option value="On Hold">On Hold</option>
+                <option value="Wishlist">On Wishlist</option>
+                <option value="Maybe">Maybe</option>
+              </SelectField>
+            </div>
+
+            <div>
+              <InputField
+                type="number"
+                placeholder="Rating"
+                className="form-control"
+                name="rating"
+                value={game ? game.rating : Number("")}
+                onChange={e => handleInputChange(e)}
+              />
+            </div>
+
+            <div>
+              <TextAreaField
+                placeholder="Review"
+                className="form-control"
+                name="review"
+                value={game ? game.review : ""}
+                onChange={e => handleInputChange(e)}
+              />
+            </div>
+
+            <TextAreaField
+              placeholder="Comments"
+              className="form-control"
+              name="comments"
+              value={game ? game.comments : ""}
+              onChange={e => handleInputChange(e)}
+            />
+
+            {userGames.isLoading && <p>loading...</p>}
+
+            <div>
+              <ButtonWrapper>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  type="submit"
+                  form="EditGame"
+                >
+                  Update Game
+                </Button>
+              </ButtonWrapper>
+            </div>
+          </form>
+          <ButtonWrapper>
+            <Button
+              variant="contained"
+              color="secondary"
+              type="submit"
+              onClick={() => {
+                deleteGame(
+                  user_id,
+                  game_id
+                );
+              }}
+            >
+              Delete Game
+            </Button>
+          </ButtonWrapper>
+        </div>
+      </ContainerInner>
+    </Container>
+  );
 }
 
 const mapStateToProps = (state: AppState) => ({
