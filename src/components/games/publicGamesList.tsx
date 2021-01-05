@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, useParams } from "react-router-dom";
 import { getPublicGamesListForUser } from "../../actions/game/gameActions";
 import { AppState } from "../../store";
 import { IUserGamesStore, GameStatus } from "../../model/game/game";
@@ -9,104 +9,69 @@ import { IUserGamesStore, GameStatus } from "../../model/game/game";
 import Container from "@material-ui/core/Container";
 import { SubHeadingWrapper } from "../../styles/styles";
 import PublicGamesListItem from "./publicGamesListItem";
+import { sortGamesForWishlist } from "../../helpers/sortGames";
 
 interface Props {
   userGames: IUserGamesStore;
   getPublicGamesListForUser(user_id: string): void;
 }
 
-interface State {}
+const PublicGamesList: React.FC<Props> = ({
+  userGames,
+  getPublicGamesListForUser
+}) => {
+  const { user_id } = useParams();
 
-interface RouteParams {
-  user_id: string;
-  game_id: string;
-}
+  useEffect(() => {
+    getPublicGamesListForUser(user_id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-export class PublicGamesList extends React.Component<
-  Props & RouteComponentProps<RouteParams>,
-  State
-> {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+  // start sort
+  const { games, isLoading } = userGames;
+  const gamesPlaying = games.filter((g) => g.status === GameStatus.PLAYING);
+  const gamesFinished = games.filter((g) => g.status === GameStatus.FINISHED);
+  const gamesOnHold = games.filter((g) => g.status === GameStatus.ON_HOLD);
+  const gamesWishlist = sortGamesForWishlist(games);
+  
+  return(
+    <>
+      <Container>
+          <SubHeadingWrapper>
+            <h1>Inventory</h1>
+          </SubHeadingWrapper>
 
-  componentDidMount = async () => {
-    await this.props.getPublicGamesListForUser(this.props.match.params.user_id);
-  };
+          {console.log("user games: ", games)}
 
-  public render() {
-    const { games, isLoading } = this.props.userGames;
-
-    const gamesPlaying = games.filter((g) => g.status === GameStatus.PLAYING);
-    const gamesFinished = games.filter((g) => g.status === GameStatus.FINISHED);
-    const gamesOnHold = games.filter((g) => g.status === GameStatus.ON_HOLD);
-    const gamesWishlistWithNullReleaseDate = games.filter(
-      (g) => g.status === GameStatus.WISHLIST && g.release_date === null
-    );
-    const gamesWishlistWithReleaseDate = games.filter(
-      (g) => g.status === GameStatus.WISHLIST && g.release_date !== null
-    );
-    const gamesMaybeWithNullReleaseDate = games.filter(
-      (g) => g.status === GameStatus.MAYBE && g.release_date === null
-    );
-    const gamesMaybeWithReleaseDate = games.filter(
-      (g) => g.status === GameStatus.MAYBE && g.release_date !== null
-    );
-
-    const gamesWishListAndMaybeWithReleaseDate = [
-      ...gamesWishlistWithReleaseDate,
-      ...gamesMaybeWithReleaseDate,
-    ].sort((a, b) => {
-      return (
-        new Date(a.release_date).getTime() - new Date(b.release_date).getTime()
-      );
-    });
-    const gamesWishlist = [
-      ...gamesWishListAndMaybeWithReleaseDate,
-      ...gamesWishlistWithNullReleaseDate,
-      ...gamesMaybeWithNullReleaseDate,
-    ];
-
-    return (
-      <>
-        <Container>
-            <SubHeadingWrapper>
-              <h1>Inventory</h1>
-            </SubHeadingWrapper>
-
-            {console.log("user games: ", games)}
-
-            {isLoading ? (
-              <p style={{ margin: "30px 0" }}>loading...</p>
-            ) : (
-              <>
-                {gamesPlaying.length ? (
-                  <PublicGamesListItem title="Playing" games={gamesPlaying} />
-                ) : (
-                  ""
-                )}
-                {gamesWishlist.length ? (
-                  <PublicGamesListItem title="Wishlist" games={gamesWishlist} />
-                ) : (
-                  ""
-                )}
-                {gamesOnHold.length ? (
-                  <PublicGamesListItem title="On Hold" games={gamesOnHold} />
-                ) : (
-                  ""
-                )}
-                {gamesFinished.length ? (
-                  <PublicGamesListItem title="Finished" games={gamesFinished} />
-                ) : (
-                  ""
-                )}
-              </>
-            )}
-        </Container>
-      </>
-    );
-  }
+          {isLoading ? (
+            <p style={{ margin: "30px 0" }}>loading...</p>
+          ) : (
+            <>
+              {gamesPlaying.length ? (
+                <PublicGamesListItem title="Playing" games={gamesPlaying} />
+              ) : (
+                ""
+              )}
+              {gamesWishlist.length ? (
+                <PublicGamesListItem title="Wishlist" games={gamesWishlist} />
+              ) : (
+                ""
+              )}
+              {gamesOnHold.length ? (
+                <PublicGamesListItem title="On Hold" games={gamesOnHold} />
+              ) : (
+                ""
+              )}
+              {gamesFinished.length ? (
+                <PublicGamesListItem title="Finished" games={gamesFinished} />
+              ) : (
+                ""
+              )}
+            </>
+          )}
+      </Container>
+    </>
+  )
 }
 
 const mapStateToProps = (state: AppState) => ({

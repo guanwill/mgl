@@ -21,7 +21,7 @@ import {
   BackLinkWrapper
 } from "../../styles/styles";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { IUserGamesStore } from "../../model/game/game";
+import { IUserGamesStore, IGameAddedOrUpdatedResponse } from "../../model/game/game";
 
 interface Props {
   callUpdateGameApi(
@@ -35,7 +35,7 @@ interface Props {
     comments: string,
     user_id: string,
     game_id: string
-  ): void;
+  ): IGameAddedOrUpdatedResponse;
   callDeleteGameApi(user_id: string, game_id: string);
   userGames: IUserGamesStore;
 }
@@ -64,6 +64,7 @@ const EditGame: React.FC<Props> = ({
   const history = useHistory();
   const { user_id, game_id } = useParams();
   const [game, setGame] = useState(null)
+  const [gameMessage, setGameMessage] = useState(null);
 
   const handleInputChange = async event => {
     const newState = { [event.target.name]: event.target.value } as Pick<
@@ -82,25 +83,34 @@ const EditGame: React.FC<Props> = ({
 
   const handleSubmit = async e => {
     e.preventDefault();
-    await callUpdateGameApi(
-      game.title,
-      game.genre ? game.genre : "",
-      game.platform,
-      game.release_date && game.release_date !== 'Invalid date' ? game.release_date : null,
-      game.status,
-      game.rating ? game.rating : Number(""),
-      game.review ? game.review : "",
-      game.comments ? game.comments : "",
-      user_id,
-      game_id
-    );
+
+    // check if edited game has same title as an existing game
+    let gameExists = userGames.games.find(g => g.title === game.title);
+
+    if (gameExists && gameExists.title && gameExists._id != game_id) {
+      setGameMessage('Game already exists')
+    } else {
+      const response = await callUpdateGameApi(
+        game.title,
+        game.genre ? game.genre : "",
+        game.platform,
+        game.release_date && game.release_date !== 'Invalid date' ? game.release_date : null,
+        game.status,
+        game.rating ? game.rating : Number(""),
+        game.review ? game.review : "",
+        game.comments ? game.comments : "",
+        user_id,
+        game_id
+      );
+      setGameMessage('Game updated')
+
+      if (response.message === "Game updated") {
+        history.push(`/user/${user_id}/games`);
+      }
+    }
   };
 
   useEffect(() => {
-    if (userGames.message === "Game updated") {
-      history.push(`/user/${user_id}/games`);
-    }
-
     if (isTokenExpired()) {
       console.log("IS EXPIRED? ", isTokenExpired());
       history.push("/login");
@@ -128,7 +138,7 @@ const EditGame: React.FC<Props> = ({
       setGame(newGameState);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userGames.message]);
+  }, []);
 
   return (
     <Container>
@@ -139,6 +149,8 @@ const EditGame: React.FC<Props> = ({
           </Link>
         </BackLinkWrapper>
         <PageTitle>Edit Game</PageTitle>
+        
+        <p>{gameMessage}</p>
 
         <div>
           <form id="EditGame" onSubmit={handleSubmit}>

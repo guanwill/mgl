@@ -14,9 +14,9 @@ import {
   SelectField,
   TextAreaField,
   ContainerInner,
-  BackLinkWrapper
+  BackLinkWrapper,
 } from "../../styles/styles";
-import { IUserGamesStore, IGameToAdd, IGameLocal } from "../../model/game/game";
+import { IUserGamesStore, IGameToAdd, IGameLocal, IGameAddedOrUpdatedResponse } from "../../model/game/game";
 import { Link as MaterialUiLink } from "@material-ui/core";
 import { useParams, useHistory } from "react-router-dom";
 
@@ -31,31 +31,28 @@ interface Props {
     review: string,
     comments: string,
     user_id: string
-  ): void;
+  ): IGameAddedOrUpdatedResponse;
   userGames: IUserGamesStore;
   gameToAdd: IGameToAdd;
 }
 
-const AddGame: React.FC<Props> = ({
-  callAddGameApi,
-  userGames,
-  gameToAdd
-}) => {
+const AddGame: React.FC<Props> = ({ callAddGameApi, userGames, gameToAdd }) => {
   const history = useHistory();
   const { user_id } = useParams();
-  const [game, setGame] = useState(null)
-  
-  const handleInputChange = async event => {
+  const [game, setGame] = useState(null);
+  const [gameMessage, setGameMessage] = useState(null);
+
+  const handleInputChange = async (event) => {
     const newState = { [event.target.name]: event.target.value } as Pick<
       IGameLocal,
       keyof IGameLocal
     >;
-    await setGame({...game, ...newState});
+    await setGame({ ...game, ...newState });
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    await callAddGameApi(
+    const response = await callAddGameApi(
       game.title,
       game.genre ? game.genre : "",
       game.platform,
@@ -66,6 +63,16 @@ const AddGame: React.FC<Props> = ({
       game.comments ? game.comments : "",
       user_id
     );
+
+    setGameMessage(response.message)
+
+    if (response.message !== "Game already exists") {
+      if (gameToAdd.title) {
+        history.push(`/`);
+      } else {
+        history.push(`/user/${user_id}/games`);
+      }
+    }
   };
 
   const goBackToPreviousPage = () => {
@@ -77,16 +84,6 @@ const AddGame: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    if (userGames.message === "Game added") {
-      if (gameToAdd.title) {
-        history.push(`/`);
-      } else {
-        history.push(`/user/${user_id}/games`);
-      }
-    } else {
-      userGames.message = "";
-    }
-
     if (isTokenExpired()) {
       console.log("IS EXPIRED? ", isTokenExpired());
       history.push("/login");
@@ -95,11 +92,14 @@ const AddGame: React.FC<Props> = ({
     if (gameToAdd.title) {
       setGame({
         title: gameToAdd.title,
-        release_date: gameToAdd.release_date !== 'Invalid date' ? gameToAdd.release_date : null
+        release_date:
+          gameToAdd.release_date !== "Invalid date"
+            ? gameToAdd.release_date
+            : null,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userGames.message]);
+  }, []);
 
   return (
     <Container>
@@ -116,7 +116,7 @@ const AddGame: React.FC<Props> = ({
         </BackLinkWrapper>
         <PageTitle>Add Game</PageTitle>
 
-        <p>{userGames.message}</p>
+        <p>{gameMessage}</p>
 
         <div>
           <form id="AddGame" onSubmit={handleSubmit}>
@@ -128,7 +128,7 @@ const AddGame: React.FC<Props> = ({
                 className="form-control"
                 name="title"
                 required={true}
-                onChange={e => handleInputChange(e)}
+                onChange={(e) => handleInputChange(e)}
               />
             </div>
 
@@ -136,7 +136,7 @@ const AddGame: React.FC<Props> = ({
               <SelectField
                 name="genre"
                 id="genre"
-                onChange={e => handleInputChange(e)}
+                onChange={(e) => handleInputChange(e)}
               >
                 <option value="">Select Genre</option>
                 <option value="Adventure">Adventure</option>
@@ -155,7 +155,7 @@ const AddGame: React.FC<Props> = ({
               <SelectField
                 name="platform"
                 id="platform"
-                onChange={e => handleInputChange(e)}
+                onChange={(e) => handleInputChange(e)}
                 required={true}
               >
                 <option value="">Select Platform</option>
@@ -174,7 +174,7 @@ const AddGame: React.FC<Props> = ({
                 placeholder="Release date"
                 className="form-control"
                 name="release_date"
-                onChange={e => handleInputChange(e)}
+                onChange={(e) => handleInputChange(e)}
               />
             </div>
 
@@ -182,7 +182,7 @@ const AddGame: React.FC<Props> = ({
               <SelectField
                 name="status"
                 id="status"
-                onChange={e => handleInputChange(e)}
+                onChange={(e) => handleInputChange(e)}
                 required={true}
               >
                 <option value="">Select Status</option>
@@ -200,7 +200,7 @@ const AddGame: React.FC<Props> = ({
                 placeholder="Rating"
                 className="form-control"
                 name="rating"
-                onChange={e => handleInputChange(e)}
+                onChange={(e) => handleInputChange(e)}
               />
             </div>
 
@@ -209,7 +209,7 @@ const AddGame: React.FC<Props> = ({
                 placeholder="Review"
                 className="form-control"
                 name="review"
-                onChange={e => handleInputChange(e)}
+                onChange={(e) => handleInputChange(e)}
               />
             </div>
 
@@ -217,7 +217,7 @@ const AddGame: React.FC<Props> = ({
               placeholder="Comments"
               className="form-control"
               name="comments"
-              onChange={e => handleInputChange(e)}
+              onChange={(e) => handleInputChange(e)}
             />
 
             {userGames.isLoading && <p>loading...</p>}
@@ -239,15 +239,15 @@ const AddGame: React.FC<Props> = ({
       </ContainerInner>
     </Container>
   );
-}
+};
 
 const mapStateToProps = (state: AppState) => ({
   userGames: state.userGames,
-  gameToAdd: state.gameToAdd
+  gameToAdd: state.gameToAdd,
 });
 
 const mapDispatchToProps = {
-  callAddGameApi
+  callAddGameApi,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddGame);

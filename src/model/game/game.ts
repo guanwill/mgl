@@ -41,6 +41,10 @@ export interface IGameApiResponse {
     message?: string
 }
 
+export interface IGameAddedOrUpdatedResponse {
+    message: string;
+}
+
 export enum GameStatus {
     PLAYING = "Playing",
     FINISHED = "Finished",

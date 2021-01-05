@@ -92,8 +92,9 @@ export const callAddGameApi = (title: string, genre: string, platform: string, r
             }
         }
         const gamesResponse = await api.gameApi.addGame(title, genre, platform, release_date, status, rating, review, comments, user_id, config);
-        dispatch(addGameSuccess(gamesResponse));
-        return dispatch(clearSearchedGame());
+        // dispatch(addGameSuccess(gamesResponse));
+        dispatch(clearSearchedGame());
+        return gamesResponse;
     } catch (e) {
         return e
     } finally {
@@ -145,8 +146,8 @@ export const callUpdateGameApi = (title: string, genre: string, platform: string
                 Authorization: `Bearer ${localStorage.getItem("accessToken")}`
             }
         }
-        const gamesResponse = await api.gameApi.updateGame(title, genre, platform, release_date, status, rating, review, comments, user_id, game_id, config);
-        return dispatch(updateGameSuccess(gamesResponse));
+        return await api.gameApi.updateGame(title, genre, platform, release_date, status, rating, review, comments, user_id, game_id, config);
+        // return dispatch(updateGameSuccess(gamesResponse));
     } catch (e) {
         return e
     } finally {

@@ -23,6 +23,7 @@ import {
 } from "../../styles/styles";
 import { Link as MaterialUiLink } from "@material-ui/core";
 import { useParams, useHistory } from "react-router-dom";
+import { sortGamesForWishlist } from "../../helpers/sortGames";
 
 interface Props {
   userGames: IUserGamesStore;
@@ -61,36 +62,10 @@ const Games: React.FC<Props> = ({
 
   // Sort games
   const { games, isLoading } = userGames;
-
   const gamesPlaying = games.filter((g) => g.status === GameStatus.PLAYING);
   const gamesFinished = games.filter((g) => g.status === GameStatus.FINISHED);
   const gamesOnHold = games.filter((g) => g.status === GameStatus.ON_HOLD);
-  const gamesWishlistWithNullReleaseDate = games.filter(
-    (g) => g.status === GameStatus.WISHLIST && g.release_date === null
-  );
-  const gamesWishlistWithReleaseDate = games.filter(
-    (g) => g.status === GameStatus.WISHLIST && g.release_date !== null
-  );
-  const gamesMaybeWithNullReleaseDate = games.filter(
-    (g) => g.status === GameStatus.MAYBE && g.release_date === null
-  );
-  const gamesMaybeWithReleaseDate = games.filter(
-    (g) => g.status === GameStatus.MAYBE && g.release_date !== null
-  );
-
-  const gamesWishListAndMaybeWithReleaseDate = [
-    ...gamesWishlistWithReleaseDate,
-    ...gamesMaybeWithReleaseDate,
-  ].sort((a, b) => {
-    return (
-      new Date(a.release_date).getTime() - new Date(b.release_date).getTime()
-    );
-  });
-  const gamesWishlist = [
-    ...gamesWishListAndMaybeWithReleaseDate,
-    ...gamesWishlistWithNullReleaseDate,
-    ...gamesMaybeWithNullReleaseDate,
-  ];
+  const gamesWishlist = sortGamesForWishlist(games);
 
   return (
     <>
