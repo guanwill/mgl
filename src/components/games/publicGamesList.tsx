@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { RouteComponentProps, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getPublicGamesListForUser } from "../../actions/game/gameActions";
 import { AppState } from "../../store";
 import { IUserGamesStore, GameStatus } from "../../model/game/game";

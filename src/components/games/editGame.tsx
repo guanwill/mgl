@@ -87,7 +87,7 @@ const EditGame: React.FC<Props> = ({
     // check if edited game has same title as an existing game
     let gameExists = userGames.games.find(g => g.title === game.title);
 
-    if (gameExists && gameExists.title && gameExists._id != game_id) {
+    if (gameExists && gameExists.title && gameExists._id !== game_id) {
       setGameMessage('Game already exists')
     } else {
       const response = await callUpdateGameApi(
