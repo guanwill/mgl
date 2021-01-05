@@ -1,7 +1,7 @@
 import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../../store';
 import { IApi } from '../../api';
-import _ from 'lodash';
+// import _ from 'lodash';
 import { IGame, IGamesApiResponse, IGameApiResponse, IUserGamesStore, IGameToAdd } from '../../model/game/game';
 
 export interface IConfig {

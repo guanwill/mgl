@@ -9,8 +9,7 @@ export interface IGameToAdd {
     release_date: string;
 }
 
-export interface IGame {
-    _id: string,
+export interface IGameLocal {
     title: string,
     user: string,
     status: string;
@@ -20,6 +19,10 @@ export interface IGame {
     rating?: number | null;
     review?: string | null;
     comments?: string | null;
+}
+
+export interface IGame extends IGameLocal {
+    _id: string
 }
 
 export interface IGamesApiResponse {
