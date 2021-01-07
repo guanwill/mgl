@@ -67,13 +67,6 @@ export const callFetchGamesApi = (user_id: string): Function => async (
   return dispatch(loadedGames(sortedGames));
 };
 
-export const addGameSuccess = (payload: IUserGamesStore): IGameAction => {
-  return {
-    type: GameActionType.ADD_GAME,
-    payload: payload,
-  };
-};
-
 export const callAddGameApi = (
   title: string,
   genre: string,
@@ -141,13 +134,6 @@ export const callDeleteGameApi = (
   } catch (e) {
     return e;
   }
-};
-
-export const updateGameSuccess = (payload: IGameApiResponse): IGameAction => {
-  return {
-    type: GameActionType.UPDATE_GAME,
-    payload: payload,
-  };
 };
 
 export const callUpdateGameApi = (
