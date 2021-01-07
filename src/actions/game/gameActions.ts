@@ -54,6 +54,7 @@ export const callFetchGamesApi = (user_id: string): Function => async (
     state: AppState,
     api: IApi
 ) => {
+    console.log('hi3');
     dispatch(isLoading(true));
     try {
         let config: IConfig = {
