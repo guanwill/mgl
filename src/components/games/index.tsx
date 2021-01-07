@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import {
   callFetchGamesApi,
@@ -38,6 +38,7 @@ const Games: React.FC<Props> = ({
 }) => {
   const history = useHistory();
   const { user_id } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
 
   console.log("user games: ", userGames.games)
 
@@ -50,18 +51,29 @@ const Games: React.FC<Props> = ({
     const text = `https://${window.location.host}/public/games/user/${user_id}`;
     await navigator.clipboard.writeText(text)
   };
+
+  const fetchGames = async () => {
+    try {
+      setIsLoading(true);
+      await callFetchGamesApi(user_id);
+    } catch (e) {
+      throw e
+    } finally {
+      setIsLoading(false);
+    }
+  }
   
   useEffect(() => {
     if (isTokenExpired()) {
       console.log("IS EXPIRED? ", isTokenExpired());
       history.push("/login");
     }
-    callFetchGamesApi(user_id);
+    fetchGames();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Sort games
-  const { games, isLoading } = userGames;
+  const { games } = userGames;
   const gamesPlaying = games.filter((g) => g.status === GameStatus.PLAYING);
   const gamesFinished = games.filter((g) => g.status === GameStatus.FINISHED);
   const gamesOnHold = games.filter((g) => g.status === GameStatus.ON_HOLD);
@@ -105,6 +117,7 @@ const Games: React.FC<Props> = ({
             <p style={{ margin: "30px 0" }}>loading...</p>
           ) : (
             <>
+              {games.length === 0 && <p style={{margin: "30px 0"}}>List is empty.</p>}
               {gamesPlaying.length ? (
                 <GameTable
                   title="Playing"

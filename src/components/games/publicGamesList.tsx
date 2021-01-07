@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getPublicGamesListForUser } from "../../actions/game/gameActions";
@@ -21,14 +21,26 @@ const PublicGamesList: React.FC<Props> = ({
   getPublicGamesListForUser
 }) => {
   const { user_id } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchGames = async () => {
+    try {
+      setIsLoading(true);
+      await getPublicGamesListForUser(user_id);
+    } catch (e) {
+      throw e
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   useEffect(() => {
-    getPublicGamesListForUser(user_id)
+    fetchGames();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // start sort
-  const { games, isLoading } = userGames;
+  const { games } = userGames;
   const gamesPlaying = games.filter((g) => g.status === GameStatus.PLAYING);
   const gamesFinished = games.filter((g) => g.status === GameStatus.FINISHED);
   const gamesOnHold = games.filter((g) => g.status === GameStatus.ON_HOLD);
@@ -47,6 +59,7 @@ const PublicGamesList: React.FC<Props> = ({
             <p style={{ margin: "30px 0" }}>loading...</p>
           ) : (
             <>
+              {games.length === 0 && <p style={{margin: "30px 0"}}>List is empty.</p>}
               {gamesPlaying.length ? (
                 <PublicGamesListItem title="Playing" games={gamesPlaying} />
               ) : (

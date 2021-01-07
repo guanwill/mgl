@@ -12,11 +12,6 @@ export default function gameReducer(
         ...state,
         games: action.payload
       };    
-    case GameActionType.IS_LOADING:
-      return {
-        ...state,
-        isLoading: action.payload
-      };
     case GameActionType.ADD_GAME:
         return {
           ...state,

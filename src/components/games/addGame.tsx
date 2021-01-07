@@ -41,6 +41,7 @@ const AddGame: React.FC<Props> = ({ callAddGameApi, userGames, gameToAdd }) => {
   const { user_id } = useParams();
   const [game, setGame] = useState(null);
   const [gameMessage, setGameMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = async (event) => {
     const newState = { [event.target.name]: event.target.value } as Pick<
@@ -52,17 +53,27 @@ const AddGame: React.FC<Props> = ({ callAddGameApi, userGames, gameToAdd }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await callAddGameApi(
-      game.title,
-      game.genre ? game.genre : "",
-      game.platform,
-      game.release_date ? game.release_date : null,
-      game.status,
-      game.rating ? game.rating : Number(""),
-      game.review ? game.review : "",
-      game.comments ? game.comments : "",
-      user_id
-    );
+
+    let response;
+
+    try {
+      setIsLoading(true)
+      response = await callAddGameApi(
+        game.title,
+        game.genre ? game.genre : "",
+        game.platform,
+        game.release_date ? game.release_date : null,
+        game.status,
+        game.rating ? game.rating : Number(""),
+        game.review ? game.review : "",
+        game.comments ? game.comments : "",
+        user_id
+      );      
+    } catch (e) {
+      throw e
+    } finally {
+      setIsLoading(false)
+    }
 
     setGameMessage(response.message)
 
@@ -220,7 +231,7 @@ const AddGame: React.FC<Props> = ({ callAddGameApi, userGames, gameToAdd }) => {
               onChange={(e) => handleInputChange(e)}
             />
 
-            {userGames.isLoading && <p>loading...</p>}
+            {isLoading && <p>loading...</p>}
 
             <div>
               <ButtonWrapper>

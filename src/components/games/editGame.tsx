@@ -65,6 +65,7 @@ const EditGame: React.FC<Props> = ({
   const { user_id, game_id } = useParams();
   const [game, setGame] = useState(null)
   const [gameMessage, setGameMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = async event => {
     const newState = { [event.target.name]: event.target.value } as Pick<
@@ -90,18 +91,28 @@ const EditGame: React.FC<Props> = ({
     if (gameExists && gameExists.title && gameExists._id !== game_id) {
       setGameMessage('Game already exists')
     } else {
-      const response = await callUpdateGameApi(
-        game.title,
-        game.genre ? game.genre : "",
-        game.platform,
-        game.release_date && game.release_date !== 'Invalid date' ? game.release_date : null,
-        game.status,
-        game.rating ? game.rating : Number(""),
-        game.review ? game.review : "",
-        game.comments ? game.comments : "",
-        user_id,
-        game_id
-      );
+
+      let response;
+      try {
+        setIsLoading(true);        
+        response = await callUpdateGameApi(
+          game.title,
+          game.genre ? game.genre : "",
+          game.platform,
+          game.release_date && game.release_date !== 'Invalid date' ? game.release_date : null,
+          game.status,
+          game.rating ? game.rating : Number(""),
+          game.review ? game.review : "",
+          game.comments ? game.comments : "",
+          user_id,
+          game_id
+        );
+      } catch (e) {
+        throw e
+      } finally {
+        setIsLoading(false);
+      }
+      
       setGameMessage('Game updated')
 
       if (response.message === "Game updated") {
@@ -260,7 +271,7 @@ const EditGame: React.FC<Props> = ({
               onChange={e => handleInputChange(e)}
             />
 
-            {userGames.isLoading && <p>loading...</p>}
+            {isLoading && <p>loading...</p>}
 
             <div>
               <ButtonWrapper>
