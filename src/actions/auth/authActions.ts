@@ -51,11 +51,11 @@ export const callLoginApi = (username: string, password: string): Function => as
     api: IApi
 ) => {
     try {
-        const loginResponse = await api.authApi.login(username, password);
+        const { user, accesstoken, message } = await api.authApi.login(username, password);
 
-        if (loginResponse.user) {
-            const userDetails: IAuthenticatedUserDetails = _.pick(loginResponse.user, 'verified', '_id', 'username', 'name');
-            const payload: IAuthenticatedDetails = { user: userDetails, accesstoken: loginResponse.accesstoken, message: loginResponse.message };
+        if (user) {
+            const userDetails: IAuthenticatedUserDetails = _.pick(user, 'verified', '_id', 'username', 'name');
+            const payload: IAuthenticatedDetails = { user: userDetails, accesstoken, message };
             localStorage.setItem('accessToken', payload.accesstoken);
             // axios.defaults.headers.common['Authorization'] = payload.accesstoken;
 
@@ -63,7 +63,7 @@ export const callLoginApi = (username: string, password: string): Function => as
             return dispatch(setLoginSuccess(payload));
         }
         
-        const pendingVerificationUser = { user: {verified: false, _id:'', username: '', name: ''}, accesstoken: '', message: loginResponse.message };
+        const pendingVerificationUser = { user: {verified: false, _id:'', username: '', name: ''}, accesstoken: '', message: message };
         return dispatch(setLoginSuccess(pendingVerificationUser));
 
     } catch (e) {
