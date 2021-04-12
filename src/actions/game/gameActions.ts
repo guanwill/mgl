@@ -124,14 +124,7 @@ export const callDeleteGameApi = (
 };
 
 export const callUpdateGameApi = (
-  title: string,
-  genre: string,
-  platform: string,
-  release_date: string,
-  status: string,
-  rating: number,
-  review: string,
-  comments: string,
+  gameArgs: Partial<IGameLocal>,
   user_id: string,
   game_id: string
 ): Function => async (
@@ -145,14 +138,7 @@ export const callUpdateGameApi = (
     },
   };
   return await api.gameApi.updateGame(
-    title,
-    genre,
-    platform,
-    release_date,
-    status,
-    rating,
-    review,
-    comments,
+    gameArgs,
     user_id,
     game_id,
     config

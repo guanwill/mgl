@@ -2,6 +2,7 @@ import {
   IGamesApiResponse,
   IGameLocal,
   IUserGamesStore,
+  IGameToAdd,
 } from "../../model/game/game";
 import {
   callFetchGamesApi,
@@ -13,6 +14,8 @@ import {
   callAddGameApi,
   callDeleteGameApi,
   deleteGameSuccess,
+  callUpdateGameApi,
+  addSearchedGame,
 } from "./gameActions";
 
 const createExpectedAction = (
@@ -138,4 +141,38 @@ describe("gameActions", () => {
     });
   });
 
+  describe("Update Game", () => {
+    const gameArgs: Partial<IGameLocal> = {
+        title: "title",
+    };
+
+    const mockGameResponse: Partial<IGamesApiResponse> = {
+      games: [{ title: "game1" }] as any,
+      username: "user1",
+    };
+
+    it("should call updateGame api", async () => {
+      const userId = "userid1";
+      const gameId = "gameid1";
+      const api = createApi("updateGame", mockGameResponse);
+
+      await callUpdateGameApi(gameArgs, userId, gameId)(dispatch, state, api);
+      expect(api.gameApi.updateGame).toBeCalledWith(gameArgs, userId, gameId, config);
+    });
+  });
+
+  describe("Add Sarched Game", () => {
+    it("should create ADD_SEARCHED_GAME action", () => {
+        const payload: IGameToAdd = {
+          title: 'title',
+          release_date: '1/1/2021'
+        };
+        const expectedAction = createExpectedAction(
+          GameActionType.ADD_SEARCHED_GAME,
+          payload
+        );
+        const action = addSearchedGame(payload);
+        expect(action).toEqual(expectedAction);
+      });
+  });
 });

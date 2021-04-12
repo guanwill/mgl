@@ -61,7 +61,7 @@ export default class GameApi {
         }
     }
 
-    public updateGame = async (title: string, genre: string, platform: string, release_date: string, status: string, rating: number, review: string, comments: string, user_id: string, game_id: string, config: IConfig): Promise<IGameApiResponse> => {
+    public updateGame = async ({title, genre, platform, release_date, status, rating, review, comments}: Partial<IGameLocal>, user_id: string, game_id: string, config: IConfig): Promise<IGameApiResponse> => {
         try {
             const payload = {
                 title,

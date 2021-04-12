@@ -3,7 +3,7 @@ import moment from "moment";
 import { connect } from "react-redux";
 import {
   callUpdateGameApi,
-  callDeleteGameApi
+  callDeleteGameApi,
 } from "../../actions/game/gameActions";
 import { AppState } from "../../store";
 import isTokenExpired from "../../helpers/isTokenExpired";
@@ -18,21 +18,18 @@ import {
   TextAreaField,
   PageTitle,
   ContainerInner,
-  BackLinkWrapper
+  BackLinkWrapper,
 } from "../../styles/styles";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { IUserGamesStore, IGameAddedOrUpdatedResponse } from "../../model/game/game";
+import {
+  IUserGamesStore,
+  IGameAddedOrUpdatedResponse,
+  IGameLocal,
+} from "../../model/game/game";
 
 interface Props {
   callUpdateGameApi(
-    title: string,
-    genre: string,
-    platform: string,
-    release_date: string,
-    status: string,
-    rating: number,
-    review: string,
-    comments: string,
+    gameArgs: Partial<IGameLocal>,
     user_id: string,
     game_id: string
   ): IGameAddedOrUpdatedResponse;
@@ -59,20 +56,20 @@ interface RouteParams {
 const EditGame: React.FC<Props> = ({
   callUpdateGameApi,
   callDeleteGameApi,
-  userGames
+  userGames,
 }) => {
   const history = useHistory();
   const { user_id, game_id } = useParams();
-  const [game, setGame] = useState(null)
+  const [game, setGame] = useState(null);
   const [gameMessage, setGameMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleInputChange = async event => {
+  const handleInputChange = async (event) => {
     const newState = { [event.target.name]: event.target.value } as Pick<
       State,
       keyof State
     >;
-    await setGame({...game, ...newState});
+    await setGame({ ...game, ...newState });
   };
 
   const deleteGame = (user_id, game_id) => {
@@ -82,38 +79,48 @@ const EditGame: React.FC<Props> = ({
     }
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // check if edited game has same title as an existing game
-    let gameExists = userGames.games.find(g => g.title === game.title);
+    let gameExists = userGames.games.find((g) => g.title === game.title);
 
     if (gameExists && gameExists.title && gameExists._id !== game_id) {
-      setGameMessage('Game already exists')
+      setGameMessage("Game already exists");
     } else {
-
       let response;
+      const {
+        title,
+        genre,
+        platform,
+        release_date,
+        status,
+        rating,
+        review,
+        comments,
+      } = game;
+
+      const gameArgs = {
+        title,
+        genre: genre ? genre: "",
+        platform,
+        release_date: release_date && release_date != "Invalid date" ? release_date : null,
+        status,
+        rating: rating ? rating : Number(""),
+        review,
+        comments,
+      };
+
       try {
-        setIsLoading(true);        
-        response = await callUpdateGameApi(
-          game.title,
-          game.genre ? game.genre : "",
-          game.platform,
-          game.release_date && game.release_date !== 'Invalid date' ? game.release_date : null,
-          game.status,
-          game.rating ? game.rating : Number(""),
-          game.review ? game.review : "",
-          game.comments ? game.comments : "",
-          user_id,
-          game_id
-        );
+        setIsLoading(true);
+        response = await callUpdateGameApi(gameArgs, user_id, game_id);
       } catch (e) {
-        throw e
+        throw e;
       } finally {
         setIsLoading(false);
       }
-      
-      setGameMessage('Game updated')
+
+      setGameMessage("Game updated");
 
       if (response.message === "Game updated") {
         history.push(`/user/${user_id}/games`);
@@ -129,7 +136,7 @@ const EditGame: React.FC<Props> = ({
 
     const gamesList = userGames.games;
     const gameToEditId = game_id;
-    const gameToEdit = gamesList.find(game => game._id === gameToEditId);
+    const gameToEdit = gamesList.find((game) => game._id === gameToEditId);
 
     let newGameState;
 
@@ -140,11 +147,11 @@ const EditGame: React.FC<Props> = ({
         title: gameToEdit.title,
         genre: gameToEdit.genre,
         platform: gameToEdit.platform,
-        release_date: moment(gameToEdit.release_date).format('YYYY-MM-DD'),
+        release_date: moment(gameToEdit.release_date).format("YYYY-MM-DD"),
         status: gameToEdit.status,
         rating: gameToEdit.rating,
         review: gameToEdit.review,
-        comments: gameToEdit.comments
+        comments: gameToEdit.comments,
       };
       setGame(newGameState);
     }
@@ -155,12 +162,10 @@ const EditGame: React.FC<Props> = ({
     <Container>
       <ContainerInner>
         <BackLinkWrapper>
-          <Link to={`/user/${user_id}/games/`}>
-            Back
-          </Link>
+          <Link to={`/user/${user_id}/games/`}>Back</Link>
         </BackLinkWrapper>
         <PageTitle>Edit Game</PageTitle>
-        
+
         <p>{gameMessage}</p>
 
         <div>
@@ -173,7 +178,7 @@ const EditGame: React.FC<Props> = ({
                 name="title"
                 value={game ? game.title : ""}
                 required={true}
-                onChange={e => handleInputChange(e)}
+                onChange={(e) => handleInputChange(e)}
               />
             </div>
 
@@ -182,7 +187,7 @@ const EditGame: React.FC<Props> = ({
                 name="genre"
                 id="genre"
                 value={game ? game.genre : ""}
-                onChange={e => handleInputChange(e)}
+                onChange={(e) => handleInputChange(e)}
               >
                 <option value="">Select Genre</option>
                 <option value="Adventure">Adventure</option>
@@ -202,7 +207,7 @@ const EditGame: React.FC<Props> = ({
                 name="platform"
                 id="platform"
                 value={game ? game.platform : ""}
-                onChange={e => handleInputChange(e)}
+                onChange={(e) => handleInputChange(e)}
                 required={true}
               >
                 <option value="">Select Platform</option>
@@ -221,7 +226,7 @@ const EditGame: React.FC<Props> = ({
                 className="form-control"
                 name="release_date"
                 value={game ? game.release_date : ""}
-                onChange={e => handleInputChange(e)}
+                onChange={(e) => handleInputChange(e)}
               />
             </div>
 
@@ -230,7 +235,7 @@ const EditGame: React.FC<Props> = ({
                 name="status"
                 id="status"
                 value={game ? game.status : ""}
-                onChange={e => handleInputChange(e)}
+                onChange={(e) => handleInputChange(e)}
                 required={true}
               >
                 <option value="">Select Status</option>
@@ -249,7 +254,7 @@ const EditGame: React.FC<Props> = ({
                 className="form-control"
                 name="rating"
                 value={game ? game.rating : Number("")}
-                onChange={e => handleInputChange(e)}
+                onChange={(e) => handleInputChange(e)}
               />
             </div>
 
@@ -259,7 +264,7 @@ const EditGame: React.FC<Props> = ({
                 className="form-control"
                 name="review"
                 value={game ? game.review : ""}
-                onChange={e => handleInputChange(e)}
+                onChange={(e) => handleInputChange(e)}
               />
             </div>
 
@@ -268,7 +273,7 @@ const EditGame: React.FC<Props> = ({
               className="form-control"
               name="comments"
               value={game ? game.comments : ""}
-              onChange={e => handleInputChange(e)}
+              onChange={(e) => handleInputChange(e)}
             />
 
             {isLoading && <p>loading...</p>}
@@ -292,10 +297,7 @@ const EditGame: React.FC<Props> = ({
               color="secondary"
               type="submit"
               onClick={() => {
-                deleteGame(
-                  user_id,
-                  game_id
-                );
+                deleteGame(user_id, game_id);
               }}
             >
               Delete Game
@@ -305,18 +307,15 @@ const EditGame: React.FC<Props> = ({
       </ContainerInner>
     </Container>
   );
-}
+};
 
 const mapStateToProps = (state: AppState) => ({
-  userGames: state.userGames
+  userGames: state.userGames,
 });
 
 const mapDispatchToProps = {
   callUpdateGameApi,
-  callDeleteGameApi
+  callDeleteGameApi,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EditGame);
+export default connect(mapStateToProps, mapDispatchToProps)(EditGame);
