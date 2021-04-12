@@ -16,21 +16,14 @@ import {
   ContainerInner,
   BackLinkWrapper,
 } from "../../styles/styles";
-import { IUserGamesStore, IGameToAdd, IGameLocal, IGameAddedOrUpdatedResponse } from "../../model/game/game";
+import { IUserGamesStore, IGameToAdd, IGameLocal, IGameAddedOrUpdatedResponse, IGame } from "../../model/game/game";
 import { Link as MaterialUiLink } from "@material-ui/core";
 import { useParams, useHistory } from "react-router-dom";
 
 interface Props {
   callAddGameApi(
-    title: string,
-    genre: string,
-    platform: string,
-    release_date: string,
-    status: string,
-    rating: number,
-    review: string,
-    comments: string,
-    user_id: string
+    user_id: string,
+    gameArgs: Partial<IGameLocal>
   ): IGameAddedOrUpdatedResponse;
   userGames: IUserGamesStore;
   gameToAdd: IGameToAdd;
@@ -54,20 +47,18 @@ const AddGame: React.FC<Props> = ({ callAddGameApi, userGames, gameToAdd }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const { title, genre, platform, release_date, status, rating, review, comments } = game
+    const gameArgs = { title, genre, platform, release_date, status, rating, review, comments }
+
     let response;
 
     try {
       setIsLoading(true)
+
+      
       response = await callAddGameApi(
-        game.title,
-        game.genre ? game.genre : "",
-        game.platform,
-        game.release_date ? game.release_date : null,
-        game.status,
-        game.rating ? game.rating : Number(""),
-        game.review ? game.review : "",
-        game.comments ? game.comments : "",
-        user_id
+        user_id,
+        gameArgs
       );      
     } catch (e) {
       throw e
@@ -75,9 +66,11 @@ const AddGame: React.FC<Props> = ({ callAddGameApi, userGames, gameToAdd }) => {
       setIsLoading(false)
     }
 
-    setGameMessage(response.message)
+    const { message } = response
 
-    if (response.message !== "Game already exists") {
+    setGameMessage(message)
+
+    if (message !== "Game already exists") {
       if (gameToAdd.title) {
         history.push(`/`);
       } else {

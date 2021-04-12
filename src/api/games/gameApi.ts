@@ -1,6 +1,6 @@
 import { IHttpClient } from '../httpClient';
 import { IConfig } from '../../actions/game/gameActions';
-import { IGamesApiResponse, IGameApiResponse } from '../../model/game/game';
+import { IGamesApiResponse, IGameApiResponse, IGameLocal } from '../../model/game/game';
 
 export default class GameApi {
     httpClient: IHttpClient;
@@ -31,7 +31,7 @@ export default class GameApi {
         }
     }
 
-    public addGame = async (title: string, genre: string, platform: string, release_date: string, status: string, rating: number, review: string, comments: string, user_id: string, config: IConfig): Promise<IGamesApiResponse> => {
+    public addGame = async ( user_id: string, {title, genre, platform, release_date, status, rating, review, comments}: Partial<IGameLocal>, config: IConfig): Promise<IGamesApiResponse> => {
         try {
             const payload = {
                 title,

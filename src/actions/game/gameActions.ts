@@ -8,6 +8,7 @@ import {
   IGameApiResponse,
   IUserGamesStore,
   IGameToAdd,
+  IGameLocal,
 } from "../../model/game/game";
 
 export interface IConfig {
@@ -57,26 +58,19 @@ export const callFetchGamesApi = (user_id: string): Function => async (
       Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     },
   };
-  const gamesResponse: IGamesApiResponse = await api.gameApi.fetchGames(
+  const { games }: IGamesApiResponse = await api.gameApi.fetchGames(
     user_id,
     config
   );
-  const sortedGames = gamesResponse.games.sort((a, b) =>
+  const sortedGames = games.sort((a, b) =>
     a.title > b.title ? 1 : b.title > a.title ? -1 : 0
   );
   return dispatch(loadedGames(sortedGames));
 };
 
 export const callAddGameApi = (
-  title: string,
-  genre: string,
-  platform: string,
-  release_date: string,
-  status: string,
-  rating: number,
-  review: string,
-  comments: string,
-  user_id: string
+  user_id: string,
+  gameArgs: Partial<IGameLocal>
 ): Function => async (
   dispatch: ThunkDispatch<AppState, void, IGameAction>,
   state: AppState,
@@ -88,15 +82,8 @@ export const callAddGameApi = (
     },
   };
   const gamesResponse = await api.gameApi.addGame(
-    title,
-    genre,
-    platform,
-    release_date,
-    status,
-    rating,
-    review,
-    comments,
     user_id,
+    gameArgs,
     config
   );
   // dispatch(addGameSuccess(gamesResponse));
