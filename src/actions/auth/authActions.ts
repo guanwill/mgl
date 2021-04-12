@@ -7,13 +7,13 @@ import _ from 'lodash';
 
 export enum AuthActionType {
     LOGIN_USER = 'LOGIN_USER',
-    // LOGIN_ERROR = 'LOGIN_ERROR',
     LOGOUT_USER = 'LOGOUT_USER',
     REGISTER_USER = 'REGISTER_USER',
-    // REGISTER_ERROR = 'REGISTER_ERROR',
     VERIFY_USER = 'VERIFY_USER',
     RESEND_VERIFICATION = "RESEND_VERIFICATION",
     RESET_PASSWORD = "RESET_PASSWORD"
+    // LOGIN_ERROR = 'LOGIN_ERROR',
+    // REGISTER_ERROR = 'REGISTER_ERROR',
 }
 
 export interface IAuthAction {
@@ -56,7 +56,7 @@ export const callLoginApi = (username: string, password: string): Function => as
         if (user) {
             const userDetails: IAuthenticatedUserDetails = _.pick(user, 'verified', '_id', 'username', 'name');
             const payload: IAuthenticatedDetails = { user: userDetails, accesstoken, message };
-            localStorage.setItem('accessToken', payload.accesstoken);
+            localStorage.setItem('accessToken', accesstoken);
             // axios.defaults.headers.common['Authorization'] = payload.accesstoken;
 
             console.log('AUTHACTION SET HEADER ', axios.defaults.headers.common['Authorization']);
@@ -87,7 +87,7 @@ export const logoutUser = (logoutPayload: IAuthenticatedDetails) => {
 //     }
 // }
 
-export const setRegisterSuccess = (registerResponse: IAuthenticatedDetails): IAuthAction => {
+export const setRegisterSuccess = (registerResponse: Partial<IAuthenticatedDetails>): IAuthAction => {
     return {
         type: AuthActionType.REGISTER_USER,
         payload: registerResponse,
@@ -100,9 +100,8 @@ export const callRegisterApi = (username: string, password: string): Function =>
     api: IApi
 ) => {
     try {
-        const registerResponse = await api.authApi.register(username, password);
-        const payload: IAuthenticatedDetails = { user: {verified: false, _id:'', username: '', name: ''}, accesstoken: '', message: registerResponse.message };
-        return dispatch(setRegisterSuccess(payload));
+        const { message } = await api.authApi.register(username, password);
+        return dispatch(setRegisterSuccess({ message }));
     } catch (e) {
         // return dispatch(setRegisterError(e));
         return e

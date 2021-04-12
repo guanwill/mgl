@@ -20,7 +20,7 @@ export default function authReducer(
     case AuthActionType.REGISTER_USER:
       return {
         ...state,
-        ...action.payload
+        message: action.payload.message
       };
     case AuthActionType.VERIFY_USER:
         return {
