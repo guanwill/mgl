@@ -36,11 +36,13 @@ const Games: React.FC<Props> = ({
   callFetchGamesApi,
   executeClearSearchedGame
 }) => {
+  console.log('games....,', userGames);
+  console.log('callFetchGamesApi...', callFetchGamesApi);
   const history = useHistory();
   const { user_id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log("user games: ", userGames.games)
+  // console.log("user games: ", userGames.games)
 
   const redirectToAddGamePage = () => {
     executeClearSearchedGame(); // do we need this? add game has its own
@@ -55,6 +57,7 @@ const Games: React.FC<Props> = ({
   const fetchGames = async () => {
     try {
       setIsLoading(true);
+      console.log('INSIDE FETCHGAMES');
       await callFetchGamesApi(user_id);
     } catch (e) {
       throw e
@@ -64,10 +67,11 @@ const Games: React.FC<Props> = ({
   }
   
   useEffect(() => {
-    if (isTokenExpired()) {
-      console.log("IS EXPIRED? ", isTokenExpired());
-      history.push("/login");
-    }
+    console.log('INSIDE EFFECT');
+    // if (isTokenExpired()) {
+    //   console.log("IS EXPIRED? ", isTokenExpired());
+    //   history.push("/login");
+    // }
     fetchGames();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

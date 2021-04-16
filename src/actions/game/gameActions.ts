@@ -52,6 +52,7 @@ export const callFetchGamesApi = (user_id: string): Function => async (
   state: AppState,
   api: IApi
 ) => {
+  console.log('inside callFetchGamesApi....');
   let config: IConfig = {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
