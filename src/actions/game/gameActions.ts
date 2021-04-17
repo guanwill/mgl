@@ -53,6 +53,7 @@ export const callFetchGamesApi = (user_id: string): Function => async (
   state: AppState,
   api: IApi
 ) => {
+  console.log('callFetchGamesApi');
   let config: IConfig = {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -65,7 +66,9 @@ export const callFetchGamesApi = (user_id: string): Function => async (
   const sortedGames = games.sort((a, b) =>
     a.title > b.title ? 1 : b.title > a.title ? -1 : 0
   );
-  return dispatch(loadedGames(sortedGames));
+
+  console.log('finish calling...', games);
+  dispatch(loadedGames(sortedGames));
 };
 
 export const callAddGameApi = (

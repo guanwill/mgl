@@ -25,9 +25,9 @@ import { Link as MaterialUiLink } from "@material-ui/core";
 import { useParams, useHistory } from "react-router-dom";
 import { sortGamesForWishlist } from "../../helpers/sortGames";
 
-interface Props {
+export interface Props {
   userGames: IUserGamesStore;
-  callFetchGamesApi(user_id: string): void;
+  callFetchGamesApi: (user_id: string) => void;
   executeClearSearchedGame(): void;
 }
 
@@ -36,6 +36,7 @@ const Games: React.FC<Props> = ({
   callFetchGamesApi,
   executeClearSearchedGame
 }) => {
+  console.log('props...', userGames);
   const history = useHistory();
   const { user_id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +56,9 @@ const Games: React.FC<Props> = ({
   const fetchGames = async () => {
     try {
       setIsLoading(true);
-      await callFetchGamesApi(user_id);
+      console.log('fetchgames....');
+      const a = await callFetchGamesApi(user_id);
+      console.log('finish fetchgames....', a);
     } catch (e) {
       throw e
     } finally {
@@ -64,13 +67,14 @@ const Games: React.FC<Props> = ({
   }
   
   useEffect(() => {
-    if (isTokenExpired()) {
-      console.log("IS EXPIRED? ", isTokenExpired());
-      history.push("/login");
-    }
+    console.log('useeffect');
+    // if (isTokenExpired()) {
+    //   console.log("IS EXPIRED? ", isTokenExpired());
+    //   history.push("/login");
+    // }
     fetchGames();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [fetchGames])
 
   // Sort games
   const { games } = userGames;
