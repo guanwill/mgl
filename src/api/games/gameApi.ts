@@ -2,6 +2,14 @@ import { IHttpClient } from '../httpClient';
 import { IConfig } from '../../actions/game/gameActions';
 import { IGamesApiResponse, IGameApiResponse, IGameLocal } from '../../model/game/game';
 
+export interface IGameApi {
+    fetchGames: (userId: string, config: IConfig) => Promise<IGamesApiResponse>;
+    fetchPublicGamesListForUser: (userId: string) => Promise<IGamesApiResponse>;
+    addGame: (userId: string, game: Partial<IGameLocal>, config: IConfig) => Promise<IGamesApiResponse>;
+    deleteGame: (userId: string, gameId: string, config: IConfig) => Promise<IGamesApiResponse>;
+    updateGame?: (game: Partial<IGameLocal>, user_id: string, game_id: string, config: IConfig) => Promise<IGameApiResponse>;
+}
+
 export default class GameApi {
     httpClient: IHttpClient;
     hostName: string;

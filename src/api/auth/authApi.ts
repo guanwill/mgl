@@ -1,6 +1,14 @@
 import { IHttpClient } from '../httpClient';
 
-export default class AuthApi {
+export interface IAuthApi {
+    login: (username: string, password: string) => Promise<any>;
+    register: (username: string, password: string) => Promise<any>;
+    verify?: (token: string) => Promise<any>;
+    resendVerificationToken?: (email: string) => Promise<any>;
+    resetPassword?: (email: string) => Promise<any>;
+}
+
+export default class AuthApi implements IAuthApi {
     httpClient: IHttpClient;
     hostName: string;
 
@@ -9,7 +17,7 @@ export default class AuthApi {
         this.hostName = hostName;
     }
 
-    public login = async (username: string, password: string): Promise<any> => {
+    public login = async (username: string, password: string) => {
         try {
             const payload = {
                 username: username,
