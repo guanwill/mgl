@@ -3,7 +3,7 @@ import { IHttpClient } from "../httpClient";
 import AuthApi, { IAuthApi } from "./authApi";
 
 describe("authApi", () => {
-  let hostName = "http://localhost:8000";
+  let hostName = "http://localhost:80ss00";
   let username = "Bob";
   let password = "password";
   let httpClientMock: IHttpClient;
