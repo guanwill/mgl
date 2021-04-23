@@ -33,6 +33,12 @@
     "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "eject": "react-scripts eject"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "yarn format:check && yarn test"
+    }
+  },
   "lint-staged": {
     "*.{js,ts,jsx,tsx,json,css,md}": [
       "prettier --write",
