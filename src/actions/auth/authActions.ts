@@ -10,14 +10,14 @@ export enum AuthActionType {
     LOGOUT_USER = 'LOGOUT_USER',
     REGISTER_USER = 'REGISTER_USER',
     VERIFY_USER = 'VERIFY_USER',
-    RESEND_VERIFICATION = "RESEND_VERIFICATION",
-    RESET_PASSWORD = "RESET_PASSWORD"
+    RESEND_VERIFICATION = 'RESEND_VERIFICATION',
+    RESET_PASSWORD = 'RESET_PASSWORD'
     // LOGIN_ERROR = 'LOGIN_ERROR',
     // REGISTER_ERROR = 'REGISTER_ERROR',
 }
 
 export interface IAuthAction {
-    type: AuthActionType,
+    type: AuthActionType;
     payload?: any;
 }
 
@@ -41,9 +41,9 @@ export class AuthAction implements IAuthAction {
 export const setLoginSuccess = (loginResponse: IAuthenticatedDetails): IAuthAction => {
     return {
         type: AuthActionType.LOGIN_USER,
-        payload: loginResponse,
-    }
-}
+        payload: loginResponse
+    };
+};
 
 export const callLoginApi = (username: string, password: string): Function => async (
     dispatch: ThunkDispatch<AppState, void, IAuthAction>,
@@ -62,23 +62,26 @@ export const callLoginApi = (username: string, password: string): Function => as
             console.log('AUTHACTION SET HEADER ', axios.defaults.headers.common['Authorization']);
             return dispatch(setLoginSuccess(payload));
         }
-        
-        const pendingVerificationUser = { user: {verified: false, _id:'', username: '', name: ''}, accesstoken: '', message: message };
-        return dispatch(setLoginSuccess(pendingVerificationUser));
 
+        const pendingVerificationUser = {
+            user: { verified: false, _id: '', username: '', name: '' },
+            accesstoken: '',
+            message: message
+        };
+        return dispatch(setLoginSuccess(pendingVerificationUser));
     } catch (e) {
         // delete axios.defaults.headers.common['Authorization'];
         // return dispatch(setLoginError(e));
-        return e
-    }    
-}
+        return e;
+    }
+};
 
 export const logoutUser = (logoutPayload: IAuthenticatedDetails) => {
     return {
         type: AuthActionType.LOGOUT_USER,
-        payload: logoutPayload,
-    }
-}
+        payload: logoutPayload
+    };
+};
 
 // export const setRegisterError = (registerError: any): IAuthAction => {
 //     return {
@@ -90,9 +93,9 @@ export const logoutUser = (logoutPayload: IAuthenticatedDetails) => {
 export const setRegisterSuccess = (registerResponse: Partial<IAuthenticatedDetails>): IAuthAction => {
     return {
         type: AuthActionType.REGISTER_USER,
-        payload: registerResponse,
-    }
-}
+        payload: registerResponse
+    };
+};
 
 export const callRegisterApi = (username: string, password: string): Function => async (
     dispatch: ThunkDispatch<AppState, void, IAuthAction>,
@@ -104,16 +107,16 @@ export const callRegisterApi = (username: string, password: string): Function =>
         return dispatch(setRegisterSuccess({ message }));
     } catch (e) {
         // return dispatch(setRegisterError(e));
-        return e
-    }    
-}
+        return e;
+    }
+};
 
 export const setVerifySuccess = (verifyResponse: IAuthenticatedDetails): IAuthAction => {
     return {
         type: AuthActionType.VERIFY_USER,
-        payload: verifyResponse,
-    }
-}
+        payload: verifyResponse
+    };
+};
 
 export const callVerifyApi = (token: string): Function => async (
     dispatch: ThunkDispatch<AppState, void, IAuthAction>,
@@ -122,20 +125,24 @@ export const callVerifyApi = (token: string): Function => async (
 ) => {
     try {
         const verificationResponse = await api.authApi.verify(token);
-        const payload: IAuthenticatedDetails = { user: {verified: false, _id:'', username: '', name: ''}, accesstoken: '', message: verificationResponse.message };
+        const payload: IAuthenticatedDetails = {
+            user: { verified: false, _id: '', username: '', name: '' },
+            accesstoken: '',
+            message: verificationResponse.message
+        };
         return dispatch(setVerifySuccess(payload));
     } catch (e) {
         // return dispatch(setRegisterError(e));
-        return e
-    }    
-}
+        return e;
+    }
+};
 
 export const setResendVerificationSuccess = (verifyResponse: IAuthenticatedDetails): IAuthAction => {
     return {
         type: AuthActionType.RESEND_VERIFICATION,
-        payload: verifyResponse,
-    }
-}
+        payload: verifyResponse
+    };
+};
 
 export const callResendVerificationApi = (email: string): Function => async (
     dispatch: ThunkDispatch<AppState, void, IAuthAction>,
@@ -144,20 +151,24 @@ export const callResendVerificationApi = (email: string): Function => async (
 ) => {
     try {
         const verificationResponse = await api.authApi.resendVerificationToken(email);
-        const payload: IAuthenticatedDetails = { user: {verified: false, _id:'', username: '', name: ''}, accesstoken: '', message: verificationResponse.message };
+        const payload: IAuthenticatedDetails = {
+            user: { verified: false, _id: '', username: '', name: '' },
+            accesstoken: '',
+            message: verificationResponse.message
+        };
         return dispatch(setResendVerificationSuccess(payload));
     } catch (e) {
         // return dispatch(setRegisterError(e));
-        return e
-    }    
-}
+        return e;
+    }
+};
 
 export const setResetPasswordSuccess = (verifyResponse: IAuthenticatedDetails): IAuthAction => {
     return {
         type: AuthActionType.RESET_PASSWORD,
-        payload: verifyResponse,
-    }
-}
+        payload: verifyResponse
+    };
+};
 
 export const callResetPasswordApi = (email: string): Function => async (
     dispatch: ThunkDispatch<AppState, void, IAuthAction>,
@@ -166,10 +177,14 @@ export const callResetPasswordApi = (email: string): Function => async (
 ) => {
     try {
         const forgotPasswordResponse = await api.authApi.resetPassword(email);
-        const payload: IAuthenticatedDetails = { user: {verified: false, _id:'', username: '', name: ''}, accesstoken: '', message: forgotPasswordResponse.message };
+        const payload: IAuthenticatedDetails = {
+            user: { verified: false, _id: '', username: '', name: '' },
+            accesstoken: '',
+            message: forgotPasswordResponse.message
+        };
         return dispatch(setResetPasswordSuccess(payload));
     } catch (e) {
         // return dispatch(setRegisterError(e));
-        return e
-    }    
-}
+        return e;
+    }
+};

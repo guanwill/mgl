@@ -28,7 +28,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "cross-env react-scripts test --testPathIgnorePatterns=App",
+    "test": "cross-env react-scripts test --watchAll=false --testPathIgnorePatterns=App",
+    "format": "prettier --write src/**/*",
+    "format:check": "prettier --check src/**/*",
     "eject": "react-scripts eject"
   },
   "husky": {
@@ -39,7 +41,7 @@
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx,json,css,md}": [
-      "prettier --write --ignore-unknown src/**/*",
+      "prettier --check --ignore-unknown src/**/*",
       "git add"
     ]
   },

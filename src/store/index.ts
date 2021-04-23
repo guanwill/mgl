@@ -1,41 +1,41 @@
-import { combineReducers } from "redux";
-import userInformation from "../reducers/auth/authReducer";
-import userGames from "../reducers/game/gameReducer";
-import gameToAdd from "../reducers/game/gameToAddReducer";
-import { IAuthenticatedDetails } from "../model/auth/auth";
-import { IUserGamesStore, IGameToAdd } from "../model/game/game";
+import { combineReducers } from 'redux';
+import userInformation from '../reducers/auth/authReducer';
+import userGames from '../reducers/game/gameReducer';
+import gameToAdd from '../reducers/game/gameToAddReducer';
+import { IAuthenticatedDetails } from '../model/auth/auth';
+import { IUserGamesStore, IGameToAdd } from '../model/game/game';
 
 interface IStore {
-  userInformation: IAuthenticatedDetails;
-  userGames: IUserGamesStore;
-  gameToAdd: IGameToAdd;
+    userInformation: IAuthenticatedDetails;
+    userGames: IUserGamesStore;
+    gameToAdd: IGameToAdd;
 }
 
 export const initialState: IStore = {
-  userInformation: {
-    user: {
-      verified: false,
-      _id: "",
-      username: "",
-      name: ""
+    userInformation: {
+        user: {
+            verified: false,
+            _id: '',
+            username: '',
+            name: ''
+        },
+        accesstoken: '',
+        message: ''
     },
-    accesstoken: "",
-    message: ""
-  },
-  userGames: {
-    games: [],
-    message: ""
-  },
-  gameToAdd: {
-    title: "",
-    release_date: ""
-  }
+    userGames: {
+        games: [],
+        message: ''
+    },
+    gameToAdd: {
+        title: '',
+        release_date: ''
+    }
 };
 
 export const rootReducer = combineReducers({
-  userInformation,
-  userGames,
-  gameToAdd
+    userInformation,
+    userGames,
+    gameToAdd
 });
 
 export type AppState = ReturnType<typeof rootReducer>;

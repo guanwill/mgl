@@ -7,13 +7,13 @@ export interface IHttpClient {
 }
 
 class AxiosHttpClient implements IHttpClient {
-    get = async (uri: string, config?: object) => {        
+    get = async (uri: string, config?: object) => {
         try {
             return await axios.get(uri, config);
         } catch (exception) {
-            throw exception
+            throw exception;
         }
-    }
+    };
 
     post = async (uri: string, payload: object, config?: object) => {
         try {
@@ -21,7 +21,7 @@ class AxiosHttpClient implements IHttpClient {
         } catch (exception) {
             throw exception;
         }
-    }
+    };
 
     delete = async (uri: string, config?: object) => {
         try {
@@ -29,7 +29,7 @@ class AxiosHttpClient implements IHttpClient {
         } catch (exception) {
             throw exception;
         }
-    }
+    };
 }
 
 const httpClient = new AxiosHttpClient();
