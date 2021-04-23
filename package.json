@@ -28,20 +28,20 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --watchAll=false --testPathIgnorePatterns=App",
+    "test": "cross-env CI=true react-scripts test --watchAll=false --testPathIgnorePatterns=App",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "eject": "react-scripts eject"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn test",
-      "pre-push": "yarn test"
+      "pre-commit": "lint-staged",
+      "pre-push": "yarn format:check && yarn test"
     }
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx,json,css,md}": [
-      "prettier --check --ignore-unknown src/**/*",
+      "prettier --write",
       "git add"
     ]
   },
