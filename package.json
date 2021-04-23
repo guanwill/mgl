@@ -40,9 +40,8 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts,jsx,tsx,json,css,md}": [
-      "prettier --write",
-      "git add"
+    "./src/*.{js,ts,jsx,tsx,json,css,md}": [
+      "npx prettier --write"
     ]
   },
   "eslintConfig": {
