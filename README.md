@@ -1,6 +1,6 @@
 # A Hero's Bag
 
-**Feature**
+**Features**
 
 -   Crud Games
 -   Search Games
