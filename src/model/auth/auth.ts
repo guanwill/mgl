@@ -5,8 +5,8 @@ export interface IAuthenticatedDetails {
 }
 
 export interface IAuthenticatedUserDetails {
-    verified: boolean,
-    _id: string,
-    username: string,
-    name: string,
+    verified: boolean;
+    _id: string;
+    username: string;
+    name: string;
 }

@@ -13,18 +13,18 @@ export default class GameApi {
     public fetchLatestGames = async (): Promise<any> => {
         try {
             const response = await this.httpClient.get(`${this.hostName}/game_info/latest_games`);
-            return response.data
+            return response.data;
         } catch (err) {
             console.log('ERR ', err);
-            throw (err);
+            throw err;
         }
-    }
+    };
 
     // new graphql endpoint
     public fetchLatestGamesV2 = async (): Promise<any> => {
         try {
             const query = {
-                "query": `{ 
+                query: `{ 
                     latestGames {
                         id
                         name,
@@ -41,31 +41,31 @@ export default class GameApi {
                         deck
                       }
                  }`
-            }
+            };
             const response = await this.httpClient.post(`${this.hostName}/mgl_graphql`, query);
-            return response.data
+            return response.data;
         } catch (err) {
             console.log('ERR ', err);
-            throw (err);
+            throw err;
         }
-    }
+    };
 
     // obsolete due to grpahql endpoint below
     public searchGame = async (query: string): Promise<any> => {
         try {
             const response = await this.httpClient.post(`${this.hostName}/game_info/search_games/${query}`, {});
-            return response.data
+            return response.data;
         } catch (err) {
             console.log('ERR ', err);
-            throw (err);
+            throw err;
         }
-    }
+    };
 
     // new graphql endpoint
     public searchGameV2 = async (userQuery: string): Promise<any> => {
         try {
             const query = {
-                "query": `{ 
+                query: `{ 
                     searchGames(query: "${userQuery}") {
                         id
                         name,
@@ -82,12 +82,12 @@ export default class GameApi {
                         deck
                     }
                 }`
-            }
+            };
             const response = await this.httpClient.post(`${this.hostName}/mgl_graphql`, query);
-            return response.data
+            return response.data;
         } catch (err) {
             console.log('ERR ', err);
-            throw (err);
+            throw err;
         }
-    }
+    };
 }

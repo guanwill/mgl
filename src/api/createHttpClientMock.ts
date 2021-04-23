@@ -1,7 +1,7 @@
-import { IHttpClient } from "./httpClient";
+import { IHttpClient } from './httpClient';
 
-export const createHttpClientMock = (response: object): IHttpClient => ({  
-  get: jest.fn().mockResolvedValue(response),
-  post: jest.fn().mockResolvedValue(response),
-  delete: jest.fn().mockResolvedValue(response),
+export const createHttpClientMock = (response: object): IHttpClient => ({
+    get: jest.fn().mockResolvedValue(response),
+    post: jest.fn().mockResolvedValue(response),
+    delete: jest.fn().mockResolvedValue(response)
 });

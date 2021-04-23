@@ -1,14 +1,14 @@
-import React from "react";
-import NewGames from "./newGames";
-import SearchGames from "./searchGames";
+import React from 'react';
+import NewGames from './newGames';
+import SearchGames from './searchGames';
 
 const HomePage: React.FC = () => {
-  return (
-    <>
-      <SearchGames />
-      <NewGames />
-    </>
-  );
+    return (
+        <>
+            <SearchGames />
+            <NewGames />
+        </>
+    );
 };
 
 export default HomePage;

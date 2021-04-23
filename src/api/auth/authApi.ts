@@ -22,57 +22,60 @@ export default class AuthApi implements IAuthApi {
             const payload = {
                 username: username,
                 password: password
-            }
+            };
             const response = await this.httpClient.post(`${this.hostName}/api/v1/auth/login`, payload);
-            return response.data
+            return response.data;
         } catch (err) {
-            throw (err);
+            throw err;
         }
-    }
+    };
 
     public register = async (username: string, password: string): Promise<any> => {
         try {
             const payload = {
                 username: username,
-                password: password,
-            }
+                password: password
+            };
             const response = await this.httpClient.post(`${this.hostName}/api/v1/auth/register`, payload);
-            return response.data
+            return response.data;
         } catch (err) {
-            throw (err);
+            throw err;
         }
-    }
+    };
 
     public verify = async (token: string): Promise<any> => {
         try {
             const response = await this.httpClient.get(`${this.hostName}/api/v1/auth/verify_account/${token}`);
-            return response.data
+            return response.data;
         } catch (err) {
-            throw (err);
+            throw err;
         }
-    }
+    };
 
     public resendVerificationToken = async (email: string): Promise<any> => {
         try {
             const payload = {
                 username: email
-            }
-            const response = await this.httpClient.post(`${this.hostName}/api/v1/auth/resend_verification_email`, payload);
-            return response.data
+            };
+            const response = await this.httpClient.post(
+                `${this.hostName}/api/v1/auth/resend_verification_email`,
+                payload
+            );
+            return response.data;
         } catch (err) {
-            throw (err);
+            throw err;
         }
-    }
+    };
 
     public resetPassword = async (email: string): Promise<any> => {
         try {
             const payload = {
                 username: email
-            }
+            };
             const response = await this.httpClient.post(`${this.hostName}/api/v1/auth/forgot_password`, payload);
-            return response.data
+            return response.data;
         } catch (err) {
-            throw (err);
+            throw err;
         }
-    }
+    };
 }
