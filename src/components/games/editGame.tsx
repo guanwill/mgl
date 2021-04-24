@@ -77,7 +77,7 @@ const EditGame: React.FC<Props> = ({ callUpdateGameApi, callDeleteGameApi, userG
                 title,
                 genre: genre ? genre : '',
                 platform,
-                release_date: release_date && release_date != 'Invalid date' ? release_date : null,
+                release_date: release_date && release_date !== 'Invalid date' ? release_date : null,
                 status,
                 rating: rating ? rating : Number(''),
                 review,

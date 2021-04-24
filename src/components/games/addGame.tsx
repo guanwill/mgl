@@ -16,7 +16,7 @@ import {
     ContainerInner,
     BackLinkWrapper
 } from '../../styles/styles';
-import { IUserGamesStore, IGameToAdd, IGameLocal, IGameAddedOrUpdatedResponse, IGame } from '../../model/game/game';
+import { IUserGamesStore, IGameToAdd, IGameLocal, IGameAddedOrUpdatedResponse } from '../../model/game/game';
 import { Link as MaterialUiLink } from '@material-ui/core';
 import { useParams, useHistory } from 'react-router-dom';
 
